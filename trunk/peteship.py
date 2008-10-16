@@ -3,27 +3,34 @@ import sys, pygame, math
 from gameobjects.gametime import *
 pygame.init()
 
-GC = GameClock()
+""" rev12 : set framerate to 30, hopefully """
+GC = GameClock(30)
 size = width, height = 640, 480
 screen = pygame.display.set_mode(size)
 
 black = 0, 0, 0
 white = 255, 255, 255
 red = 255, 0, 0
+midred = 170, 0, 0
 green = 0, 255, 0
+midgreen = 0, 170, 0
 blue = 0, 0, 255
+midblue = 0, 0, 170
 grey = 150, 150, 150
 darkgrey = 50, 50, 50
 #Meh, fun.
 pointsrgb = [red, green, blue]
 
 def positive(number):
+    #Convert negative numbers to their positive equivalent.
+    #If the number is positive, return it.
     if number < 0:
         return number * -1
     else:
         return number
 
 def normalisedAngle(angle):
+    #Ensure that an angle is in degrees properly (360 = 0)
     if angle > 359:
         return normalisedAngle(angle - 360)
     elif angle < 0:
@@ -38,6 +45,7 @@ class Order():
         return
 
 class Idle(Order):
+    # do nothing. 
     def poll(self):
         return
 
@@ -48,12 +56,15 @@ class MoveToXY(Order):
     def poll(self):
         #pygame.draw.aaline(screen, red, (self.x - 10, self.y), (self.x + 10, self.y))
         #pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10))
-        #pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))        
+        #pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))
+        """ rev12 : i like circles """
+        pygame.draw.circle(screen, midgreen, (self.x, self.y), ship.intRadius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
         if ship.intRotation != self.angleToXY:
             if positive(self.angleToXY - ship.intRotation) < ship.intRotateSpeed:
                 ship.rotateRight(positive(self.angleToXY - ship.intRotation))
             else:
-                ship.rotateRight()
+                """ new in rev 12, see appropriate function """
+                ship.rotateLeft(positive(self.angleToXY - ship.intRotation))
         elif (ship.x, ship.y) != (self.x, self.y):
             print ship.distanceFrom(self.x, self.y)
             if ship.distanceFrom(self.x, self.y) < (120 * ship.intSpeed):
@@ -70,7 +81,7 @@ class Ship():
     intRotation = 120
    
     #speed stats.
-    intSpeed = 0.01
+    intSpeed = 0.02
     intRotateSpeed = 1.0
 
     #health.
@@ -92,18 +103,26 @@ class Ship():
         self.calcPoints()
    
     def draw(self):
+        """ Modded in rev 12 - effectively added multiple engine ports - seems dodgy though??? weird overwrite on the square. """
         #pygame.draw.line(screen, white, (50, 50), (25, 25))
         for i in range(0, len(self.points)):
-            if i == self.intEnginePoint:
-                pygame.draw.aaline(screen, grey, self.points[i],self.points[i - 1])
-            else:
-                pygame.draw.aaline(screen, white, self.points[i],self.points[i - 1])
+            for j in range(0, len(self.intEnginePoint)):
+                if i == self.intEnginePoint[j]:
+                    pygame.draw.aaline(screen, red, self.points[i],self.points[i - 1])
+                else:
+                    pygame.draw.aaline(screen, white, self.points[i],self.points[i - 1])
 
     def rotateRight(self, rotateBy=0):
         #Does exactly that
         if rotateBy == 0:
             rotateBy = self.intRotateSpeed
         self.intRotation = normalisedAngle(self.intRotation + rotateBy)
+
+    def rotateLeft(self, rotateBy=0):
+       #Does exactly that
+       if rotateBy == 0:
+           rotateBy = self.intRotateSpeed
+       self.intRotation = normalisedAngle(self.intRotation - rotateBy)
 
     def moveForward(self, speed=0):
         #LOLZ.
@@ -125,7 +144,8 @@ class Ship():
         return math.sqrt((self.x-x)**2 + (self.y-y)**2)
 
 class S1s1(Ship):
-    intEnginePoint = 2
+    """ as of rev 12 now a list"""
+    intEnginePoint = [2]
 
     def calcPoints(self):
         self.points = [(self.x + self.intRadius * math.sin(math.radians(self.intRotation)), self.y - self.intRadius * math.cos(math.radians(self.intRotation))),\
@@ -133,7 +153,8 @@ class S1s1(Ship):
         (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 3.7 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 3.7 * math.pi / 3)))]
 
 class S1s2(Ship):
-    intEnginePoint = 2
+    """ as of rev 12, now a list """
+    intEnginePoint = [2, 3]
       
     def calcPoints(self):
         self.points = [(self.x + self.intRadius * math.sin(math.radians(self.intRotation)), self.y - self.intRadius * math.cos(math.radians(self.intRotation))),\
@@ -142,8 +163,10 @@ class S1s2(Ship):
         (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 4.3 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 4.3 * math.pi / 3)))]
 
 
-ships = [S1s1(0, True, 200.0, 50.0), S1s2(0, True, 100.0, 100.0)]
+ships = [S1s1(0, True, 200.0, 50.0), S1s2(0, True, 100.0, 100.0), S1s1(0, True, 150, 75)]
 ships[0].order = MoveToXY(ships[0], 300.0, 100.0)
+ships[1].order = MoveToXY(ships[1], 400.0, 200.0)
+ships[2].order = MoveToXY(ships[2], 100.0, 100.0)
 
 GC.start()
 
