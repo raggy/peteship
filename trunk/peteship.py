@@ -58,7 +58,7 @@ class MoveToXY(Order):
         #pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10))
         #pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))
         """ rev12 : i like circles """
-        #pygame.draw.circle(screen, midgreen, (self.x, self.y), ship.intRadius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
+        pygame.draw.circle(screen, midgreen, (self.x, self.y), ship.intRadius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
         if ship.intRotation != self.angleToXY:
             if positive(self.angleToXY - ship.intRotation) < ship.intRotateSpeed:
                 ship.rotateRight(positive(self.angleToXY - ship.intRotation))
@@ -151,25 +151,23 @@ class S1s1(Ship):
         self.points = [(self.x + self.intRadius * math.sin(self.intRotation), (self.y - self.intRadius * math.cos(self.intRotation))),\
         (self.x + self.intRadius * math.sin(self.intRotation + 2.3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 2.3 * math.pi / 3))),\
         (self.x + self.intRadius * math.sin(self.intRotation + 3.7 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 3.7 * math.pi / 3)))]
-        print self.points
 
 class S1s2(Ship):
     """ as of rev 12, now a list """
     intEnginePoint = [2, 3]
       
     def calcPoints(self):
-        self.points = [(self.x + self.intRadius * math.sin(self.intRotation)), (self.y - self.intRadius * math.cos(self.intRotation)),\
+        self.points = [((self.x + self.intRadius * math.sin(self.intRotation)), (self.y - self.intRadius * math.cos(self.intRotation))),\
         (self.x + self.intRadius * math.sin(self.intRotation + 1.7 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 1.7 * math.pi / 3))),\
         (self.x + self.intRadius * math.sin(self.intRotation + 3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 3 * math.pi / 3))),\
         (self.x + self.intRadius * math.sin(self.intRotation + 4.3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 4.3 * math.pi / 3)))]
-        print self.points
 
 
 ships = [S1s1(0, True, 100.0, 50.0), S1s2(0, True, 100.0, 100.0), S1s1(0, True, 150, 75)]
-"""ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
+ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
 ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
 ships[2].order = MoveToXY(ships[2], 100.0, 100.0)
-"""
+
 GC.start()
 
 while True:
