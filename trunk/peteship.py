@@ -32,25 +32,27 @@ def normalisedAngle(angle):
         return angle
 
 class Order():
-    def poll(self, ship):
+    def __init__(self, ship):
+        return
+    def poll(self):
         return
 
 class Idle(Order):
-    def poll(self, ship):
+    def poll(self):
         return
 
 class MoveToXY(Order):
-    def __init__(self, x, y):
+    def __init__(self, ship, x, y):
         self.x, self.y = x, y
         self.angleToXY = ship.angleToXY(self.x, self.y)
         print self.angleToXY
-    def poll(self, ship):
+    def poll(self):
         pygame.draw.aaline(screen, red, (self.x - 10, self.y), (self.x + 10, self.y))
         pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10))
         pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))        
         if ship.intRotation != self.angleToXY:
-            if (self.angleToXY - ship.intRotation) < ship.intRotateSpeed:
-                ship.rotateRight(self.angleToXY - ship.intRotation)
+            if positive(self.angleToXY - ship.intRotation) < ship.intRotateSpeed:
+                ship.rotateRight(positive(self.angleToXY - ship.intRotation))
             else:
                 ship.rotateRight()
         elif (ship.x, ship.y) != (self.x, self.y):
@@ -58,7 +60,7 @@ class MoveToXY(Order):
                 ship.moveForward(ship.distanceFrom(self.x, self.y))
             ship.moveForward()
         else:
-            ship.order = Idle()
+            ship.order = Idle(ship)
         ship.calcPoints()
       
 class Ship():
@@ -85,7 +87,7 @@ class Ship():
         self.side = side
         self.player = player
         self.x, self.y = x, y
-        self.order = Idle()
+        self.order = Idle(self)
         self.calcPoints()
    
     def draw(self):
@@ -110,16 +112,16 @@ class Ship():
         self.x += math.degrees((math.sin(math.radians(self.intRotation))) * speed)
 
     def poll(self):
-        self.order.poll(self)
+        self.order.poll()
 
     def angleToXY(self, x, y):
-        if (self.y - y) > 0:
-            return normalisedAngle(int(math.degrees(math.atan(positive(self.y-y)/positive(self.x-x)))))
+        if self.y - y > 0:
+            return normalisedAngle(int(math.degrees(math.atan((self.x-x)/(y-self.y)))))
         else:
-            return normalisedAngle(int(math.degrees(math.atan(positive(self.x-x)/positive(self.y-y)))))
+            return normalisedAngle(int(math.degrees(math.atan((self.x-x)/(y-self.y)))+180))
 
     def distanceFrom(self, x, y):
-        return math.sqrt(x**2 + y**2)
+        return math.sqrt((self.x-x)**2 + (self.y-y)**2)
 
 class S1s1(Ship):
     intEnginePoint = 2
@@ -140,7 +142,7 @@ class S1s2(Ship):
 
 
 ships = [S1s1(0, True, 200.0, 50.0), S1s2(0, True, 100.0, 100.0)]
-ships[0].order = MoveToXY(201.0, 101.0)
+ships[0].order = MoveToXY(ships[0], 300.0, 100.0)
 
 GC.start()
 
