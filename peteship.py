@@ -45,19 +45,20 @@ class MoveToXY(Order):
     def __init__(self, ship, x, y):
         self.x, self.y = x, y
         self.angleToXY = ship.angleToXY(self.x, self.y)
-        print self.angleToXY
     def poll(self):
-        pygame.draw.aaline(screen, red, (self.x - 10, self.y), (self.x + 10, self.y))
-        pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10))
-        pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))        
+        #pygame.draw.aaline(screen, red, (self.x - 10, self.y), (self.x + 10, self.y))
+        #pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10))
+        #pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))        
         if ship.intRotation != self.angleToXY:
             if positive(self.angleToXY - ship.intRotation) < ship.intRotateSpeed:
                 ship.rotateRight(positive(self.angleToXY - ship.intRotation))
             else:
                 ship.rotateRight()
         elif (ship.x, ship.y) != (self.x, self.y):
-            if ship.distanceFrom(self.x, self.y) < ship.intSpeed:
-                ship.moveForward(ship.distanceFrom(self.x, self.y))
+            print ship.distanceFrom(self.x, self.y)
+            if ship.distanceFrom(self.x, self.y) < (120 * ship.intSpeed):
+                ship.x, ship.y = self.x, self.y
+                ship.order = Idle(ship)
             ship.moveForward()
         else:
             ship.order = Idle(ship)
@@ -70,7 +71,7 @@ class Ship():
    
     #speed stats.
     intSpeed = 0.01
-    intRotateSpeed =  10.0
+    intRotateSpeed = 1.0
 
     #health.
     intSI = 1
