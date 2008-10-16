@@ -58,7 +58,7 @@ class MoveToXY(Order):
         #pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10))
         #pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))
         """ rev12 : i like circles """
-        pygame.draw.circle(screen, midgreen, (self.x, self.y), ship.intRadius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
+        #pygame.draw.circle(screen, midgreen, (self.x, self.y), ship.intRadius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
         if ship.intRotation != self.angleToXY:
             if positive(self.angleToXY - ship.intRotation) < ship.intRotateSpeed:
                 ship.rotateRight(positive(self.angleToXY - ship.intRotation))
@@ -67,7 +67,6 @@ class MoveToXY(Order):
                 ship.rotateLeft(positive(self.angleToXY - ship.intRotation))
         elif (ship.x, ship.y) != (self.x, self.y):
             if ship.distanceFrom(self.x, self.y) < (120 * ship.intSpeed):
-                ship.x, ship.y = self.x, self.y
                 ship.order = Idle(ship)
             ship.moveForward()
         else:
