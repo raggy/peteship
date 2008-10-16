@@ -66,7 +66,7 @@ class MoveToXY(Order):
                 """ new in rev 12, see appropriate function """
                 ship.rotateLeft(positive(self.angleToXY - ship.intRotation))
         elif (ship.x, ship.y) != (self.x, self.y):
-            if ship.distanceFrom(self.x, self.y) < (120 * ship.intSpeed):
+            if ship.distanceFrom(self.x, self.y) < ship.intSpeed:
                 ship.order = Idle(ship)
             ship.moveForward()
         else:
@@ -79,7 +79,7 @@ class Ship():
     intRotation = math.radians(120.0)
    
     #speed stats.
-    intSpeed = 0.02
+    intSpeed = 2.0
     intRotateSpeed = 1.0
 
     #health.
