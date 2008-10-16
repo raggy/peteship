@@ -137,6 +137,8 @@ class Ship():
     def angleToXY(self, x, y):
         if self.y - y > 0:
             return normalisedAngle(math.degrees(math.atan((self.x-x)/(y-self.y))))
+        elif self.y - y == 0:
+            return normalisedAngle(math.degrees(-math.atan(self.x-x)))
         else:
             return normalisedAngle(math.degrees(math.atan((self.x-x)/(y-self.y)))+180)
 
@@ -165,7 +167,7 @@ class S1s2(Ship):
 
 ships = [S1s1(0, True, 200.0, 50.0), S1s2(0, True, 100.0, 100.0), S1s1(0, True, 150, 75)]
 ships[0].order = MoveToXY(ships[0], 300.0, 100.0)
-ships[1].order = MoveToXY(ships[1], 200.0, 100.0)
+ships[1].order = MoveToXY(ships[1], 301.0, 100.0)
 ships[2].order = MoveToXY(ships[2], 100.0, 100.0)
 
 GC.start()
