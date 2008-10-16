@@ -109,7 +109,7 @@ class Ship():
                 if i == self.intEnginePoint[j]:
                     colour = red
             pygame.draw.aaline(screen, colour, self.points[i], self.points[i - 1])
-
+            
     def rotateRight(self, rotateBy=0):
         #Does exactly that
         if rotateBy == 0:
@@ -167,19 +167,22 @@ ships = [S1s1(0, True, 100.0, 50.0), S1s2(0, True, 100.0, 100.0), S1s1(0, True, 
 ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
 ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
 ships[2].order = MoveToXY(ships[2], 100.0, 100.0)
+running = True
 
 GC.start()
 
-while True:
+while running:
     for frame_count, game_time in GC.update():
         event = pygame.event.poll()
         if event.type == pygame.QUIT:
             pygame.quit()
+            running = False
+        else:
+            #if event.type == click, etc.
+            screen.fill(black)
     
-        screen.fill(black)
-
-        for ship in ships:
-            ship.poll()
-            ship.draw()
+            for ship in ships:
+                ship.poll()
+                ship.draw()
         
-        pygame.display.flip()
+            pygame.display.flip()
