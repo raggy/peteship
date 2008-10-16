@@ -78,7 +78,7 @@ class MoveToXY(Order):
 class Ship():
     #basic stats for drawing & position.
     intRadius = 8
-    intRotation = 120
+    intRotation = 120.0
    
     #speed stats.
     intSpeed = 0.02
@@ -136,9 +136,9 @@ class Ship():
 
     def angleToXY(self, x, y):
         if self.y - y > 0:
-            return normalisedAngle(int(math.degrees(math.atan((self.x-x)/(y-self.y)))))
+            return normalisedAngle(math.degrees(math.atan((self.x-x)/(y-self.y))))
         else:
-            return normalisedAngle(int(math.degrees(math.atan((self.x-x)/(y-self.y)))+180))
+            return normalisedAngle(math.degrees(math.atan((self.x-x)/(y-self.y)))+180)
 
     def distanceFrom(self, x, y):
         return math.sqrt((self.x-x)**2 + (self.y-y)**2)
@@ -165,7 +165,7 @@ class S1s2(Ship):
 
 ships = [S1s1(0, True, 200.0, 50.0), S1s2(0, True, 100.0, 100.0), S1s1(0, True, 150, 75)]
 ships[0].order = MoveToXY(ships[0], 300.0, 100.0)
-ships[1].order = MoveToXY(ships[1], 400.0, 200.0)
+ships[1].order = MoveToXY(ships[1], 200.0, 100.0)
 ships[2].order = MoveToXY(ships[2], 100.0, 100.0)
 
 GC.start()
