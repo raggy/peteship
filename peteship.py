@@ -23,14 +23,6 @@ def D2R(degrees):
 
 def R2D(radians):
       return (radians * 180) / math.pi
-
-"""
-def renderLoop():
-      screen.fill(black)
-      dave.draw()
-      john.draw()
-      pygame.display.flip()
-"""
       
 class Ship():
       #basic stats for drawing & position.
@@ -97,12 +89,8 @@ class S1s2(Ship):
             (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 1.7 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 1.7 * math.pi / 3))),\
             (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 3 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 3 * math.pi / 3))),\
             (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 4.3 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 4.3 * math.pi / 3)))]
-"""
-dave = S1s1(0, True)
-john = S1s2(0, True)
-john.x = 100
-john.y = 100
-"""
+
+
 ships = [S1s1(0, True), S1s2(0, True)]
 ships[1].x = 100
 ships[1].y = 100
@@ -113,38 +101,16 @@ GC.start()
 
 while running:
       for frame_count, game_time in GC.update():
-            """
-            #dave.rotateRight()
-            dave.moveForward()
-            john.moveForward()
-            dave.calcPoints()
-            john.calcPoints()
-            """
-
+            event = pygame.event.poll()
+            if event.type == pygame.QUIT:
+                  running = 0
+                  pygame.quit()
+            
             screen.fill(black)
             
             for ship in ships:
                   ship.moveForward()
                   ship.calcPoints()
                   ship.draw()
-
+                  
             pygame.display.flip()
-            
-            #renderLoop()
-            event = pygame.event.poll()
-            if event.type == pygame.QUIT:
-                  running = 0
-                  pygame.quit()
-
-"""
-while running:
-   screen.fill(black)
-   dave.draw()
-   dave.rotateRight()
-   #pygame.draw.line(screen, white, (50, 50), (75, 75))
-   pygame.display.flip()
-   event = pygame.event.poll()
-   if event.type == pygame.QUIT:
-      running = 0
-      pygame.quit()
-"""
