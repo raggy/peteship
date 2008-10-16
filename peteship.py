@@ -17,12 +17,8 @@ darkgrey = 50, 50, 50
 #Meh, fun.
 pointsrgb = [red, green, blue]
       
-class Ship(self, floatx, floaty):
+class Ship():
     #basic stats for drawing & position.
-    self.x = 0.0
-    self.y = 0.0
-    self.x = x #.0 for float plox.
-    self.y = y
     intRadius = 8
     intRotation = 120
    
@@ -43,9 +39,10 @@ class Ship(self, floatx, floaty):
 
     hasOrder = False
 
-    def __init__(self, side, player=True):
+    def __init__(self, side, player, x, y):
         self.side = side
         self.player = player
+        self.x, self.y = x, y
         self.calcPoints()
    
     def draw(self):
@@ -92,7 +89,7 @@ class S1s2(Ship):
         (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 4.3 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 4.3 * math.pi / 3)))]
 
 
-ships = [S1s1(50, 50, 0, True), S1s2(50, 50, 0, True)]
+ships = [S1s1(0, True, 200.0, 50.0), S1s2(0, True, 100.0, 100.0)]
 
 running = 1
 GC.start()
