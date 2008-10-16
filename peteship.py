@@ -16,18 +16,13 @@ grey = 150, 150, 150
 darkgrey = 50, 50, 50
 #Meh, fun.
 pointsrgb = [red, green, blue]
-
-def D2R(degrees):
-    return degrees * (math.pi / 180)
-    #nigh on unholy goodness.
-
-def R2D(radians):
-    return (radians * 180) / math.pi
       
-class Ship():
+class Ship(self, floatx, floaty):
     #basic stats for drawing & position.
-    x = 50.0 #.0 for float plox.
-    y = 50.0
+    self.x = 0.0
+    self.y = 0.0
+    self.x = x #.0 for float plox.
+    self.y = y
     intRadius = 8
     intRotation = 120
    
@@ -97,10 +92,7 @@ class S1s2(Ship):
         (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 4.3 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 4.3 * math.pi / 3)))]
 
 
-ships = [S1s1(0, True), S1s2(0, True)]
-ships[1].x = 100
-ships[1].y = 100
-
+ships = [S1s1(50, 50, 0, True), S1s2(50, 50, 0, True)]
 
 running = 1
 GC.start()
