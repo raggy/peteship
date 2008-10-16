@@ -16,6 +16,47 @@ grey = 150, 150, 150
 darkgrey = 50, 50, 50
 #Meh, fun.
 pointsrgb = [red, green, blue]
+
+def positive(number):
+    if number < 0:
+        return number * -1
+    else:
+        return number
+
+def normalisedAngle(angle):
+    if angle > 359:
+        return normalisedAngle(angle - 360)
+    elif angle < 0:
+        return normalisedAngle(angle + 360)
+    else:
+        return angle
+
+class Order():
+    def poll(self, ship):
+        return
+
+class Idle(Order):
+    def poll(self, ship):
+        return
+
+class MoveToXY(Order):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        self.angleToXY = ship.angleToXY(self.x, self.y)
+        print self.angleToXY
+    def poll(self, ship):
+        if ship.intRotation != self.angleToXY:
+            if (self.angleToXY - ship.intRotation) < ship.intRotateSpeed:
+                ship.rotateRight(self.angleToXY - ship.intRotation)
+            else:
+                ship.rotateRight()
+        elif (ship.x, ship.y) != (self.x, self.y):
+            if ship.distanceFrom(self.x, self.y) < ship.intSpeed:
+                ship.moveForward(ship.distanceFrom(self.x, self.y)
+            ship.moveForward()
+        else:
+            ship.order = Idle()
+        ship.calcPoints()
       
 class Ship():
     #basic stats for drawing & position.
@@ -24,7 +65,7 @@ class Ship():
    
     #speed stats.
     intSpeed = 0.01
-    intRotateSpeed =  0.1
+    intRotateSpeed =  10.0
 
     #health.
     intSI = 1
@@ -37,12 +78,11 @@ class Ship():
 
     points = []
 
-    hasOrder = False
-
     def __init__(self, side, player, x, y):
         self.side = side
         self.player = player
         self.x, self.y = x, y
+        self.order = Idle()
         self.calcPoints()
    
     def draw(self):
@@ -53,11 +93,11 @@ class Ship():
             else:
                 pygame.draw.aaline(screen, white, self.points[i],self.points[i - 1])
 
-    def rotateRight(self):
-        #Does exactly that.
-        self.intRotation += self.intRotateSpeed
-        if self.intRotation > 359:
-            self.intRotation -= 360
+    def rotateRight(self, rotateBy=-1):
+        #Does exactly that
+        if rotateBy == -1:
+            rotateBy = self.intRotateSpeed
+        self.intRotation = normalisedAngle(self.intRotation + rotateBy)
 
     def moveForward(self):
         #LOLZ.
@@ -65,12 +105,11 @@ class Ship():
         self.x += math.degrees((math.sin(math.radians(self.intRotation))) * self.intSpeed)
 
     def poll(self):
-            if not self.hasOrder:
-                  return False
-            else:
-                  return True
+        self.order.poll(self)
 
-            
+    def angleToXY(self, x, y):
+        return normalisedAngle(int(math.degrees(math.atan(y-self.y/x-self.x))))
+
 class S1s1(Ship):
     intEnginePoint = 2
 
@@ -90,21 +129,20 @@ class S1s2(Ship):
 
 
 ships = [S1s1(0, True, 200.0, 50.0), S1s2(0, True, 100.0, 100.0)]
+ships[0].order = MoveToXY(10.0, 0.0)
 
-running = 1
 GC.start()
 
-while running:
+while True:
     for frame_count, game_time in GC.update():
         event = pygame.event.poll()
         if event.type == pygame.QUIT:
-            running = 0
             pygame.quit()
     
         screen.fill(black)
-            
+
         for ship in ships:
             ship.poll()
             ship.draw()
-                  
+        
         pygame.display.flip()
