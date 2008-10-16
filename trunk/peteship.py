@@ -105,11 +105,11 @@ class Ship():
         """ Modded in rev 12 - effectively added multiple engine ports - seems dodgy though??? weird overwrite on the square. """
         #pygame.draw.line(screen, white, (50, 50), (25, 25))
         for i in range(0, len(self.points)):
+            colour = white
             for j in range(0, len(self.intEnginePoint)):
                 if i == self.intEnginePoint[j]:
-                    pygame.draw.aaline(screen, red, self.points[i],self.points[i - 1])
-                else:
-                    pygame.draw.aaline(screen, white, self.points[i],self.points[i - 1])
+                    colour = red
+            pygame.draw.aaline(screen, colour, self.points[i],self.points[i - 1])
 
     def rotateRight(self, rotateBy=0):
         #Does exactly that
@@ -164,9 +164,9 @@ class S1s2(Ship):
         (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 4.3 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 4.3 * math.pi / 3)))]
 
 
-ships = [S1s1(0, True, 200.0, 50.0), S1s2(0, True, 100.0, 100.0), S1s1(0, True, 150, 75)]
-ships[0].order = MoveToXY(ships[0], 300.0, 100.0)
-ships[1].order = MoveToXY(ships[1], 301.0, 100.0)
+ships = [S1s1(0, True, 100.0, 50.0), S1s2(0, True, 100.0, 100.0), S1s1(0, True, 150, 75)]
+ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
+ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
 ships[2].order = MoveToXY(ships[2], 100.0, 100.0)
 
 GC.start()
