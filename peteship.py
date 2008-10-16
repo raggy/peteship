@@ -30,11 +30,11 @@ def positive(number):
         return number
 
 def normalisedAngle(angle):
-    #Ensure that an angle is in degrees properly (360 = 0)
-    if angle > 359:
-        return normalisedAngle(angle - 360)
+    #Ensure that an angle is in radians properly (0 ~ 2*math.pi)
+    if angle >= (math.pi * 2):
+        return normalisedAngle(angle - 2 * math.pi)
     elif angle < 0:
-        return normalisedAngle(angle + 360)
+        return normalisedAngle(angle + 2 * math.pi)
     else:
         return angle
 
@@ -76,7 +76,7 @@ class MoveToXY(Order):
 class Ship():
     #basic stats for drawing & position.
     intRadius = 8
-    intRotation = 120.0
+    intRotation = math.radians(120.0)
    
     #speed stats.
     intSpeed = 0.02
@@ -108,7 +108,7 @@ class Ship():
             for j in range(0, len(self.intEnginePoint)):
                 if i == self.intEnginePoint[j]:
                     colour = red
-            pygame.draw.aaline(screen, colour, self.points[i],self.points[i - 1])
+            pygame.draw.aaline(screen, colour, self.points[i], self.points[i - 1])
 
     def rotateRight(self, rotateBy=0):
         #Does exactly that
@@ -126,19 +126,19 @@ class Ship():
         #LOLZ.
         if speed == 0:
             speed = self.intSpeed             
-        self.y -= math.degrees((math.cos(math.radians(self.intRotation))) * speed)   
-        self.x += math.degrees((math.sin(math.radians(self.intRotation))) * speed)
+        self.y -= math.cos(self.intRotation) * speed  
+        self.x += math.sin(self.intRotation) * speed
 
     def poll(self):
         self.order.poll()
 
     def angleToXY(self, x, y):
         if self.y - y > 0:
-            return normalisedAngle(math.degrees(math.atan((self.x-x)/(y-self.y))))
+            return normalisedAngle(math.atan((self.x-x)/(y-self.y)))
         elif self.y - y == 0:
-            return normalisedAngle(math.degrees(-math.atan(self.x-x)))
+            return normalisedAngle(-math.atan(self.x-x))
         else:
-            return normalisedAngle(math.degrees(math.atan((self.x-x)/(y-self.y)))+180)
+            return normalisedAngle(math.atan((self.x-x)/(y-self.y))+math.pi)
 
     def distanceFrom(self, x, y):
         return math.sqrt((self.x-x)**2 + (self.y-y)**2)
@@ -148,26 +148,28 @@ class S1s1(Ship):
     intEnginePoint = [2]
 
     def calcPoints(self):
-        self.points = [(self.x + self.intRadius * math.sin(math.radians(self.intRotation)), self.y - self.intRadius * math.cos(math.radians(self.intRotation))),\
-        (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 2.3 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 2.3 * math.pi / 3))),\
-        (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 3.7 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 3.7 * math.pi / 3)))]
+        self.points = [(self.x + self.intRadius * math.sin(self.intRotation), (self.y - self.intRadius * math.cos(self.intRotation))),\
+        (self.x + self.intRadius * math.sin(self.intRotation + 2.3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 2.3 * math.pi / 3))),\
+        (self.x + self.intRadius * math.sin(self.intRotation + 3.7 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 3.7 * math.pi / 3)))]
+        print self.points
 
 class S1s2(Ship):
     """ as of rev 12, now a list """
     intEnginePoint = [2, 3]
       
     def calcPoints(self):
-        self.points = [(self.x + self.intRadius * math.sin(math.radians(self.intRotation)), self.y - self.intRadius * math.cos(math.radians(self.intRotation))),\
-        (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 1.7 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 1.7 * math.pi / 3))),\
-        (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 3 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 3 * math.pi / 3))),\
-        (self.x + self.intRadius * math.sin((math.radians(self.intRotation) + 4.3 * math.pi / 3)), self.y - self.intRadius * math.cos((math.radians(self.intRotation) + 4.3 * math.pi / 3)))]
+        self.points = [(self.x + self.intRadius * math.sin(self.intRotation)), (self.y - self.intRadius * math.cos(self.intRotation)),\
+        (self.x + self.intRadius * math.sin(self.intRotation + 1.7 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 1.7 * math.pi / 3))),\
+        (self.x + self.intRadius * math.sin(self.intRotation + 3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 3 * math.pi / 3))),\
+        (self.x + self.intRadius * math.sin(self.intRotation + 4.3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 4.3 * math.pi / 3)))]
+        print self.points
 
 
 ships = [S1s1(0, True, 100.0, 50.0), S1s2(0, True, 100.0, 100.0), S1s1(0, True, 150, 75)]
-ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
+"""ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
 ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
 ships[2].order = MoveToXY(ships[2], 100.0, 100.0)
-
+"""
 GC.start()
 
 while True:
