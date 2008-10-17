@@ -108,7 +108,7 @@ class Ship():
             for j in range(0, len(self.intEnginePoint)):
                 if i == self.intEnginePoint[j]:
                     colour = red
-            pygame.draw.aaline(screen, colour, self.points[i], self.points[i - 1])
+            pygame.draw.line(screen, colour, self.points[i], self.points[i - 1])
             
     def rotateRight(self, rotateBy=0):
         #Does exactly that
@@ -130,9 +130,12 @@ class Ship():
         self.x += math.sin(self.intRotation) * speed
 
     def poll(self):
+        #update the ships data
         self.order.poll()
 
     def angleToXY(self, x, y):
+        #calculate the angle from the referenced ships heading to the
+        #given x,y point.
         if self.y - y > 0:
             return normalisedAngle(math.atan((self.x-x)/(y-self.y)))
         elif self.y - y == 0:
@@ -141,6 +144,7 @@ class Ship():
             return normalisedAngle(math.atan((self.x-x)/(y-self.y))+math.pi)
 
     def distanceFrom(self, x, y):
+        #Pythagoras up in this. yeah boy.
         return math.sqrt((self.x-x)**2 + (self.y-y)**2)
 
 class S1s1(Ship):
@@ -148,6 +152,8 @@ class S1s1(Ship):
     intEnginePoint = [2]
 
     def calcPoints(self):
+    #calculate the three points of the triangle relative to the center xy of the ship
+    #and the radius given to the ship.
         self.points = [(self.x + self.intRadius * math.sin(self.intRotation), (self.y - self.intRadius * math.cos(self.intRotation))),\
         (self.x + self.intRadius * math.sin(self.intRotation + 2.3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 2.3 * math.pi / 3))),\
         (self.x + self.intRadius * math.sin(self.intRotation + 3.7 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 3.7 * math.pi / 3)))]
