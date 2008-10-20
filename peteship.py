@@ -1,10 +1,9 @@
 #!/usr/local/bin/python
 import sys, pygame, math
-from gameobjects.gametime import *
 pygame.init()
 
 """ rev12 : set framerate to 30, hopefully """
-GC = GameClock(30)
+clock = pygame.time.Clock()
 size = width, height = 640, 480
 screen = pygame.display.set_mode(size)
 
@@ -233,37 +232,36 @@ ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
                 
 running = True
 
-GC.start() # Start game clock
-
 while running:
-    for frame_count, game_time in GC.update():
-        pygame.msg.message
-        pygame.event.clear(pygame.MOUSEMOTION)
-        pygame.event.clear(pygame.MOUSEBUTTONUP)
-        for event in pygame.event.get(pygame.MOUSEBUTTONDOWN): # Loop through all MOUSEBUTTONDOWN events on the buffer
-            if event.dict['button'] == 1: # If left mouse button clicked
-                # then ask any ships if they're going to be selected
-                for ship in ships:
-                    if (event.dict['pos'][0] >= (ship.x - ship.radius - player.x) and event.dict['pos'][0] <= (ship.x + ship.radius - player.x)) and (event.dict['pos'][1] >= (ship.y - ship.radius - player.y) and event.dict['pos'][1] <= (ship.y + ship.radius - player.y)): # If player clicked on this ship
-                        player.selectedShip = ship # Set player's selected ship
-            elif event.dict['button'] == 3: # If right mouse button clicked
-                player.selectedShip.order = MoveToXY(player.selectedShip, float(event.dict['pos'][0] - player.x), float(event.dict['pos'][1]) - player.y) # Give a move order to where player clicked
-        for event in pygame.event.get(pygame.KEYDOWN):
-            if event.key == pygame.K_UP:
-                player.y -= 10
-            elif event.key == pygame.K_DOWN:
-                player.y += 10
-            elif event.key == pygame.K_LEFT:
-                player.x -= 10
-            elif event.key == pygame.K_RIGHT:
-                player.x += 10
-        screen.fill(black)
+    clock.tick(60)
+    pygame.msg.message
+    pygame.event.clear(pygame.MOUSEMOTION)
+    pygame.event.clear(pygame.MOUSEBUTTONUP)
+    for event in pygame.event.get(pygame.MOUSEBUTTONDOWN): # Loop through all MOUSEBUTTONDOWN events on the buffer
+        if event.dict['button'] == 1: # If left mouse button clicked
+            # then ask any ships if they're going to be selected
+            for ship in ships:
+                if (event.dict['pos'][0] >= (ship.x - ship.radius - player.x) and event.dict['pos'][0] <= (ship.x + ship.radius - player.x)) and (event.dict['pos'][1] >= (ship.y - ship.radius - player.y) and event.dict['pos'][1] <= (ship.y + ship.radius - player.y)): # If player clicked on this ship
+                    player.selectedShip = ship # Set player's selected ship
+        elif event.dict['button'] == 3: # If right mouse button clicked
+            player.selectedShip.order = MoveToXY(player.selectedShip, float(event.dict['pos'][0] - player.x), float(event.dict['pos'][1]) - player.y) # Give a move order to where player clicked
+    for event in pygame.event.get(pygame.KEYDOWN):
+        if event.key == pygame.K_UP:
+            player.y -= 10
+        elif event.key == pygame.K_DOWN:
+            player.y += 10
+        elif event.key == pygame.K_LEFT:
+            player.x -= 10
+        elif event.key == pygame.K_RIGHT:
+            player.x += 10
+    screen.fill(black)
+
+    for ship in ships: # Need to do code to check whether ships are on screen before drawing them
+        ship.poll()
+        ship.draw()
     
-        for ship in ships: # Need to do code to check whether ships are on screen before drawing them
-            ship.poll()
-            ship.draw()
-        
-        pygame.display.flip()
-        for event in pygame.event.get(pygame.QUIT):
-            pygame.quit()
-            running = False
+    pygame.display.flip()
+    for event in pygame.event.get(pygame.QUIT):
+        pygame.quit()
+        running = False
+
