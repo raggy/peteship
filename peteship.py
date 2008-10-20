@@ -54,48 +54,44 @@ class MoveToXY(Order):
         self.x, self.y = x, y
         self.angleToXY = ship.angleToXY(self.x, self.y)
     def poll(self):
-        #pygame.draw.aaline(screen, red, (self.x - 10, self.y), (self.x + 10, self.y))
-        #pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10))
-        #pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))
+        #pygame.draw.aaline(screen, red, (self.x - 10, self.y), (self.x + 10, self.y)) # movement testing markers
+        #pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10)) # testing
+        #pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))         # testing
         """ rev12 : i like circles """
         pygame.draw.circle(screen, midgreen, (self.x, self.y), ship.intRadius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
-        if ship.intRotation != self.angleToXY:
+        if ship.intRotation != self.angleToXY: # If not on target to move to the new point.
             if positive(self.angleToXY - ship.intRotation) < ship.intRotateSpeed:
+                 """ r23: Ben could you please markup this code? Not a clue how it works - BBP """
                 ship.rotateRight(positive(self.angleToXY - ship.intRotation))
             else:
                 """ new in rev 12, see appropriate function """
                 ship.rotateLeft(positive(self.angleToXY - ship.intRotation))
-        elif (ship.x, ship.y) != (self.x, self.y):
-            if ship.distanceFrom(self.x, self.y) < ship.intSpeed:
-                ship.order = Idle(ship)
-            ship.moveForward()
+        elif (ship.x, ship.y) != (self.x, self.y): # stop the ship on target
+            if ship.distanceFrom(self.x, self.y) < ship.intSpeed: # If the destintion is a shorter distance than the move distance...
+                ship.order = Idle(ship) # dump orders and...
+            ship.moveForward()          # cover the rest of the distance.
         else:
-            ship.order = Idle(ship)
-        ship.calcPoints()
+            ship.order = Idle(ship)     # if all else fails, dump orders.
+        ship.calcPoints()               # always recalculate points after moving. Rev 23: This is the source of the speedups slowdowns in ships. Calcpoints is part of the render loop.
       
-class Ship():
+class Ship()
     #basic stats for drawing & position.
-    intRadius = 8
-    intRotation = math.radians(120.0)
+    intRadius = 8                     # Size of the ship from the centre - size of largest part (if multiple parts are added)
+    intRotation = math.radians(270.0) # Initial rotation of the ship. Changes every now and then for testing, doesn't matter usually.
    
     #speed stats.
-    intSpeed = 2.0
-    intRotateSpeed = 1.0
+    intSpeed = 2.0       # Movement
+    intRotateSpeed = 1.0 # Rotation
 
-    #health.
-    intSI = 1
 
-    #game side. e.g 4th player in 4 player match = side 3
-    intSide = 0
+    intSI = 1 # integer for the health of the ship
 
-    #player owned?
-    boolPlayer=True
+    intSide = 0 #game side. e.g 4th player in 4 player match = side 3
 
-    points = []
+    points = [] # List of veticies that make up the ship.
 
-    def __init__(self, side, player, x, y):
+    def __init__(self, side, x, y):
         self.side = side
-        self.player = player
         self.x, self.y = x, y
         self.order = Idle(self)
         self.calcPoints()
@@ -169,7 +165,7 @@ class S1s2(Ship):
         (self.x + self.intRadius * math.sin(self.intRotation + 4.3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 4.3 * math.pi / 3)))]
 
 
-ships = [S1s1(0, True, 100.0, 50.0), S1s2(0, True, 100.0, 100.0), S1s1(0, True, 150, 75)]
+ships = [S1s1(0, 100.0, 50.0), S1s2(0, 100.0, 100.0), S1s1(0, 150, 75)]
 ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
 ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
 ships[2].order = MoveToXY(ships[2], 100.0, 100.0)
