@@ -67,6 +67,19 @@ class MoveToXY(Order):
             else:
                 ship.rotateLeft(positive(self.angleToXY - ship.intRotation))
         """
+        # New behaviour, rotate whilst moving
+        if (ship.x, ship.y) != (self.x, self.y): # stop the ship on target
+            if ship.distanceFrom(self.x, self.y) < ship.intSpeed: # If the destintion is a shorter distance than the move distance...
+                ship.order = Idle(ship) # dump orders and...
+            ship.moveForward()          # cover the rest of the distance.
+        else:
+            ship.order = Idle(ship)     # if all else fails, dump orders.
+        if ship.intRotation != self.angleToXY: # If the ship isn't already facing the right way
+            self.angleToXY = ship.angleToXY(self.x, self.y)
+            ship.rotateTowardAngle(self.angleToXY) # then rotate towards the right way
+        ship.calcPoints()               # always recalculate points after moving. Rev 23: This is the source of the speedups slowdownsin ships. Calcpoints is part of the render loop.
+
+        """ Old behaviour, rotate fully before moving
         if ship.intRotation != self.angleToXY: # If the ship isn't already facing the right way
             ship.rotateTowardAngle(self.angleToXY) # then rotate towards the right way
         else:
@@ -76,6 +89,7 @@ class MoveToXY(Order):
                 ship.moveForward()          # cover the rest of the distance.
             else:
                 ship.order = Idle(ship)     # if all else fails, dump orders.
+        """
         ship.calcPoints()               # always recalculate points after moving. Rev 23: This is the source of the speedups slowdowns in ships. Calcpoints is part of the render loop.
       
 class Ship():
@@ -90,7 +104,7 @@ class Ship():
 
     intSI = 1 # integer for the health of the ship
 
-    intSide = 0 # game side. e.g 4th player in 4 player match = side 3
+    intSide = 0 #game side. e.g 4th player in 4 player match = side 3
 
     points = [] # List of veticies that make up the ship.
 
@@ -182,7 +196,7 @@ ships[0].intRotation = math.radians(270)
 ships[1].intRotation = math.radians(269)
 ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
 ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
-#ships[2].order = MoveToXY(ships[2], 100.0, 100.0)
+ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
 running = True
 
 GC.start()
