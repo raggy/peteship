@@ -20,7 +20,7 @@ grey = 150, 150, 150
 darkgrey = 50, 50, 50
 #Meh, fun.
 pointsrgb = [red, green, blue]
-
+    
 def positive(number):
     #Convert negative numbers to their positive equivalent.
     #If the number is positive, return it.
@@ -198,9 +198,36 @@ ships[1].intRotation = math.radians(269)
 ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
 ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
 ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
+
+""" New in r27 """
+class Player(): 
+    """ Set of stats to store what the player can see. """
+    x = 0              # upper left position of the view, x axis.
+    y = 0              # same, y axis.
+    xy = (0, 0)        # another way to store the x, y.
+    width = size [0]   # width of the screen, from left, in pixels.
+    height = size [1]  # same, height
+    tBound = 0
+    bBound = 0
+    lBound = 0
+    rBound = 0
+    """ End of player view stuff. """
+    """ Player specific stats. """
+    colour = midgreen # hahaha why not. Tank tastic.
+    name = "Ronco"
+    """ End of player specific stats """
+    def __init__(self):
+        self.calcBounds()
+
+    def calcBounds(self):
+        self.tBound = self.y - 10 # 10 is the biggest radius so far, will replace when we have more ships.
+        self.bBound = self.y + self.height + 10 # same kinda thing
+        self.lBound = self.x - 10
+        self.rBound = self.x + self.width + 10
+                
 running = True
 
-GC.start()
+GC.start() # Start game clock
 
 while running:
     for frame_count, game_time in GC.update():
