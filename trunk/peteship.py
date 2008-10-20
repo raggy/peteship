@@ -117,15 +117,17 @@ class Ship():
    
     def draw(self):
         #pygame.draw.line(screen, white, (50, 50), (25, 25))
-        pygame.draw.circle(screen, black, (self.x, self.y), self.radius + 1) # black underlying circle.
-        pygame.draw.circle(screen, grey, (self.x, self.y), self.radius + 1, 1) # surrounding circle.
-        for i in range(0, len(self.points)):
+        #pygame.draw.circle(screen, black, (self.x, self.y), self.radius + 1) # black underlying circle.
+        #pygame.draw.circle(screen, grey, (self.x, self.y), self.radius + 1, 1) # surrounding circle.
+        pygame.draw.polygon(screen, black, self.offsetPoints())
+        pygame.draw.aalines(screen, player.colour, True, self.offsetPoints())
+        """for i in range(0, len(self.points)):
             colour = player.colour
             for j in range(0, len(self.intEnginePoint)):
                 if i == self.intEnginePoint[j]:
                     colour = red
-            pygame.draw.line(screen, colour, ((self.points[i][0] - player.x), (self.points[i][1] - player.y)), ((self.points[i - 1][0] - player.x), (self.points[i - 1][1] - player.y)))
-            
+            pygame.draw.aaline(screen, colour, ((self.points[i][0] - player.x), (self.points[i][1] - player.y)), ((self.points[i - 1][0] - player.x), (self.points[i - 1][1] - player.y)))
+            """
     """def rotateRight(self, rotateBy=0):
         # Depreciated
         if rotateBy == 0:
@@ -171,6 +173,12 @@ class Ship():
     def distanceFrom(self, x, y):
         #Pythagoras up in this. yeah boy.
         return math.sqrt((self.x-x)**2 + (self.y-y)**2)
+
+    def offsetPoints(self):
+        points = []
+        for point in self.points:
+            points.append((point[0]-self.player.x, point[1]-self.player.y))
+        return points
 
 class S1s1(Ship):
     """ as of rev 12 now a list"""
