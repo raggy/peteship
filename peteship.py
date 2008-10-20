@@ -58,7 +58,7 @@ class MoveToXY(Order):
         #pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10)) # testing
         #pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))         # testing
         """ rev12 : i like circles """
-        pygame.draw.circle(screen, midgreen, ((int(self.x) - player.x), (int(self.y)) - player.y), ship.radius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
+        pygame.draw.circle(screen, midgreen, ((int(self.x) - player.x), (int(self.y)) - player.y), ship.radius - 3, 2) # circle designators for the move. Currently living above ships so needs to be changed.
         """ Depreciated, using new function rotateTowardAngle 
         if ship.intRotation != self.angleToXY: # If not on target to move to the new point.           
             # Is this needed any more? The ships seem to rotate to their target within the first frame.
@@ -118,6 +118,8 @@ class Ship():
    
     def draw(self):
         #pygame.draw.line(screen, white, (50, 50), (25, 25))
+        pygame.draw.circle(screen, black, (self.x, self.y), self.radius + 1) # black underlying circle.
+        pygame.draw.circle(screen, grey, (self.x, self.y), self.radius + 1, 1) # surrounding circle.
         for i in range(0, len(self.points)):
             colour = player.colour
             for j in range(0, len(self.intEnginePoint)):
