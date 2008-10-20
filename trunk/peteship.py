@@ -58,7 +58,7 @@ class MoveToXY(Order):
         #pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10)) # testing
         #pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))         # testing
         """ rev12 : i like circles """
-        pygame.draw.circle(screen, midgreen, ((int(self.x) - player.x), (int(self.y)) - player.y), ship.intRadius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
+        pygame.draw.circle(screen, midgreen, ((int(self.x) - player.x), (int(self.y)) - player.y), ship.radius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
         """ Depreciated, using new function rotateTowardAngle 
         if ship.intRotation != self.angleToXY: # If not on target to move to the new point.           
             # Is this needed any more? The ships seem to rotate to their target within the first frame.
@@ -96,7 +96,7 @@ class MoveToXY(Order):
       
 class Ship():
     #basic stats for drawing & position.
-    intRadius = 8                     # Size of the ship from the centre - size of largest part (if multiple parts are added)
+    radius = 8                     # Size of the ship from the centre - size of largest part (if multiple parts are added)
     intRotation = math.radians(270.0) # Initial rotation of the ship. Changes every now and then for testing, doesn't matter usually.
     
     #speed stats.
@@ -178,19 +178,19 @@ class S1s1(Ship):
     def calcPoints(self):
     #calculate the three points of the triangle relative to the center xy of the ship
     #and the radius given to the ship.
-        self.points = [(self.x + self.intRadius * math.sin(self.intRotation), (self.y - self.intRadius * math.cos(self.intRotation))),\
-        (self.x + self.intRadius * math.sin(self.intRotation + 2.3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 2.3 * math.pi / 3))),\
-        (self.x + self.intRadius * math.sin(self.intRotation + 3.7 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 3.7 * math.pi / 3)))]
+        self.points = [(self.x + self.radius * math.sin(self.intRotation), (self.y - self.radius * math.cos(self.intRotation))),\
+        (self.x + self.radius * math.sin(self.intRotation + 2.3 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 2.3 * math.pi / 3))),\
+        (self.x + self.radius * math.sin(self.intRotation + 3.7 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 3.7 * math.pi / 3)))]
 
 class S1s2(Ship):
     """ as of rev 12, now a list """
     intEnginePoint = [2, 3]
       
     def calcPoints(self):
-        self.points = [((self.x + self.intRadius * math.sin(self.intRotation)), (self.y - self.intRadius * math.cos(self.intRotation))),\
-        (self.x + self.intRadius * math.sin(self.intRotation + 1.7 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 1.7 * math.pi / 3))),\
-        (self.x + self.intRadius * math.sin(self.intRotation + 3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 3 * math.pi / 3))),\
-        (self.x + self.intRadius * math.sin(self.intRotation + 4.3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 4.3 * math.pi / 3)))]
+        self.points = [((self.x + self.radius * math.sin(self.intRotation)), (self.y - self.radius * math.cos(self.intRotation))),\
+        (self.x + self.radius * math.sin(self.intRotation + 1.7 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 1.7 * math.pi / 3))),\
+        (self.x + self.radius * math.sin(self.intRotation + 3 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 3 * math.pi / 3))),\
+        (self.x + self.radius * math.sin(self.intRotation + 4.3 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 4.3 * math.pi / 3)))]
 
 """ New in r27 """
 class Player(): 
@@ -236,25 +236,32 @@ GC.start() # Start game clock
 while running:
     for frame_count, game_time in GC.update():
         pygame.msg.message
-        event = pygame.event.poll()
-        if event.type == pygame.QUIT:
+        pygame.event.clear(pygame.MOUSEMOTION)
+        pygame.event.clear(pygame.MOUSEBUTTONUP)
+        for event in pygame.event.get(pygame.MOUSEBUTTONDOWN): # Loop through all MOUSEBUTTONDOWN events on the buffer
+            if event.dict['button'] == 1: # If left mouse button clicked
+                # then ask any ships if they're going to be selected
+                for ship in ships:
+                    if (event.dict['pos'][0] >= (ship.x - ship.radius - player.x) and event.dict['pos'][0] <= (ship.x + ship.radius - player.x)) and (event.dict['pos'][1] >= (ship.y - ship.radius - player.y) and event.dict['pos'][1] <= (ship.y + ship.radius - player.y)): # If player clicked on this ship
+                        player.selectedShip = ship # Set player's selected ship
+            elif event.dict['button'] == 3: # If right mouse button clicked
+                player.selectedShip.order = MoveToXY(player.selectedShip, float(event.dict['pos'][0] - player.x), float(event.dict['pos'][1]) - player.y) # Give a move order to where player clicked
+        for event in pygame.event.get(pygame.KEYDOWN):
+            if event.key == pygame.K_UP:
+                player.y -= 10
+            elif event.key == pygame.K_DOWN:
+                player.y += 10
+            elif event.key == pygame.K_LEFT:
+                player.x -= 10
+            elif event.key == pygame.K_RIGHT:
+                player.x += 10
+        screen.fill(black)
+    
+        for ship in ships: # Need to do code to check whether ships are on screen before drawing them
+            ship.poll()
+            ship.draw()
+        
+        pygame.display.flip()
+        for event in pygame.event.get(pygame.QUIT):
             pygame.quit()
             running = False
-        else:
-            #if event.type == click, etc.
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    player.y -= 10
-                elif event.key == pygame.K_DOWN:
-                    player.y += 10
-                elif event.key == pygame.K_LEFT:
-                    player.x -= 10
-                elif event.key == pygame.K_RIGHT:
-                    player.x += 10
-            screen.fill(black)
-    
-            for ship in ships:
-                ship.poll()
-                ship.draw()
-        
-            pygame.display.flip()
