@@ -68,12 +68,13 @@ class MoveToXY(Order):
                 ship.rotateLeft(positive(self.angleToXY - ship.intRotation))
         """
         # New behaviour, rotate whilst moving
-        if (ship.x, ship.y) != (self.x, self.y): # stop the ship on target
-            if ship.distanceFrom(self.x, self.y) < ship.intSpeed: # If the destintion is a shorter distance than the move distance...
-                ship.order = Idle(ship) # dump orders and...
-            ship.moveForward()          # cover the rest of the distance.
-        else:
-            ship.order = Idle(ship)     # if all else fails, dump orders.
+        if normalisedAngle(self.angleToXY - ship.intRotation) < (math.pi / 2) or normalisedAngle(self.angleToXY - ship.intRotation) > (math.pi * 1.5):
+            if (ship.x, ship.y) != (self.x, self.y): # stop the ship on target
+                if ship.distanceFrom(self.x, self.y) < ship.intSpeed: # If the destintion is a shorter distance than the move distance...
+                    ship.order = Idle(ship) # dump orders and...
+                ship.moveForward()          # cover the rest of the distance.
+            else:
+                ship.order = Idle(ship)     # if all else fails, dump orders.
         if ship.intRotation != self.angleToXY: # If the ship isn't already facing the right way
             self.angleToXY = ship.angleToXY(self.x, self.y)
             ship.rotateTowardAngle(self.angleToXY) # then rotate towards the right way
@@ -203,6 +204,7 @@ GC.start()
 
 while running:
     for frame_count, game_time in GC.update():
+        pygame.msg.message
         event = pygame.event.poll()
         if event.type == pygame.QUIT:
             pygame.quit()
