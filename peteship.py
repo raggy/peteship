@@ -58,35 +58,39 @@ class MoveToXY(Order):
         #pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10)) # testing
         #pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))         # testing
         """ rev12 : i like circles """
-        pygame.draw.circle(screen, midgreen, (self.x, self.y), ship.intRadius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
-        if ship.intRotation != self.angleToXY: # If not on target to move to the new point.
-            if positive(self.angleToXY - ship.intRotation) < ship.intRotateSpeed:
-                 """ r23: Ben could you please markup this code? Not a clue how it works - BBP """
-                ship.rotateRight(positive(self.angleToXY - ship.intRotation))
+        pygame.draw.circle(screen, midgreen, (int(self.x), int(self.y)), ship.intRadius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
+        """ Depreciated, using new function rotateTowardAngle 
+        if ship.intRotation != self.angleToXY: # If not on target to move to the new point.           
+            # Is this needed any more? The ships seem to rotate to their target within the first frame.
+            if positive(self.angleToXY - ship.intRotation) < ship.intRotateSpeed: # If the amount the ship needs to turn is less than the amount it will turn in this frame (i.e. rotation speed)
+                ship.rotateRight(positive(self.angleToXY - ship.intRotation)) # then rotate just enough to be on course.
             else:
-                """ new in rev 12, see appropriate function """
                 ship.rotateLeft(positive(self.angleToXY - ship.intRotation))
-        elif (ship.x, ship.y) != (self.x, self.y): # stop the ship on target
-            if ship.distanceFrom(self.x, self.y) < ship.intSpeed: # If the destintion is a shorter distance than the move distance...
-                ship.order = Idle(ship) # dump orders and...
-            ship.moveForward()          # cover the rest of the distance.
+        """
+        if ship.intRotation != self.angleToXY: # If the ship isn't already facing the right way
+            ship.rotateTowardAngle(self.angleToXY) # then rotate towards the right way
         else:
-            ship.order = Idle(ship)     # if all else fails, dump orders.
+            if (ship.x, ship.y) != (self.x, self.y): # stop the ship on target
+                if ship.distanceFrom(self.x, self.y) < ship.intSpeed: # If the destintion is a shorter distance than the move distance...
+                    ship.order = Idle(ship) # dump orders and...
+                ship.moveForward()          # cover the rest of the distance.
+            else:
+                ship.order = Idle(ship)     # if all else fails, dump orders.
         ship.calcPoints()               # always recalculate points after moving. Rev 23: This is the source of the speedups slowdowns in ships. Calcpoints is part of the render loop.
       
-class Ship()
+class Ship():
     #basic stats for drawing & position.
     intRadius = 8                     # Size of the ship from the centre - size of largest part (if multiple parts are added)
     intRotation = math.radians(270.0) # Initial rotation of the ship. Changes every now and then for testing, doesn't matter usually.
    
     #speed stats.
     intSpeed = 2.0       # Movement
-    intRotateSpeed = 1.0 # Rotation
+    intRotateSpeed = 0.1 # Rotation
 
 
     intSI = 1 # integer for the health of the ship
 
-    intSide = 0 #game side. e.g 4th player in 4 player match = side 3
+    intSide = 0 # game side. e.g 4th player in 4 player match = side 3
 
     points = [] # List of veticies that make up the ship.
 
@@ -97,7 +101,6 @@ class Ship()
         self.calcPoints()
    
     def draw(self):
-        """ Modded in rev 12 - effectively added multiple engine ports - seems dodgy though??? weird overwrite on the square. """
         #pygame.draw.line(screen, white, (50, 50), (25, 25))
         for i in range(0, len(self.points)):
             colour = white
@@ -106,17 +109,26 @@ class Ship()
                     colour = red
             pygame.draw.line(screen, colour, self.points[i], self.points[i - 1])
             
-    def rotateRight(self, rotateBy=0):
-        #Does exactly that
+    """def rotateRight(self, rotateBy=0):
+        # Depreciated
         if rotateBy == 0:
             rotateBy = self.intRotateSpeed
         self.intRotation = normalisedAngle(self.intRotation + rotateBy)
 
     def rotateLeft(self, rotateBy=0):
-       #Does exactly that
-       if rotateBy == 0:
-           rotateBy = self.intRotateSpeed
-       self.intRotation = normalisedAngle(self.intRotation - rotateBy)
+        # Depreciated
+        if rotateBy == 0:
+            rotateBy = self.intRotateSpeed
+        self.intRotation = normalisedAngle(self.intRotation - rotateBy)
+"""
+    def rotateTowardAngle(self, angle):
+        if positive(angle - ship.intRotation) < ship.intRotateSpeed: # If rotation speed is bigger than the amount which you need to turn
+            self.intRotation = angle # then only turn to face the desired angle
+        else:
+            if normalisedAngle(angle - self.intRotation) > math.pi: # If the angle which you're rotating towards is more 180 degrees to the right, it makes more sense to turn left
+                self.intRotation = normalisedAngle(self.intRotation - self.intRotateSpeed) # Turn left by self.intRotateSpeed
+            else:
+                self.intRotation = normalisedAngle(self.intRotation + self.intRotateSpeed) # Turn right by self.intRotateSpeed
 
     def moveForward(self, speed=0):
         #LOLZ.
@@ -166,9 +178,11 @@ class S1s2(Ship):
 
 
 ships = [S1s1(0, 100.0, 50.0), S1s2(0, 100.0, 100.0), S1s1(0, 150, 75)]
+ships[0].intRotation = math.radians(270)
+ships[1].intRotation = math.radians(269)
 ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
 ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
-ships[2].order = MoveToXY(ships[2], 100.0, 100.0)
+#ships[2].order = MoveToXY(ships[2], 100.0, 100.0)
 running = True
 
 GC.start()
