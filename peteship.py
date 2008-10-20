@@ -197,7 +197,6 @@ class Player():
     """ Set of stats to store what the player can see. """
     x = 0              # upper left position of the view, x axis.
     y = 0              # same, y axis.
-    xy = (0, 0)        # another way to store the x, y.
     width = size [0]   # width of the screen, from left, in pixels.
     height = size [1]  # same, height
     tBound = 0
@@ -217,6 +216,9 @@ class Player():
         self.bBound = self.y + self.height + 10 # same kinda thing
         self.lBound = self.x - 10
         self.rBound = self.x + self.width + 10
+
+    def xy(self): # Return x, y as a tuple
+        return (x, y)
 
 player = Player()
 
