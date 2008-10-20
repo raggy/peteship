@@ -1,0 +1,14 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+A page to keep track of what Breakbeat Pete & King Raggy B are going to do.
+
+
+= Details =
+
+*Pete*
+
+_Construction ships_: Build markers, build animations, build order.
+_Circle ring around ships_: To show ships hit/selection boxes better.
+_Selection markers_: To show selected ships.
+_Move To Ship order_: For rendezvous orders.
