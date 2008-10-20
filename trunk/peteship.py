@@ -58,7 +58,7 @@ class MoveToXY(Order):
         #pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10)) # testing
         #pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))         # testing
         """ rev12 : i like circles """
-        pygame.draw.circle(screen, midgreen, (int(self.x), int(self.y)), ship.intRadius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
+        pygame.draw.circle(screen, midgreen, ((int(self.x) - player.x), (int(self.y)) - player.y), ship.intRadius, 2) # circle designators for the move. Currently living above ships so needs to be changed.
         """ Depreciated, using new function rotateTowardAngle 
         if ship.intRotation != self.angleToXY: # If not on target to move to the new point.           
             # Is this needed any more? The ships seem to rotate to their target within the first frame.
@@ -68,6 +68,7 @@ class MoveToXY(Order):
                 ship.rotateLeft(positive(self.angleToXY - ship.intRotation))
         """
         # New behaviour, rotate whilst moving
+        #if ship.distanceFrom(self.x, self.y) 
         if normalisedAngle(self.angleToXY - ship.intRotation) < (math.pi / 2) or normalisedAngle(self.angleToXY - ship.intRotation) > (math.pi * 1.5):
             if (ship.x, ship.y) != (self.x, self.y): # stop the ship on target
                 if ship.distanceFrom(self.x, self.y) < ship.intSpeed: # If the destintion is a shorter distance than the move distance...
@@ -97,10 +98,10 @@ class Ship():
     #basic stats for drawing & position.
     intRadius = 8                     # Size of the ship from the centre - size of largest part (if multiple parts are added)
     intRotation = math.radians(270.0) # Initial rotation of the ship. Changes every now and then for testing, doesn't matter usually.
-   
+    
     #speed stats.
-    intSpeed = 2.0       # Movement
-    intRotateSpeed = 0.1 # Rotation
+    intSpeed = 0.5       # Movement
+    intRotateSpeed = 0.01 # Rotation
 
 
     intSI = 1 # integer for the health of the ship
@@ -109,8 +110,8 @@ class Ship():
 
     points = [] # List of veticies that make up the ship.
 
-    def __init__(self, side, x, y):
-        self.side = side
+    def __init__(self, player, x, y):
+        self.player = player
         self.x, self.y = x, y
         self.order = Idle(self)
         self.calcPoints()
@@ -118,11 +119,11 @@ class Ship():
     def draw(self):
         #pygame.draw.line(screen, white, (50, 50), (25, 25))
         for i in range(0, len(self.points)):
-            colour = white
+            colour = player.colour
             for j in range(0, len(self.intEnginePoint)):
                 if i == self.intEnginePoint[j]:
                     colour = red
-            pygame.draw.line(screen, colour, self.points[i], self.points[i - 1])
+            pygame.draw.line(screen, colour, ((self.points[i][0] - player.x), (self.points[i][1] - player.y)), ((self.points[i - 1][0] - player.x), (self.points[i - 1][1] - player.y)))
             
     """def rotateRight(self, rotateBy=0):
         # Depreciated
@@ -191,14 +192,6 @@ class S1s2(Ship):
         (self.x + self.intRadius * math.sin(self.intRotation + 3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 3 * math.pi / 3))),\
         (self.x + self.intRadius * math.sin(self.intRotation + 4.3 * math.pi / 3), (self.y - self.intRadius * math.cos(self.intRotation + 4.3 * math.pi / 3)))]
 
-
-ships = [S1s1(0, 100.0, 50.0), S1s2(0, 100.0, 100.0), S1s1(0, 150, 75)]
-ships[0].intRotation = math.radians(270)
-ships[1].intRotation = math.radians(269)
-ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
-ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
-ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
-
 """ New in r27 """
 class Player(): 
     """ Set of stats to store what the player can see. """
@@ -224,6 +217,15 @@ class Player():
         self.bBound = self.y + self.height + 10 # same kinda thing
         self.lBound = self.x - 10
         self.rBound = self.x + self.width + 10
+
+player = Player()
+
+ships = [S1s1(player, 100.0, 50.0), S1s2(player, 100.0, 100.0), S1s1(player, 150, 75)]
+ships[0].intRotation = math.radians(270)
+ships[1].intRotation = math.radians(269)
+ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
+ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
+ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
                 
 running = True
 
@@ -238,6 +240,15 @@ while running:
             running = False
         else:
             #if event.type == click, etc.
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    player.y -= 10
+                elif event.key == pygame.K_DOWN:
+                    player.y += 10
+                elif event.key == pygame.K_LEFT:
+                    player.x -= 10
+                elif event.key == pygame.K_RIGHT:
+                    player.x += 10
             screen.fill(black)
     
             for ship in ships:
