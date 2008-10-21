@@ -54,7 +54,8 @@ class MoveToXY(Order):
         self.angleToXY = ship.angleToXY(self.x, self.y)
     def poll(self):
         """ rev12 : i like circles """
-        pygame.draw.circle(screen, midgreen, ((int(self.x) - player.x), (int(self.y)) - player.y), ship.radius - 3, 2) # circle designators for the move. Currently living above ships so needs to be changed.
+        #pygame.draw.circle(screen, midgreen, ((int(self.x * player.zoom) - player.x), (int(self.y) * player.zoom) - player.y), ship.radius - 3, 2) # circle designators for the move. Currently living above ships so needs to be changed.
+        pygame.draw.line(screen, (20,20,20), ((int(self.x * player.zoom) - player.x), (int(self.y * player.zoom)) - player.y), ((ship.x * player.zoom) - player.x,(ship.y * player.zoom) - player.y))
         # New behaviour, rotate whilst moving
         if ship.distanceFrom(self.x, self.y) > math.sqrt(((ship.x + math.sin(ship.intRotation) * ship.intSpeed)-self.x)**2 + ((ship.y - math.cos(ship.intRotation) * ship.intSpeed)-self.y)**2): # If next move will bring you closer to the destination
             if normalisedAngle(self.angleToXY - ship.intRotation) < (math.pi / 4) or normalisedAngle(self.angleToXY - ship.intRotation) > (math.pi * 1.75):
@@ -75,7 +76,7 @@ class Ship():
     intRotation = math.radians(270.0) # Initial rotation of the ship. Changes every now and then for testing, doesn't matter usually.
     
     #speed stats.
-    intSpeed = 1.5       # Movement
+    intSpeed = 2.5       # Movement
     intRotateSpeed = 0.05 # Rotation
 
 
@@ -132,7 +133,7 @@ class Ship():
     def offsetPoints(self):
         points = []
         for point in self.points:
-            points.append((point[0]-self.player.x, point[1]-self.player.y))
+            points.append(((point[0]* player.zoom - self.player.x), (point[1]* player.zoom-self.player.y)))
         return points
 
 class S1s1(Ship):
@@ -178,6 +179,7 @@ class Player():
     y = 0              # same, y axis.
     width = size [0]   # width of the screen, from left, in pixels.
     height = size [1]  # same, height
+    zoom = 2.0
     tBound = 0
     bBound = 0
     lBound = 0
@@ -213,8 +215,8 @@ ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
 
 ships = []
 for i in range(200):
-    ships.append(S1s1(player, (random.random()*width), (random.random()*height)))
-    ships[i].order = MoveToXY(ships[i], (random.random()*width), (random.random()*height))
+    ships.append(S1s6(player, (random.random()*width*4), (random.random()*height*4)))
+    ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
 running = True
 
@@ -228,11 +230,11 @@ while running:
             # then ask any ships if they're going to be selected
             player.selectedShip = False
             for ship in ships:
-                if (event.dict['pos'][0] >= (ship.x - ship.radius - player.x) and event.dict['pos'][0] <= (ship.x + ship.radius - player.x)) and (event.dict['pos'][1] >= (ship.y - ship.radius - player.y) and event.dict['pos'][1] <= (ship.y + ship.radius - player.y)): # If player clicked on this ship
+                if (event.dict['pos'][0] >= ((ship.x - ship.radius)*player.zoom - player.x) and event.dict['pos'][0] <= ((ship.x + ship.radius)*player.zoom - player.x)) and (event.dict['pos'][1] >= ((ship.y - ship.radius)*player.zoom - player.y) and event.dict['pos'][1] <= ((ship.y + ship.radius)*player.zoom - player.y)): # If player clicked on this ship
                     player.selectedShip = ship # Set player's selected ship
         elif event.dict['button'] == 3: # If right mouse button clicked
             if not player.selectedShip is False:
-                player.selectedShip.order = MoveToXY(player.selectedShip, float(event.dict['pos'][0] + player.x), float(event.dict['pos'][1]) + player.y) # Give a move order to where player clicked
+                player.selectedShip.order = MoveToXY(player.selectedShip, ((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom) # Give a move order to where player clicked
     for event in pygame.event.get(pygame.KEYDOWN):
         if event.key == pygame.K_UP:
             player.y -= 10
@@ -245,6 +247,10 @@ while running:
         elif event.key == pygame.K_ESCAPE:
             pygame.quit()
             running = False
+        elif event.key == pygame.K_q:
+            player.zoom -= 0.1
+        elif event.key == pygame.K_w:
+            player.zoom += 0.1
     screen.fill(black)
 
     for ship in ships: # Need to do code to check whether ships are on screen before drawing them
@@ -255,4 +261,3 @@ while running:
     for event in pygame.event.get(pygame.QUIT):
         pygame.quit()
         running = False
-
