@@ -1,10 +1,10 @@
 #!/usr/local/bin/python
-import sys, pygame, math
+import sys, pygame, math, random
 pygame.init()
 
 """ rev12 : set framerate to 30, hopefully """
 clock = pygame.time.Clock()
-size = width, height = 640, 480
+size = width, height = 1400, 1050
 screen = pygame.display.set_mode(size)
 
 black = 0, 0, 0
@@ -53,19 +53,8 @@ class MoveToXY(Order):
         self.x, self.y = x, y
         self.angleToXY = ship.angleToXY(self.x, self.y)
     def poll(self):
-        #pygame.draw.aaline(screen, red, (self.x - 10, self.y), (self.x + 10, self.y)) # movement testing markers
-        #pygame.draw.aaline(screen, red, (self.x, self.y - 10), (self.x, self.y + 10)) # testing
-        #pygame.draw.aaline(screen, green, (self.x, self.y), (ship.x, ship.y))         # testing
         """ rev12 : i like circles """
         pygame.draw.circle(screen, midgreen, ((int(self.x) - player.x), (int(self.y)) - player.y), ship.radius - 3, 2) # circle designators for the move. Currently living above ships so needs to be changed.
-        """ Depreciated, using new function rotateTowardAngle 
-        if ship.intRotation != self.angleToXY: # If not on target to move to the new point.           
-            # Is this needed any more? The ships seem to rotate to their target within the first frame.
-            if positive(self.angleToXY - ship.intRotation) < ship.intRotateSpeed: # If the amount the ship needs to turn is less than the amount it will turn in this frame (i.e. rotation speed)
-                ship.rotateRight(positive(self.angleToXY - ship.intRotation)) # then rotate just enough to be on course.
-            else:
-                ship.rotateLeft(positive(self.angleToXY - ship.intRotation))
-        """
         # New behaviour, rotate whilst moving
         if ship.distanceFrom(self.x, self.y) > math.sqrt(((ship.x + math.sin(ship.intRotation) * ship.intSpeed)-self.x)**2 + ((ship.y - math.cos(ship.intRotation) * ship.intSpeed)-self.y)**2): # If next move will bring you closer to the destination
             if normalisedAngle(self.angleToXY - ship.intRotation) < (math.pi / 4) or normalisedAngle(self.angleToXY - ship.intRotation) > (math.pi * 1.75):
@@ -79,19 +68,6 @@ class MoveToXY(Order):
             self.angleToXY = ship.angleToXY(self.x, self.y)
             ship.rotateTowardAngle(self.angleToXY) # then rotate towards the right way
         ship.calcPoints()               # always recalculate points after moving. Rev 23: This is the source of the speedups slowdownsin ships. Calcpoints is part of the render loop.
-
-        """ Old behaviour, rotate fully before moving
-        if ship.intRotation != self.angleToXY: # If the ship isn't already facing the right way
-            ship.rotateTowardAngle(self.angleToXY) # then rotate towards the right way
-        else:
-            if (ship.x, ship.y) != (self.x, self.y): # stop the ship on target
-                if ship.distanceFrom(self.x, self.y) < ship.intSpeed: # If the destintion is a shorter distance than the move distance...
-                    ship.order = Idle(ship) # dump orders and...
-                ship.moveForward()          # cover the rest of the distance.
-            else:
-                ship.order = Idle(ship)     # if all else fails, dump orders.
-        """
-        ship.calcPoints()               # always recalculate points after moving. Rev 23: This is the source of the speedups slowdowns in ships. Calcpoints is part of the render loop.
       
 class Ship():
     #basic stats for drawing & position.
@@ -99,8 +75,8 @@ class Ship():
     intRotation = math.radians(270.0) # Initial rotation of the ship. Changes every now and then for testing, doesn't matter usually.
     
     #speed stats.
-    intSpeed = 0.5       # Movement
-    intRotateSpeed = 0.01 # Rotation
+    intSpeed = 1.5       # Movement
+    intRotateSpeed = 0.05 # Rotation
 
 
     intSI = 1 # integer for the health of the ship
@@ -108,11 +84,6 @@ class Ship():
     intSide = 0 #game side. e.g 4th player in 4 player match = side 3
 
     points = [] # List of veticies that make up the ship.
-    """ experimental contrail code """
-    contrails = []
-    contrailNext = 0
-    contrailTimer = 30
-    """ end experimental code """
     
     def __init__(self, player, x, y):
         self.player = player
@@ -121,50 +92,9 @@ class Ship():
         self.calcPoints()
    
     def draw(self):
-        #pygame.draw.line(screen, white, (50, 50), (25, 25))
-        #pygame.draw.circle(screen, black, (self.x, self.y), self.radius + 1) # black underlying circle.
-        #pygame.draw.circle(screen, grey, (self.x, self.y), self.radius + 1, 1) # surrounding circle.
         pygame.draw.polygon(screen, black, self.offsetPoints())
         pygame.draw.aalines(screen, player.colour, True, self.offsetPoints())
-        # EXPERIMENTAL
-        """ experimental contrail code. """
-        self.contrailTimer -= 1
-        if self.contrailTimer == 0:
-            self.contrails = []
-            self.contrails[self.contrailNext] = [self.points[1], self.points[len(self.points) - 1]]
-            self.contrailNext += 1
-            self.contrailTimer = 30
-
-        for i in range(0, len(self.contrails) -1):
-            if i != 0:
-                pygame.draw.aaline(screen, red, False, self.contrails[i -1][0], self.contrails[i][0])
-                pygame.draw.aaline(screen, red, False, self.contrails[i -1][1], self.contrails[i][1])
-            pygame.draw.aalines(screen, red, False, self.contrails[i])
-        """ end experimental code """
-        # END EXPERIMENTAL
-                            
-        """for i in range(0, len(self.points)):
-            colour = player.colour
-            for j in range(0, len(self.intEnginePoint)):
-                if i == self.intEnginePoint[j]:
-                    colour = red
-            pygame.draw.aaline(screen, colour, ((self.points[i][0] - player.x), (self.points[i][1] - player.y)), ((self.points[i - 1][0] - player.x), (self.points[i - 1][1] - player.y)))
-            """
-        # End of old draw code.
-
         
-    """def rotateRight(self, rotateBy=0):
-        # Depreciated
-        if rotateBy == 0:
-            rotateBy = self.intRotateSpeed
-        self.intRotation = normalisedAngle(self.intRotation + rotateBy)
-
-    def rotateLeft(self, rotateBy=0):
-        # Depreciated
-        if rotateBy == 0:
-            rotateBy = self.intRotateSpeed
-        self.intRotation = normalisedAngle(self.intRotation - rotateBy)
-"""
     def rotateTowardAngle(self, angle):
         if positive(angle - ship.intRotation) < ship.intRotateSpeed: # If rotation speed is bigger than the amount which you need to turn
             self.intRotation = angle # then only turn to face the desired angle
@@ -237,6 +167,7 @@ class Player():
     bBound = 0
     lBound = 0
     rBound = 0
+    selectedShip = False
     """ End of player view stuff. """
     """ Player specific stats. """
     colour = white # hahaha why not. Tank tastic.
@@ -256,13 +187,20 @@ class Player():
 
 player = Player()
 
+"""
 ships = [S1s1(player, 100.0, 50.0), S1s2(player, 100.0, 100.0), S1s1(player, 150, 75)]
 ships[0].intRotation = math.radians(270)
 ships[1].intRotation = math.radians(269)
 ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
 ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
 ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
-                
+"""
+
+ships = []
+for i in range(200):
+    ships.append(S1s1(player, (random.random()*width), (random.random()*height)))
+    ships[i].order = MoveToXY(ships[i], (random.random()*width), (random.random()*height))
+
 running = True
 
 while running:
@@ -273,11 +211,13 @@ while running:
     for event in pygame.event.get(pygame.MOUSEBUTTONDOWN): # Loop through all MOUSEBUTTONDOWN events on the buffer
         if event.dict['button'] == 1: # If left mouse button clicked
             # then ask any ships if they're going to be selected
+            player.selectedShip = False
             for ship in ships:
                 if (event.dict['pos'][0] >= (ship.x - ship.radius - player.x) and event.dict['pos'][0] <= (ship.x + ship.radius - player.x)) and (event.dict['pos'][1] >= (ship.y - ship.radius - player.y) and event.dict['pos'][1] <= (ship.y + ship.radius - player.y)): # If player clicked on this ship
                     player.selectedShip = ship # Set player's selected ship
         elif event.dict['button'] == 3: # If right mouse button clicked
-            player.selectedShip.order = MoveToXY(player.selectedShip, float(event.dict['pos'][0] - player.x), float(event.dict['pos'][1]) - player.y) # Give a move order to where player clicked
+            if not player.selectedShip is False:
+                player.selectedShip.order = MoveToXY(player.selectedShip, float(event.dict['pos'][0] + player.x), float(event.dict['pos'][1]) + player.y) # Give a move order to where player clicked
     for event in pygame.event.get(pygame.KEYDOWN):
         if event.key == pygame.K_UP:
             player.y -= 10
@@ -287,6 +227,9 @@ while running:
             player.x -= 10
         elif event.key == pygame.K_RIGHT:
             player.x += 10
+        elif event.key == pygame.K_ESCAPE:
+            pygame.quit()
+            running = False
     screen.fill(black)
 
     for ship in ships: # Need to do code to check whether ships are on screen before drawing them
