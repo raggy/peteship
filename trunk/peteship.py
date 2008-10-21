@@ -156,6 +156,21 @@ class S1s2(Ship):
         (self.x + self.radius * math.sin(self.intRotation + 3 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 3 * math.pi / 3))),\
         (self.x + self.radius * math.sin(self.intRotation + 4.3 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 4.3 * math.pi / 3)))]
 
+class S1s6(Ship):
+    """ Carrier """
+    intEnginePoint = [0, 0]
+    buildPoints = []
+        
+    def calcPoints(self):
+        self.points = [(self.x + self.radius * math.sin(self.intRotation + 5.8 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 5.8 * math.pi /3))),\
+        (self.x + self.radius * math.sin(self.intRotation + 0.2 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 0.2 * math.pi / 3))),\
+        (self.x + self.radius * math.sin(self.intRotation + 2 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 2 * math.pi / 3))),\
+        (self.x + self.radius * math.sin(self.intRotation + 2.8 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 2.8 * math.pi / 3))),\
+        (self.x + self.radius * math.sin(self.intRotation + 3.2 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 3.2 * math.pi / 3))),\
+        (self.x + self.radius * math.sin(self.intRotation + 4 * math.pi / 3), (self.y - self.radius * math.cos(self.intRotation + 4 * math.pi / 3)))]
+        
+        self.buildPoints.append([(self.x + (self.radius + 10) * math.sin(self.intRotation)), (self.y - (self.radius + 10) * math.cos(self.intRotation))])
+
 """ New in r27 """
 class Player(): 
     """ Set of stats to store what the player can see. """
