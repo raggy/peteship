@@ -108,7 +108,12 @@ class Ship():
     intSide = 0 #game side. e.g 4th player in 4 player match = side 3
 
     points = [] # List of veticies that make up the ship.
-
+    """ experimental contrail code """
+    contrails = []
+    contrailNext = 0
+    contrailTimer = 30
+    """ end experimental code """
+    
     def __init__(self, player, x, y):
         self.player = player
         self.x, self.y = x, y
@@ -121,6 +126,23 @@ class Ship():
         #pygame.draw.circle(screen, grey, (self.x, self.y), self.radius + 1, 1) # surrounding circle.
         pygame.draw.polygon(screen, black, self.offsetPoints())
         pygame.draw.aalines(screen, player.colour, True, self.offsetPoints())
+        # EXPERIMENTAL
+        """ experimental contrail code. """
+        self.contrailTimer -= 1
+        if self.contrailTimer == 0:
+            self.contrails = []
+            self.contrails[self.contrailNext] = [self.points[1], self.points[len(self.points) - 1]]
+            self.contrailNext += 1
+            self.contrailTimer = 30
+
+        for i in range(0, len(self.contrails) -1):
+            if i != 0:
+                pygame.draw.aaline(screen, red, False, self.contrails[i -1][0], self.contrails[i][0])
+                pygame.draw.aaline(screen, red, False, self.contrails[i -1][1], self.contrails[i][1])
+            pygame.draw.aalines(screen, red, False, self.contrails[i])
+        """ end experimental code """
+        # END EXPERIMENTAL
+                            
         """for i in range(0, len(self.points)):
             colour = player.colour
             for j in range(0, len(self.intEnginePoint)):
@@ -128,6 +150,9 @@ class Ship():
                     colour = red
             pygame.draw.aaline(screen, colour, ((self.points[i][0] - player.x), (self.points[i][1] - player.y)), ((self.points[i - 1][0] - player.x), (self.points[i - 1][1] - player.y)))
             """
+        # End of old draw code.
+
+        
     """def rotateRight(self, rotateBy=0):
         # Depreciated
         if rotateBy == 0:
@@ -214,7 +239,7 @@ class Player():
     rBound = 0
     """ End of player view stuff. """
     """ Player specific stats. """
-    colour = midgreen # hahaha why not. Tank tastic.
+    colour = white # hahaha why not. Tank tastic.
     name = "Ronco"
     """ End of player specific stats """
     def __init__(self):
