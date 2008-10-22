@@ -4,7 +4,7 @@ pygame.init()
 
 """ rev12 : set framerate to 30, hopefully """
 clock = pygame.time.Clock()
-size = width, height = 1400, 1050
+size = width, height = 1024, 600
 screen = pygame.display.set_mode(size)
 
 black = 0, 0, 0
@@ -187,7 +187,7 @@ class Player():
     selectedShip = False
     """ End of player view stuff. """
     """ Player specific stats. """
-    colour = white # hahaha why not. Tank tastic.
+    colour = white # hahaha why not.
     name = "Ronco"
     """ End of player specific stats """
     def __init__(self):
@@ -214,8 +214,8 @@ ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
 """
 
 ships = []
-for i in range(200):
-    ships.append(S1s6(player, (random.random()*width*4), (random.random()*height*4)))
+for i in range(1000):
+    ships.append(S1s6(player, (random.random()*width), (random.random()*height)))
     ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
 running = True
@@ -255,7 +255,11 @@ while running:
 
     for ship in ships: # Need to do code to check whether ships are on screen before drawing them
         ship.poll()
-        ship.draw()
+        if ship.x > player.lBound:
+            if ship.x < player.rBound:
+                if ship.y > player.tBound:
+                    if ship.y < player.bBound:
+                        ship.draw()
     
     pygame.display.flip()
     for event in pygame.event.get(pygame.QUIT):
