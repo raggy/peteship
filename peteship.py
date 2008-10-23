@@ -8,6 +8,7 @@ size = width, height = 800, 480 #Eee compatible resolution. ;)
 screen = pygame.display.set_mode(size)
 
 GLOBAL_TESTSHIPS = 1 #Generic int for creating multimples of tsetingships.
+GLOBAL_ZOOMAMOUNT = 0.05
 
 black = 0, 0, 0
 white = 255, 255, 255
@@ -147,7 +148,7 @@ class Ship():
 class S1s1(Ship):
     """ as of rev 12 now a list"""
     intEnginePoint = [2]
-
+    radius = 3
     #buildInfo
     buildCost = 10
     buildTime = 50
@@ -234,11 +235,11 @@ class S1s6(Ship):
 """ New in r27 """
 class Player(): 
     """ Set of stats to store what the player can see. """
-    x = 0              # upper left position of the view, x axis.
-    y = 0              # same, y axis.
+    x = 0.0              # upper left position of the view, x axis.
+    y = 0.0              # same, y axis.
     width = size [0]   # width of the screen, from left, in pixels.
     height = size [1]  # same, height
-    zoom = 2.0
+    zoom = 1.0
     tBound = 0
     bBound = 0
     lBound = 0
@@ -258,6 +259,10 @@ class Player():
         self.bBound = self.y + self.height + 10 # same kinda thing
         self.lBound = self.x - 10
         self.rBound = self.x + self.width + 10
+
+    def focusOn(self, x, y):
+        self.x = x - (self.width / 2)
+        self.y = y - (self.height / 2)
 
     def xy(self): # Return x, y as a tuple
         return (x, y)
@@ -281,12 +286,15 @@ for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this
 
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!
-#ships[0].addToBuildQueue()
+ships[0].addToBuildQueue()
 #ships[0].addToBuildQueue()
 #print ships[0].buildQueue
 
 """ end build test code """
 
+player.focusOn(ships[0].x, ships[0].y)
+
+keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_w:False}
 running = True
 
 while running:
@@ -305,25 +313,31 @@ while running:
             if not player.selectedShip is False:
                 player.selectedShip.order = MoveToXY(player.selectedShip, ((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom) # Give a move order to where player clicked
     for event in pygame.event.get(pygame.KEYDOWN):
-        if event.key == pygame.K_UP:
-            player.y -= 10
-        elif event.key == pygame.K_DOWN:
-            player.y += 10
-        elif event.key == pygame.K_LEFT:
-            player.x -= 10
-        elif event.key == pygame.K_RIGHT:
-            player.x += 10
-        elif event.key == pygame.K_ESCAPE:
-            pygame.quit()
-            running = False
-        elif event.key == pygame.K_q: # petenote: When i figure out how many pixels this changes by i'll move the display so the zoom is centered.
-            player.zoom -= 0.1
-            player.x -= player.width/player.zoom - player.width/(player.zoom + 0.1)
-            player.y -= player.height/player.zoom - player.height/(player.zoom + 0.1)
-        elif event.key == pygame.K_w:
-            player.zoom += 0.1
-            player.x += player.width/(player.zoom - 0.1) - player.width/player.zoom
-            player.y += player.height/(player.zoom - 0.1) - player.height/player.zoom
+        keysHeld[event.key] = True
+    for event in pygame.event.get(pygame.KEYUP):
+        keysHeld[event.key] = False
+
+    # Check keys
+    if keysHeld[pygame.K_UP]:
+        player.y -= 5
+    elif keysHeld[pygame.K_DOWN]:
+        player.y += 5
+    elif keysHeld[pygame.K_LEFT]:
+        player.x -= 5
+    elif keysHeld[pygame.K_RIGHT]:
+        player.x += 5
+    elif keysHeld[pygame.K_ESCAPE]:
+        pygame.quit()
+        running = False
+    elif keysHeld[pygame.K_q]: # petenote: When i figure out how many pixels this changes by i'll move the display so the zoom is centered.
+        player.zoom -= GLOBAL_ZOOMAMOUNT
+        player.x -= (player.width/player.zoom - player.width/(player.zoom + GLOBAL_ZOOMAMOUNT))
+        player.y -= (player.height/player.zoom - player.height/(player.zoom + GLOBAL_ZOOMAMOUNT))
+    elif keysHeld[pygame.K_w]:
+        player.zoom += GLOBAL_ZOOMAMOUNT
+        player.x += (player.width/(player.zoom - GLOBAL_ZOOMAMOUNT) - player.width/player.zoom)
+        player.y += (player.height/(player.zoom - GLOBAL_ZOOMAMOUNT) - player.height/player.zoom)
+        #print (player.width/(player.zoom - GLOBAL_ZOOMAMOUNT) - player.width/player.zoom)
 
     screen.fill(black) #ARRR.
     
