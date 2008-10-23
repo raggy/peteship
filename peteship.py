@@ -59,10 +59,10 @@ class MoveToXY(Order):
         #pygame.draw.circle(screen, midgreen, ((int(self.x * player.zoom) - player.x), (int(self.y) * player.zoom) - player.y), ship.radius - 3, 2) # circle designators for the move. Currently living above ships so needs to be changed.
         pygame.draw.line(screen, (20,20,20), ((int(self.x * player.zoom) - player.x), (int(self.y * player.zoom)) - player.y), ((ship.x * player.zoom) - player.x,(ship.y * player.zoom) - player.y))
         # New behaviour, rotate whilst moving
-        if ship.distanceFrom(self.x, self.y) > math.sqrt(((ship.x + math.sin(ship.rotation) * ship.intSpeed)-self.x)**2 + ((ship.y - math.cos(ship.rotation) * ship.intSpeed)-self.y)**2): # If next move will bring you closer to the destination
+        if ship.distanceFrom(self.x, self.y) > math.sqrt(((ship.x + math.sin(ship.rotation) * ship.speed)-self.x)**2 + ((ship.y - math.cos(ship.rotation) * ship.speed)-self.y)**2): # If next move will bring you closer to the destination
             if normalisedAngle(self.angleToXY - ship.rotation) < (math.pi / 4) or normalisedAngle(self.angleToXY - ship.rotation) > (math.pi * 1.75):
                 if (ship.x, ship.y) != (self.x, self.y): # stop the ship on target
-                    if ship.distanceFrom(self.x, self.y) < ship.intSpeed: # If the destintion is a shorter distance than the move distance...
+                    if ship.distanceFrom(self.x, self.y) < ship.speed: # If the destintion is a shorter distance than the move distance...
                         ship.order = Idle(ship) # dump orders and...
                     ship.moveForward()          # cover the rest of the distance.
                 else:
@@ -79,7 +79,7 @@ class Ship():
                                     # r43 : Changed to rotation instead of intRotation
     
     #speed stats.
-    intSpeed = 2.5       # Movement
+    speed = 2.5       # Movementdisabled
     intRotateSpeed = 0.05 # Rotation
 
 
@@ -100,6 +100,8 @@ class Ship():
         pass
    
     def draw(self):
+        if self.needsToCalcPoints:
+            self.calcPoints()
         pygame.draw.polygon(screen, black, self.offsetPoints())
         pygame.draw.aalines(screen, player.colour, True, self.offsetPoints())
         
@@ -111,13 +113,12 @@ class Ship():
                 self.rotation = normalisedAngle(self.rotation - self.intRotateSpeed) # Turn left by self.intRotateSpeed
             else:
                 self.rotation = normalisedAngle(self.rotation + self.intRotateSpeed) # Turn right by self.intRotateSpeed
+        self.needsToCalcPoints = True
 
-    def moveForward(self, speed=0):
-        #LOLZ.
-        if speed == 0:
-            speed = self.intSpeed             
-        self.y -= math.cos(self.rotation) * speed  
-        self.x += math.sin(self.rotation) * speed
+    def moveForward(self):       
+        self.y -= math.cos(self.rotation) * self.speed
+        self.x += math.sin(self.rotation) * self.speed
+        self.needsToCalcPoints = True
 
     def poll(self):
         #update the ships data
@@ -157,6 +158,7 @@ class S1s1(Ship):
         self.points = [(self.x + self.radius * math.sin(self.rotation), (self.y - self.radius * math.cos(self.rotation))),\
         (self.x + self.radius * math.sin(self.rotation + 2.3 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 2.3 * math.pi / 3))),\
         (self.x + self.radius * math.sin(self.rotation + 3.7 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 3.7 * math.pi / 3)))]
+        self.needsToCalcPoints = False
 
 class S1s2(Ship):
     """ as of rev 12, now a list """
@@ -171,6 +173,7 @@ class S1s2(Ship):
         (self.x + self.radius * math.sin(self.rotation + 1.7 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 1.7 * math.pi / 3))),\
         (self.x + self.radius * math.sin(self.rotation + 3 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 3 * math.pi / 3))),\
         (self.x + self.radius * math.sin(self.rotation + 4.3 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 4.3 * math.pi / 3)))]
+        self.needsToCalcPoints = False
 
 class S1s6(Ship):
     """ Carrier """
@@ -193,6 +196,7 @@ class S1s6(Ship):
         (self.x + self.radius * math.sin(self.rotation + 2.8 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 2.8 * math.pi / 3))),\
         (self.x + self.radius * math.sin(self.rotation + 3.2 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 3.2 * math.pi / 3))),\
         (self.x + self.radius * math.sin(self.rotation + 4 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 4 * math.pi / 3)))]
+        self.needsToCalcPoints = False
 
     def calcExtras(self):
         self.buildPoints[0] = (self.x + (self.radius + 10) * math.sin(self.rotation)), (self.y - (self.radius + 10) * math.cos(self.rotation))
@@ -271,14 +275,15 @@ ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
 
 ships = []
 for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
-    ships.append(S1s6(player, (random.random()*width), (random.random()*height)))
-    ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
+    #ships.append(S1s6(player, (random.random()*width), (random.random()*height)))
+    ships.append(S1s6(player, (player.width/2), (player.height/2)))
+    #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!
-ships[0].addToBuildQueue()
-ships[0].addToBuildQueue()
-print ships[0].buildQueue
+#ships[0].addToBuildQueue()
+#ships[0].addToBuildQueue()
+#print ships[0].buildQueue
 
 """ end build test code """
 
@@ -313,8 +318,12 @@ while running:
             running = False
         elif event.key == pygame.K_q: # petenote: When i figure out how many pixels this changes by i'll move the display so the zoom is centered.
             player.zoom -= 0.1
+            player.x -= player.width/player.zoom - player.width/(player.zoom + 0.1)
+            player.y -= player.height/player.zoom - player.height/(player.zoom + 0.1)
         elif event.key == pygame.K_w:
             player.zoom += 0.1
+            player.x += player.width/(player.zoom - 0.1) - player.width/player.zoom
+            player.y += player.height/(player.zoom - 0.1) - player.height/player.zoom
 
     screen.fill(black) #ARRR.
     
@@ -322,9 +331,9 @@ while running:
     for ship in ships: # Rev 43: Will work better when ships Idle properly. At the moment they stay with a move order.
         ship.poll()
         if ship.x > player.lBound and ship.x < player.rBound and ship.y > player.tBound and ship.y < player.bBound:
-            if not isinstance(ship.order,Idle):
+            #if not isinstance(ship.order,Idle):
                 #print ship.order #debug to see if ships stop.
-                ship.calcPoints()
+                #ship.calcPoints()
             ship.draw()
     
     pygame.display.flip()
