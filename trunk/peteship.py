@@ -94,6 +94,10 @@ class Ship():
         self.x, self.y = x, y
         self.order = Idle(self)
         self.calcPoints()
+        self.calcExtras() # For buildships.
+
+    def calcExtras(self):
+        pass
    
     def draw(self):
         pygame.draw.polygon(screen, black, self.offsetPoints())
@@ -145,7 +149,7 @@ class S1s1(Ship):
 
     #buildInfo
     buildCost = 10
-    buildTime = 1000
+    buildTime = 10
 
     def calcPoints(self):
     #calculate the three points of the triangle relative to the center xy of the ship
@@ -160,7 +164,7 @@ class S1s2(Ship):
 
     #buildInfo
     buildCost = 10
-    buildTime = 1000
+    buildTime = 10
       
     def calcPoints(self):
         self.points = [((self.x + self.radius * math.sin(self.rotation)), (self.y - self.radius * math.cos(self.rotation))),\
@@ -171,11 +175,12 @@ class S1s2(Ship):
 class S1s6(Ship):
     """ Carrier """
     intEnginePoint = [0, 0]
-    buildPoints = []
+    buildPoints = [(0,0),(0,0)]
     buildQueue = []
     building = False
     buildTimeRemaining = 0
     buildShip = Ship
+
 
     #buildInfo
     buildCost = 10
@@ -188,23 +193,34 @@ class S1s6(Ship):
         (self.x + self.radius * math.sin(self.rotation + 2.8 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 2.8 * math.pi / 3))),\
         (self.x + self.radius * math.sin(self.rotation + 3.2 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 3.2 * math.pi / 3))),\
         (self.x + self.radius * math.sin(self.rotation + 4 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 4 * math.pi / 3)))]
-        
-        self.buildPoints.append([(self.x + (self.radius + 10) * math.sin(self.rotation)), (self.y - (self.radius + 10) * math.cos(self.rotation))])
+
+    def calcExtras(self):
+        self.buildPoints[0] = (self.x + (self.radius + 10) * math.sin(self.rotation)), (self.y - (self.radius + 10) * math.cos(self.rotation))
 
     def poll(self):
         #standard poll functions
         self.order.poll()
+        # Update buildpoint. Needs to be done even when not on screen.
+        self.buildPoints[0] = (self.x + (self.radius + 10) * math.sin(self.rotation)), (self.y - (self.radius + 10) * math.cos(self.rotation))
         if self.building == False and len(self.buildQueue) > 0:
             self.buildShip = self.buildQueue.pop(0)
-            ships.append(self.buildShip) # Add to list of ships.
+            self.buildShip.order = Idle(self)
             self.player.resources -= self.buildShip.buildCost
             self.buildTimeRemaining = self.buildShip.buildTime
+            ships.append(self.buildShip) # Add to list of ships.
+#            print ships
             self.building = True
         elif self.building == True:
-            print "bldng"
+#            print self.buildTimeRemaining
             self.buildTimeRemaining -= 1
             self.buildShip.x = self.buildPoints[0][0]
+#            print self.buildShip.x
             self.buildShip.y = self.buildPoints[0][1]
+
+            if self.buildTimeRemaining == 0:
+                self.building = False
+                
+            
 
     def addToBuildQueue(self): #Currently only produces triangles.
         self.buildQueue.append(S1s1(self.player, self.buildPoints[0][0], self.buildPoints[0][1])) # Pete, you forgot the self. prefix
@@ -258,6 +274,7 @@ for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this
 
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!
+ships[0].addToBuildQueue()
 ships[0].addToBuildQueue()
 print ships[0].buildQueue
 
