@@ -4,7 +4,7 @@ pygame.init()
 
 """ rev12 : set framerate to 30, hopefully """
 clock = pygame.time.Clock()
-size = width, height = 1024, 600
+size = width, height = 800, 480
 screen = pygame.display.set_mode(size)
 
 black = 0, 0, 0
@@ -68,7 +68,7 @@ class MoveToXY(Order):
         if ship.intRotation != self.angleToXY: # If the ship isn't already facing the right way
             self.angleToXY = ship.angleToXY(self.x, self.y)
             ship.rotateTowardAngle(self.angleToXY) # then rotate towards the right way
-        ship.calcPoints()               # always recalculate points after moving. Rev 23: This is the source of the speedups slowdownsin ships. Calcpoints is part of the render loop.
+        # always recalculate points after moving. Rev 23: This is the source of the speedups slowdownsin ships. Calcpoints is part of the render loop.
       
 class Ship():
     #basic stats for drawing & position.
@@ -215,7 +215,7 @@ ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
 
 ships = []
 for i in range(1000):
-    ships.append(S1s6(player, (random.random()*width), (random.random()*height)))
+    ships.append(S1s1(player, (random.random()*width), (random.random()*height)))
     ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
 running = True
@@ -259,6 +259,8 @@ while running:
             if ship.x < player.rBound:
                 if ship.y > player.tBound:
                     if ship.y < player.bBound:
+                        if ship.order != Idle:
+                            ship.calcPoints()
                         ship.draw()
     
     pygame.display.flip()
