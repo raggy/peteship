@@ -149,7 +149,7 @@ class S1s1(Ship):
 
     #buildInfo
     buildCost = 10
-    buildTime = 10
+    buildTime = 50
 
     def calcPoints(self):
     #calculate the three points of the triangle relative to the center xy of the ship
@@ -216,6 +216,8 @@ class S1s6(Ship):
             self.buildShip.x = self.buildPoints[0][0]
 #            print self.buildShip.x
             self.buildShip.y = self.buildPoints[0][1]
+            self.buildShip.rotation = self.rotation
+            self.buildShip.calcPoints()
 
             if self.buildTimeRemaining == 0:
                 self.building = False
