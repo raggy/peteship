@@ -320,20 +320,20 @@ while running:
     # Check keys
     if keysHeld[pygame.K_UP]:
         player.y -= 5
-    elif keysHeld[pygame.K_DOWN]:
+    if keysHeld[pygame.K_DOWN]:
         player.y += 5
-    elif keysHeld[pygame.K_LEFT]:
+    if keysHeld[pygame.K_LEFT]:
         player.x -= 5
-    elif keysHeld[pygame.K_RIGHT]:
+    if keysHeld[pygame.K_RIGHT]:
         player.x += 5
-    elif keysHeld[pygame.K_ESCAPE]:
+    if keysHeld[pygame.K_ESCAPE]:
         pygame.quit()
         running = False
-    elif keysHeld[pygame.K_q]: # petenote: When i figure out how many pixels this changes by i'll move the display so the zoom is centered.
+    if keysHeld[pygame.K_q]: # petenote: When i figure out how many pixels this changes by i'll move the display so the zoom is centered.
         player.zoom -= GLOBAL_ZOOMAMOUNT
         player.x -= (player.width/player.zoom - player.width/(player.zoom + GLOBAL_ZOOMAMOUNT))
         player.y -= (player.height/player.zoom - player.height/(player.zoom + GLOBAL_ZOOMAMOUNT))
-    elif keysHeld[pygame.K_w]:
+    if keysHeld[pygame.K_w]:
         player.zoom += GLOBAL_ZOOMAMOUNT
         player.x += (player.width/(player.zoom - GLOBAL_ZOOMAMOUNT) - player.width/player.zoom)
         player.y += (player.height/(player.zoom - GLOBAL_ZOOMAMOUNT) - player.height/player.zoom)
