@@ -83,7 +83,6 @@ class Ship():
     speed = 2.5       # Movementdisabled
     intRotateSpeed = 0.05 # Rotation
 
-
     intSI = 1 # integer for the health of the ship
 
     intSide = 0 #game side. e.g 4th player in 4 player match = side 3
@@ -92,6 +91,7 @@ class Ship():
     
     def __init__(self, player, x, y):
         self.player = player
+        self.colour = self.player.colour
         self.x, self.y = x, y
         self.order = Idle(self)
         self.calcPoints()
@@ -185,6 +185,10 @@ class S1s6(Ship):
     buildTimeRemaining = 0
     buildShip = Ship
 
+    radius = 12
+
+    rotateSpeed = 0.002
+    speed = 0.1
 
     #buildInfo
     buildCost = 10
@@ -210,6 +214,7 @@ class S1s6(Ship):
         if self.building == False and len(self.buildQueue) > 0:
             self.buildShip = self.buildQueue.pop(0)
             self.buildShip.order = Idle(self)
+            self.buildShip.rotation = self.rotation
             self.player.resources -= self.buildShip.buildCost
             self.buildTimeRemaining = self.buildShip.buildTime
             ships.append(self.buildShip) # Add to list of ships.
@@ -221,11 +226,18 @@ class S1s6(Ship):
             self.buildShip.x = self.buildPoints[0][0]
 #            print self.buildShip.x
             self.buildShip.y = self.buildPoints[0][1]
-            self.buildShip.rotation = self.rotation
+            #self.buildShip.rotation = self.rotation
+            self.buildShip.rotation = normalisedAngle(0.02 + self.buildShip.rotation)
             self.buildShip.calcPoints()
+            self.buildShip.colour = ((self.player.colour[0] * (self.buildShip.buildTime - self.buildTimeRemaining + 1) / self.buildShip.buildTime),\
+                                     (self.player.colour[1] * (self.buildShip.buildTime - self.buildTimeRemaining + 1) / self.buildShip.buildTime),\
+                                     (self.player.colour[2] * (self.buildShip.buildTime - self.buildTimeRemaining + 1) / self.buildShip.buildTime))
+            #print self.buildShip.colour
 
-            if self.buildTimeRemaining == 0:
+            if self.buildTimeRemaining == 1:
+                self.buildShip.order = MoveToXY(self.buildShip, 100, 100)
                 self.building = False
+
                 
             
 
