@@ -207,7 +207,7 @@ class S1s6(Ship):
             self.buildShip.y = self.buildPoints[0][1]
 
     def addToBuildQueue(self): #Currently only produces triangles.
-        buildQueue.append(S1s1(self.player, buildPoints[0][0], buildPoints[0][1])) # Broken, wont add to list?
+        self.buildQueue.append(S1s1(self.player, self.buildPoints[0][0], self.buildPoints[0][1])) # Pete, you forgot the self. prefix
                           
 """ New in r27 """
 class Player(): 
@@ -258,7 +258,7 @@ for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this
 
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!
-ships[0].addToBuildQueue
+ships[0].addToBuildQueue()
 print ships[0].buildQueue
 
 """ end build test code """
