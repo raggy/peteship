@@ -4,7 +4,7 @@ pygame.init()
 
 """ rev12 : set framerate to 30, hopefully """
 clock = pygame.time.Clock()
-size = width, height = 800, 480 #Eee compatible resolution. ;)
+size = width, height = 1024, 600 #Eee compatible resolution. ;)
 screen = pygame.display.set_mode(size)
 
 GLOBAL_TESTSHIPS = 1 #Generic int for creating multimples of tsetingships.
@@ -81,7 +81,7 @@ class Ship():
     
     #speed stats.
     speed = 2.5       # Movementdisabled
-    intRotateSpeed = 0.05 # Rotation
+    rotateSpeed = 0.05 # Rotation
 
     intSI = 1 # integer for the health of the ship
 
@@ -107,13 +107,13 @@ class Ship():
         pygame.draw.aalines(screen, player.colour, True, self.offsetPoints())
         
     def rotateTowardAngle(self, angle):
-        if positive(angle - ship.rotation) < ship.intRotateSpeed: # If rotation speed is bigger than the amount which you need to turn
+        if positive(angle - ship.rotation) < ship.rotateSpeed: # If rotation speed is bigger than the amount which you need to turn
             self.rotation = angle # then only turn to face the desired angle
         else:
             if normalisedAngle(angle - self.rotation) > math.pi: # If the angle which you're rotating towards is more 180 degrees to the right, it makes more sense to turn left
-                self.rotation = normalisedAngle(self.rotation - self.intRotateSpeed) # Turn left by self.intRotateSpeed
+                self.rotation = normalisedAngle(self.rotation - self.rotateSpeed) # Turn left by self.rotateSpeed
             else:
-                self.rotation = normalisedAngle(self.rotation + self.intRotateSpeed) # Turn right by self.intRotateSpeed
+                self.rotation = normalisedAngle(self.rotation + self.rotateSpeed) # Turn right by self.rotateSpeed
         self.needsToCalcPoints = True
 
     def moveForward(self):       
@@ -187,7 +187,7 @@ class S1s6(Ship):
 
     radius = 12
 
-    rotateSpeed = 0.002
+    rotateSpeed = 0.004
     speed = 0.1
 
     #buildInfo
@@ -273,8 +273,8 @@ class Player():
         self.rBound = self.x + self.width + 10
 
     def focusOn(self, x, y):
-        self.x = x - (self.width / 2)
-        self.y = y - (self.height / 2)
+        self.x = (x - (self.width / 2)) / player.zoom
+        self.y = (y - (self.height / 2)) / player.zoom
 
     def xy(self): # Return x, y as a tuple
         return (x, y)
@@ -306,7 +306,7 @@ ships[0].addToBuildQueue()
 
 player.focusOn(ships[0].x, ships[0].y)
 
-keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_w:False}
+keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_w:False,pygame.K_SPACE:False}
 running = True
 
 while running:
@@ -321,7 +321,7 @@ while running:
             for ship in ships:
                 if (event.dict['pos'][0] >= ((ship.x - ship.radius)*player.zoom - player.x) and event.dict['pos'][0] <= ((ship.x + ship.radius)*player.zoom - player.x)) and (event.dict['pos'][1] >= ((ship.y - ship.radius)*player.zoom - player.y) and event.dict['pos'][1] <= ((ship.y + ship.radius)*player.zoom - player.y)): # If player clicked on this ship
                     player.selectedShip = ship # Set player's selected ship
-        elif event.dict['button'] == 3: # If right mouse button clicked
+        elif (event.dict['button'] == 2) or (event.dict['button'] == 3): # If right mouse button clicked
             if not player.selectedShip is False:
                 player.selectedShip.order = MoveToXY(player.selectedShip, ((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom) # Give a move order to where player clicked
     for event in pygame.event.get(pygame.KEYDOWN):
@@ -338,13 +338,19 @@ while running:
         player.x -= 5
     if keysHeld[pygame.K_RIGHT]:
         player.x += 5
+    if keysHeld[pygame.K_SPACE]:
+        if player.selectedShip != False:
+            player.focusOn(player.selectedShip.x, player.selectedShip.y)
     if keysHeld[pygame.K_ESCAPE]:
         pygame.quit()
         running = False
     if keysHeld[pygame.K_q]: # petenote: When i figure out how many pixels this changes by i'll move the display so the zoom is centered.
-        player.zoom -= GLOBAL_ZOOMAMOUNT
-        player.x -= (player.width/player.zoom - player.width/(player.zoom + GLOBAL_ZOOMAMOUNT))
-        player.y -= (player.height/player.zoom - player.height/(player.zoom + GLOBAL_ZOOMAMOUNT))
+        if player.zoom > GLOBAL_ZOOMAMOUNT:
+            player.zoom -= GLOBAL_ZOOMAMOUNT
+            player.x -= (player.width/player.zoom - player.width/(player.zoom + GLOBAL_ZOOMAMOUNT))
+            player.y -= (player.height/player.zoom - player.height/(player.zoom + GLOBAL_ZOOMAMOUNT))
+        else:
+            print "reached furthest out"
     if keysHeld[pygame.K_w]:
         player.zoom += GLOBAL_ZOOMAMOUNT
         player.x += (player.width/(player.zoom - GLOBAL_ZOOMAMOUNT) - player.width/player.zoom)
@@ -356,7 +362,7 @@ while running:
     #Update ships x & y. If the ship is onscreen, draw it. If it's not moving, don't calculate the points again = saves proc time. Will lag more and more with more ships moving though.
     for ship in ships: # Rev 43: Will work better when ships Idle properly. At the moment they stay with a move order.
         ship.poll()
-        if ship.x > player.lBound and ship.x < player.rBound and ship.y > player.tBound and ship.y < player.bBound:
+        if ship.x > (player.lBound * player.zoom) and ship.x < (player.rBound * player.zoom) and ship.y > (player.tBound * player.zoom) and ship.y < (player.bBound * player.zoom):
             #if not isinstance(ship.order,Idle):
                 #print ship.order #debug to see if ships stop.
                 #ship.calcPoints()
