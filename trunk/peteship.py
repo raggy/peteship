@@ -1,5 +1,5 @@
 #!/usr/local/bin/python
-import sys, pygame, math, random
+import sys, pygame, math, random, formations
 pygame.init()
 
 """ rev12 : set framerate to 30, hopefully """
@@ -94,6 +94,8 @@ class Ship():
     intSide = 0 #game side. e.g 4th player in 4 player match = side 3
 
     points = [] # List of veticies that make up the ship.
+
+    formation = False
     
     def __init__(self, player, x, y):
         self.player = player
@@ -140,6 +142,7 @@ class Ship():
     def poll(self):
         #update the ships data
         self.orders[0].poll()
+        self.calcExtras
 
     def angleToXY(self, x, y):
         #calculate the angle from the referenced ships heading to the
@@ -190,6 +193,7 @@ class S1s1(Ship):
     #buildInfo
     buildCost = 10
     buildTime = 50
+    rotateSpeed = 0.1
 
     def calcPoints(self):
     #calculate the three points of the triangle relative to the center xy of the ship
@@ -247,8 +251,7 @@ class S1s6(Ship):
     def poll(self):
         #standard poll functions
         self.order.poll()
-        # Update buildpoint. Needs to be done even when not on screen.
-        self.buildPoints[0] = (self.x + (self.radius + 10) * math.sin(self.rotation)), (self.y - (self.radius + 10) * math.cos(self.rotation))
+        self.calcExtras()
         if self.building == False and len(self.buildQueue) > 0:
             self.buildShip = self.buildQueue.pop(0)
             self.buildShip.order = Idle(self)
@@ -274,10 +277,7 @@ class S1s6(Ship):
 
             if self.buildTimeRemaining == 1:
                 self.buildShip.order = MoveToXY(self.buildShip, 100, 100)
-                self.building = False
-
-                
-            
+                self.building = False            
 
     def addToBuildQueue(self): #Currently only produces triangles.
         self.buildQueue.append(S1s1(self.player, self.buildPoints[0][0], self.buildPoints[0][1])) # Pete, you forgot the self. prefix
