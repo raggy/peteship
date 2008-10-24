@@ -102,9 +102,8 @@ def main(player):
         pygame.display.flip()
 
         if keysHeld[pygame.K_ESCAPE]:
-            pygame.quit()
             running = False
 
         for event in pygame.event.get(pygame.QUIT):
-            pygame.quit()
             running = False
+    pygame.quit()
