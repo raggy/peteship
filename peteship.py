@@ -41,7 +41,7 @@ def normalisedAngle(angle):
         return angle
 
 class Order():
-    def __init__(self, ship):
+    def __init__(self):
         return
     def poll(self):
         return
@@ -52,22 +52,28 @@ class Idle(Order):
         return
 
 class MoveToXY(Order):
-    def __init__(self, ship, x, y):
+    def __init__(self, x, y):
         self.x, self.y = x, y
+
+    def setShip(self, ship):
+        self.ship = ship
         self.angleToXY = ship.angleToXY(self.x, self.y)
+        
     def poll(self):
         """ rev12 : i like circles """
         #pygame.draw.circle(screen, midgreen, ((int(self.x * player.zoom) - player.x), (int(self.y) * player.zoom) - player.y), ship.radius - 3, 2) # circle designators for the move. Currently living above ships so needs to be changed.
         pygame.draw.line(screen, (20,20,20), ((int(self.x * player.zoom) - player.x), (int(self.y * player.zoom)) - player.y), ((ship.x * player.zoom) - player.x,(ship.y * player.zoom) - player.y))
         # New behaviour, rotate whilst moving
-        if ship.distanceFrom(self.x, self.y) > math.sqrt(((ship.x + math.sin(ship.rotation) * ship.speed)-self.x)**2 + ((ship.y - math.cos(ship.rotation) * ship.speed)-self.y)**2): # If next move will bring you closer to the destination
-            if normalisedAngle(self.angleToXY - ship.rotation) < (math.pi / 4) or normalisedAngle(self.angleToXY - ship.rotation) > (math.pi * 1.75):
-                if (ship.x, ship.y) != (self.x, self.y): # stop the ship on target
-                    if ship.distanceFrom(self.x, self.y) < ship.speed: # If the destintion is a shorter distance than the move distance...
-                        ship.order = Idle(ship) # dump orders and...
-                    ship.moveForward()          # cover the rest of the distance.
-                else:
-                    ship.order = Idle(ship)     # if all else fails, dump orders.
+        #if ship.distanceFrom(self.x, self.y) > math.sqrt(((ship.x + math.sin(ship.rotation) * ship.speed)-self.x)**2 + ((ship.y - math.cos(ship.rotation) * ship.speed)-self.y)**2): # If next move will bring you closer to the destination
+        if (normalisedAngle(self.angleToXY - ship.rotation) < (math.pi / 4) or normalisedAngle(self.angleToXY - ship.rotation) > (math.pi * 1.75)) or (ship.moving):
+            ship.moving = True
+            if (ship.x, ship.y) != (self.x, self.y): # stop the ship on target
+                if ship.distanceFrom(self.x, self.y) < ship.speed: # If the destintion is a shorter distance than the move distance...
+                    ship.order = ship.nextOrder() # get next orders and
+                ship.moveForward()          # cover the rest of the distance.
+            else:
+                ship.order = ship.nextOrder() # Get next orders
+        
         if ship.rotation != self.angleToXY: # If the ship isn't already facing the right way
             self.angleToXY = ship.angleToXY(self.x, self.y)
             ship.rotateTowardAngle(self.angleToXY) # then rotate towards the right way
@@ -93,7 +99,8 @@ class Ship():
         self.player = player
         self.colour = self.player.colour
         self.x, self.y = x, y
-        self.order = Idle(self)
+        self.orders = [Idle()]
+        self.moving = False
         self.calcPoints()
         self.calcExtras() # For buildships.
 
@@ -123,7 +130,7 @@ class Ship():
 
     def poll(self):
         #update the ships data
-        self.order.poll()
+        self.orders[0].poll()
 
     def angleToXY(self, x, y):
         #calculate the angle from the referenced ships heading to the
@@ -144,6 +151,21 @@ class Ship():
         for point in self.points:
             points.append(((point[0]* player.zoom - self.player.x), (point[1]* player.zoom-self.player.y)))
         return points
+
+    def nextOrder(self):
+        self.orders.pop(0)
+        if len(self.orders) == 0:
+            self.moving = False
+            self.orders.append(Idle())
+
+    def addOrder(self, order):
+        self.orders.append(order)
+        self.orders[-1].setShip(self)
+
+    def setOrder(self, order):
+        self.orders = []
+        self.orders.append(order)
+        self.orders[0].setShip(self)
 
 class S1s1(Ship):
     """ as of rev 12 now a list"""
@@ -326,7 +348,7 @@ while running:
             player.selecting = True
         elif (event.dict['button'] == 2) or (event.dict['button'] == 3): # If right mouse button clicked
             for ship in player.selectedShips:
-                ship.order = MoveToXY(ship, ((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom)
+                ship.setOrder(MoveToXY(((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom))
     for event in pygame.event.get(pygame.MOUSEBUTTONUP):
         if event.dict['button'] == 1:
             player.selectedShips = []
