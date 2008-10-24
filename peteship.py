@@ -7,7 +7,7 @@ clock = pygame.time.Clock()
 size = width, height = 800, 480 #Eee compatible resolution. ;)
 screen = pygame.display.set_mode(size)
 
-GLOBAL_TESTSHIPS = 100 #Generic int for creating multimples of tsetingships.
+GLOBAL_TESTSHIPS = 10 #Generic int for creating multimples of tsetingships.
 GLOBAL_ZOOMAMOUNT = 0.05
 
 black = 0, 0, 0
@@ -42,7 +42,7 @@ def normalisedAngle(angle):
 
 class Order():
     def __init__(self):
-        return
+        self.x = self.y = False
     def poll(self):
         return
 
@@ -62,7 +62,7 @@ class MoveToXY(Order):
     def poll(self):
         """ rev12 : i like circles """
         #pygame.draw.circle(screen, midgreen, ((int(self.x * player.zoom) - player.x), (int(self.y) * player.zoom) - player.y), ship.radius - 3, 2) # circle designators for the move. Currently living above ships so needs to be changed.
-        pygame.draw.line(screen, (20,20,20), ((self.x - player.x) * player.zoom, (self.y - player.y) * player.zoom), ((ship.x  - player.x) * player.zoom, (ship.y - player.y) * player.zoom))
+        #pygame.draw.line(screen, (20,20,20), ((self.x - player.x) * player.zoom, (self.y - player.y) * player.zoom), ((ship.x  - player.x) * player.zoom, (ship.y - player.y) * player.zoom))
         # New behaviour, rotate whilst moving
         #if ship.distanceFrom(self.x, self.y) > math.sqrt(((ship.x + math.sin(ship.rotation) * ship.speed)-self.x)**2 + ((ship.y - math.cos(ship.rotation) * ship.speed)-self.y)**2): # If next move will bring you closer to the destination
         if (normalisedAngle(self.angleToXY - ship.rotation) < (math.pi / 4) or normalisedAngle(self.angleToXY - ship.rotation) > (math.pi * 1.75)) or (ship.moving):
@@ -110,8 +110,17 @@ class Ship():
     def draw(self):
         if self.needsToCalcPoints:
             self.calcPoints()
+        self.drawOrders()
         pygame.draw.polygon(screen, black, self.offsetPoints())
         pygame.draw.aalines(screen, player.colour, True, self.offsetPoints())
+
+    def drawOrders(self):
+        lastx, lasty = self.x, self.y
+        for order in self.orders:
+            if not (order.x is False and order.y is False):
+                pygame.draw.line(screen, (20,20,20), ((lastx - player.x) * player.zoom, (lasty - player.y) * player.zoom), ((order.x  - player.x) * player.zoom, (order.y - player.y) * player.zoom))
+                #pygame.draw.circle(screen, (20,20,20), ((order.x - player.x) * player.zoom, (order.y - player.y) * player.zoom), 2)
+                lastx, lasty = order.x, order.y
         
     def rotateTowardAngle(self, angle):
         if positive(angle - ship.rotation) < ship.rotateSpeed: # If rotation speed is bigger than the amount which you need to turn
