@@ -3,13 +3,15 @@ import misc, math
 class Order():
     def __init__(self):
         self.x = self.y = False
+    def setShip(self, ship):
+        pass
     def poll(self):
-        return
+        pass
 
 class Idle(Order):
     # do nothing. 
     def poll(self):
-        return
+        pass
 
 class MoveToXY(Order):
     def __init__(self, x, y):
