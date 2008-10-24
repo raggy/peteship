@@ -7,7 +7,7 @@ clock = pygame.time.Clock()
 size = width, height = 1024, 600 #Eee compatible resolution. ;)
 screen = pygame.display.set_mode(size)
 
-GLOBAL_TESTSHIPS = 1 #Generic int for creating multimples of tsetingships.
+GLOBAL_TESTSHIPS = 100 #Generic int for creating multimples of tsetingships.
 GLOBAL_ZOOMAMOUNT = 0.05
 
 black = 0, 0, 0
@@ -256,7 +256,7 @@ class Player():
     bBound = 0
     lBound = 0
     rBound = 0
-    selectedShip = False
+    selectedShips = []
     """ End of player view stuff. """
     """ Player specific stats. """
     colour = white # hahaha why not.
@@ -291,39 +291,57 @@ ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
 """
 
 ships = []
+#shipsOnScreen = []
 for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
-    #ships.append(S1s6(player, (random.random()*width), (random.random()*height)))
-    ships.append(S1s6(player, (player.width/2), (player.height/2)))
+    ships.append(S1s1(player, (random.random()*width), (random.random()*height)))
+    #ships.append(S1s6(player, (player.width/2), (player.height/2)))
     #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
+
+
 
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!
-ships[0].addToBuildQueue()
+#ships[0].addToBuildQueue()
 #ships[0].addToBuildQueue()
 #print ships[0].buildQueue
 
 """ end build test code """
 
 player.focusOn(ships[0].x, ships[0].y)
-
+player.selecting = False
 keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_w:False,pygame.K_SPACE:False}
 running = True
+
+# Note on possible efficiency improvement: make a list of all ships on screen at the start of the frame
 
 while running:
     clock.tick(30)
     pygame.msg.message
-    pygame.event.clear(pygame.MOUSEMOTION)
-    pygame.event.clear(pygame.MOUSEBUTTONUP)
+    
     for event in pygame.event.get(pygame.MOUSEBUTTONDOWN): # Loop through all MOUSEBUTTONDOWN events on the buffer
         if event.dict['button'] == 1: # If left mouse button clicked
             # then ask any ships if they're going to be selected
-            player.selectedShip = False
-            for ship in ships:
-                if (event.dict['pos'][0] >= ((ship.x - ship.radius)*player.zoom - player.x) and event.dict['pos'][0] <= ((ship.x + ship.radius)*player.zoom - player.x)) and (event.dict['pos'][1] >= ((ship.y - ship.radius)*player.zoom - player.y) and event.dict['pos'][1] <= ((ship.y + ship.radius)*player.zoom - player.y)): # If player clicked on this ship
-                    player.selectedShip = ship # Set player's selected ship
+            #Testing new box select
+            player.selStartPos = player.selEndPos = event.dict['pos']
+            player.selecting = True
         elif (event.dict['button'] == 2) or (event.dict['button'] == 3): # If right mouse button clicked
-            if not player.selectedShip is False:
-                player.selectedShip.order = MoveToXY(player.selectedShip, ((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom) # Give a move order to where player clicked
+            for ship in player.selectedShips:
+                ship.order = MoveToXY(ship, ((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom)
+    for event in pygame.event.get(pygame.MOUSEBUTTONUP):
+        if event.dict['button'] == 1:
+            player.selectedShips = []
+            player.selecting = False
+            player.selEndPos = event.dict['pos']
+            if player.selStartPos[0] > player.selEndPos[0]: # If the player has dragged leftwards
+                player.selStartPos, player.selEndPos = (player.selEndPos[0], player.selStartPos[1]), (player.selStartPos[0], player.selEndPos[1]) # then swap the x positions of start and end
+            if player.selStartPos[1] > player.selEndPos[1]:
+                player.selEndPos, player.selStartPos = (player.selEndPos[0], player.selStartPos[1]), (player.selStartPos[0], player.selEndPos[1])
+            for ship in ships:
+                if (player.selEndPos[0] >= ((ship.x - ship.radius)*player.zoom - player.x) and player.selStartPos[0] <= ((ship.x + ship.radius)*player.zoom - player.x)) and (player.selEndPos[1] >= ((ship.y - ship.radius)*player.zoom - player.y) and player.selStartPos[1] <= ((ship.y + ship.radius)*player.zoom - player.y)): # If player clicked on this ship
+                    player.selectedShips.append(ship) # Set player's selected ship
+    for event in pygame.event.get(pygame.MOUSEMOTION):
+        if player.selecting:
+            player.selEndPos = event.dict['pos']
     for event in pygame.event.get(pygame.KEYDOWN):
         keysHeld[event.key] = True
     for event in pygame.event.get(pygame.KEYUP):
@@ -338,9 +356,9 @@ while running:
         player.x -= 5
     if keysHeld[pygame.K_RIGHT]:
         player.x += 5
-    if keysHeld[pygame.K_SPACE]:
+    """if keysHeld[pygame.K_SPACE]:
         if player.selectedShip != False:
-            player.focusOn(player.selectedShip.x, player.selectedShip.y)
+            player.focusOn(player.selectedShip.x, player.selectedShip.y)"""
     if keysHeld[pygame.K_ESCAPE]:
         pygame.quit()
         running = False
@@ -358,16 +376,29 @@ while running:
         #print (player.width/(player.zoom - GLOBAL_ZOOMAMOUNT) - player.width/player.zoom)
 
     screen.fill(black) #ARRR.
-    
-    #Update ships x & y. If the ship is onscreen, draw it. If it's not moving, don't calculate the points again = saves proc time. Will lag more and more with more ships moving though.
+
+
+    #shipsOnScreen = []
+    #Update ships x & y. If the ship is onscreen, add to shipsOnScreen list. If it's not moving, don't calculate the points again = saves proc time. Will lag more and more with more ships moving though.
     for ship in ships: # Rev 43: Will work better when ships Idle properly. At the moment they stay with a move order.
         ship.poll()
         if ship.x > (player.lBound * player.zoom) and ship.x < (player.rBound * player.zoom) and ship.y > (player.tBound * player.zoom) and ship.y < (player.bBound * player.zoom):
+            #shipsOnScreen.append(ship)
             #if not isinstance(ship.order,Idle):
                 #print ship.order #debug to see if ships stop.
                 #ship.calcPoints()
             ship.draw()
+
+    #for ship in shipsOnScreen:
+    #    ship.draw()
     
+    if player.selecting: # If the player is currently holding down the left mouse button
+        # Draw a nice box for selection
+        pygame.draw.line(screen, darkgrey, player.selStartPos, (player.selStartPos[0], player.selEndPos[1]))
+        pygame.draw.line(screen, darkgrey, (player.selStartPos[0], player.selEndPos[1]), player.selEndPos)
+        pygame.draw.line(screen, darkgrey, player.selEndPos, (player.selEndPos[0], player.selStartPos[1]))
+        pygame.draw.line(screen, darkgrey, (player.selEndPos[0], player.selStartPos[1]), player.selStartPos)
+        
     pygame.display.flip()
     for event in pygame.event.get(pygame.QUIT):
         pygame.quit()
