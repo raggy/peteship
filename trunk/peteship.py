@@ -4,7 +4,7 @@ pygame.init()
 
 """ rev12 : set framerate to 30, hopefully """
 clock = pygame.time.Clock()
-size = width, height = 1024, 600 #Eee compatible resolution. ;)
+size = width, height = 800, 480 #Eee compatible resolution. ;)
 screen = pygame.display.set_mode(size)
 
 GLOBAL_TESTSHIPS = 100 #Generic int for creating multimples of tsetingships.
@@ -295,10 +295,10 @@ class Player():
         self.calcBounds()
 
     def calcBounds(self):
-        self.tBound = self.y - 10 # 10 is the biggest radius so far, will replace when we have more ships.
-        self.bBound = self.y + self.height + 10 # same kinda thing
-        self.lBound = self.x - 10
-        self.rBound = self.x + self.width + 10
+        self.tBound = (self.y - 10) / self.zoom # 10 is the biggest radius so far, will replace when we have more ships.
+        self.bBound = self.y + (self.height + 10) / self.zoom # same kinda thing
+        self.lBound = (self.x - 10) / self.zoom
+        self.rBound = self.x + (self.width + 10) / self.zoom
 
     def focusOn(self, x, y):
         self.x = (x - (self.width / 2)) / player.zoom
@@ -307,6 +307,25 @@ class Player():
     def xy(self): # Return x, y as a tuple
         return (x, y)
 
+    def zoomBy(self, zoom):
+        if self.zoom + zoom > 0.5:
+            self.zoom += zoom
+            #self.calcBounds() # Replace this with the panBy function
+            self.panBy((self.width / (self.zoom - zoom) - self.width / self.zoom) / 2, (self.height / (self.zoom - zoom) - self.height / self.zoom) / 2)
+            #print "("+str(self.width)+" / ("+str(self.zoom)+" - "+str(zoom)+") - "+str(self.width)+" / "+str(self.zoom)+") / 2"
+            #player.newwidth = player.width/player.zoom
+            #player.oldwidth = player.width/(player.zoom - zoom)
+            #difference between widths = player.newwidth - player.oldwidth
+            #divide by 
+            #and subtract
+            #player.x -= (player.width/player.zoom - player.width/(player.zoom + GLOBAL_ZOOMAMOUNT))
+            #player.y -= (player.height/player.zoom - player.height/(player.zoom + GLOBAL_ZOOMAMOUNT))
+
+    def panBy(self, x, y):
+        self.x += x
+        self.y += y
+        self.calcBounds()
+            
 player = Player()
 
 """
@@ -335,7 +354,7 @@ for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this
 
 """ end build test code """
 
-player.focusOn(ships[0].x, ships[0].y)
+#player.focusOn(ships[0].x, ships[0].y)
 player.selecting = False
 keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_w:False,pygame.K_SPACE:False}
 running = True
@@ -365,6 +384,14 @@ while running:
             else:
                 for ship in player.selectedShips:
                     ship.setOrder(MoveToXY(((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom))
+        elif (event.dict['button'] == 4):
+            player.panBy(0,-10)
+        elif (event.dict['button'] == 5):
+            player.panBy(0,10)
+        elif (event.dict['button'] == 6):
+            player.panBy(-10,0)
+        elif (event.dict['button'] == 7):
+            player.panBy(10,0)
     for event in pygame.event.get(pygame.MOUSEBUTTONUP):
         if event.dict['button'] == 1:
             player.selectedShips = []
@@ -383,13 +410,13 @@ while running:
 
     # Check keys
     if keysHeld[pygame.K_UP]:
-        player.y -= 5
+        player.panBy(0,-10)
     if keysHeld[pygame.K_DOWN]:
-        player.y += 5
+        player.panBy(0,10)
     if keysHeld[pygame.K_LEFT]:
-        player.x -= 5
+        player.panBy(-10,0)
     if keysHeld[pygame.K_RIGHT]:
-        player.x += 5
+        player.panBy(10,0)
     """if keysHeld[pygame.K_SPACE]:
         if player.selectedShip != False:
             player.focusOn(player.selectedShip.x, player.selectedShip.y)"""
@@ -397,26 +424,24 @@ while running:
         pygame.quit()
         running = False
     if keysHeld[pygame.K_q]: # petenote: When i figure out how many pixels this changes by i'll move the display so the zoom is centered.
-        if player.zoom > GLOBAL_ZOOMAMOUNT:
-            player.zoom -= GLOBAL_ZOOMAMOUNT
-            player.x -= (player.width/player.zoom - player.width/(player.zoom + GLOBAL_ZOOMAMOUNT))
-            player.y -= (player.height/player.zoom - player.height/(player.zoom + GLOBAL_ZOOMAMOUNT))
-        else:
-            print "reached furthest out"
+        player.zoomBy(-GLOBAL_ZOOMAMOUNT)
     if keysHeld[pygame.K_w]:
-        player.zoom += GLOBAL_ZOOMAMOUNT
-        player.x += (player.width/(player.zoom - GLOBAL_ZOOMAMOUNT) - player.width/player.zoom)
-        player.y += (player.height/(player.zoom - GLOBAL_ZOOMAMOUNT) - player.height/player.zoom)
+        player.zoomBy(GLOBAL_ZOOMAMOUNT)
+        #player.zoom += GLOBAL_ZOOMAMOUNT
+        #player.x += (player.width/(player.zoom - GLOBAL_ZOOMAMOUNT) - player.width/player.zoom)
+        #player.y += (player.height/(player.zoom - GLOBAL_ZOOMAMOUNT) - player.height/player.zoom)
         #print (player.width/(player.zoom - GLOBAL_ZOOMAMOUNT) - player.width/player.zoom)
 
     screen.fill(black) #ARRR.
 
+    #for i in range(0,1000,100):
+     #   pygame.draw.line(screen, darkgrey, (i*player.zoom, 0), (i*player.zoom, 1000))
 
     #shipsOnScreen = []
     #Update ships x & y. If the ship is onscreen, add to shipsOnScreen list. If it's not moving, don't calculate the points again = saves proc time. Will lag more and more with more ships moving though.
     for ship in ships: # Rev 43: Will work better when ships Idle properly. At the moment they stay with a move order.
         ship.poll()
-        if ship.x > (player.lBound * player.zoom) and ship.x < (player.rBound * player.zoom) and ship.y > (player.tBound * player.zoom) and ship.y < (player.bBound * player.zoom):
+        if ship.x > player.lBound and ship.x < player.rBound and ship.y > player.tBound and ship.y < player.bBound:
             #shipsOnScreen.append(ship)
             #if not isinstance(ship.order,Idle):
                 #print ship.order #debug to see if ships stop.
