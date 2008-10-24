@@ -1,4 +1,4 @@
-import peteship, players, ships, formations, random
+import peteship, players, ships, formations, random, orders, misc
 
 GLOBAL_TESTSHIPS = 10 #Generic int for creating multimples of tsetingships.
 
