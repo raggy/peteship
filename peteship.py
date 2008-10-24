@@ -250,11 +250,11 @@ class S1s6(Ship):
 
     def poll(self):
         #standard poll functions
-        self.order.poll()
+        self.orders[0].poll()
         self.calcExtras()
         if self.building == False and len(self.buildQueue) > 0:
             self.buildShip = self.buildQueue.pop(0)
-            self.buildShip.order = Idle(self)
+            self.buildShip.orders = [Idle()]
             self.buildShip.rotation = self.rotation
             self.player.resources -= self.buildShip.buildCost
             self.buildTimeRemaining = self.buildShip.buildTime
@@ -276,7 +276,7 @@ class S1s6(Ship):
             #print self.buildShip.colour
 
             if self.buildTimeRemaining == 1:
-                self.buildShip.order = MoveToXY(self.buildShip, 100, 100)
+                self.buildShip.setOrder(MoveToXY(10,10))
                 self.building = False            
 
     def addToBuildQueue(self): #Currently only produces triangles.
@@ -346,16 +346,16 @@ ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
 
 ships = []
 #shipsOnScreen = []
-for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
-    ships.append(S1s1(player, (random.random()*width), (random.random()*height)))
-    #ships.append(S1s6(player, (player.width/2), (player.height/2)))
+#for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
+    #ships.append(S1s1(player, (random.random()*width), (random.random()*height)))
+ships.append(S1s6(player, (player.width/2), (player.height/2)))
     #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
 
 
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!
-#ships[0].addToBuildQueue()
+ships[0].addToBuildQueue()
 #ships[0].addToBuildQueue()
 #print ships[0].buildQueue
 
