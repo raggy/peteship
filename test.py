@@ -20,8 +20,9 @@ for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this
 #ships[0].built = True
     #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
+player.ships[0].setOrder(MoveToXY(100.0, 100.0))
 lollerLine = formations.Formation(player.ships)
-
+lollerLine.calcAssignPattern()
 
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!
