@@ -62,7 +62,7 @@ class MoveToXY(Order):
     def poll(self):
         """ rev12 : i like circles """
         #pygame.draw.circle(screen, midgreen, ((int(self.x * player.zoom) - player.x), (int(self.y) * player.zoom) - player.y), ship.radius - 3, 2) # circle designators for the move. Currently living above ships so needs to be changed.
-        pygame.draw.line(screen, (20,20,20), ((int(self.x * player.zoom) - player.x), (int(self.y * player.zoom)) - player.y), ((ship.x * player.zoom) - player.x,(ship.y * player.zoom) - player.y))
+        pygame.draw.line(screen, (20,20,20), ((self.x - player.x) * player.zoom, (self.y - player.y) * player.zoom), ((ship.x  - player.x) * player.zoom, (ship.y - player.y) * player.zoom))
         # New behaviour, rotate whilst moving
         #if ship.distanceFrom(self.x, self.y) > math.sqrt(((ship.x + math.sin(ship.rotation) * ship.speed)-self.x)**2 + ((ship.y - math.cos(ship.rotation) * ship.speed)-self.y)**2): # If next move will bring you closer to the destination
         if (normalisedAngle(self.angleToXY - ship.rotation) < (math.pi / 4) or normalisedAngle(self.angleToXY - ship.rotation) > (math.pi * 1.75)) or (ship.moving):
@@ -149,7 +149,7 @@ class Ship():
     def offsetPoints(self):
         points = []
         for point in self.points:
-            points.append(((point[0]* player.zoom - self.player.x), (point[1]* player.zoom-self.player.y)))
+            points.append(((point[0] - self.player.x) * player.zoom, (point[1] - self.player.y) * player.zoom))
         return points
 
     def nextOrder(self):
@@ -295,9 +295,9 @@ class Player():
         self.calcBounds()
 
     def calcBounds(self):
-        self.tBound = (self.y - 10) / self.zoom # 10 is the biggest radius so far, will replace when we have more ships.
+        self.tBound = self.y - 10 / self.zoom # 10 is the biggest radius so far, will replace when we have more ships.
         self.bBound = self.y + (self.height + 10) / self.zoom # same kinda thing
-        self.lBound = (self.x - 10) / self.zoom
+        self.lBound = self.x - 10 / self.zoom
         self.rBound = self.x + (self.width + 10) / self.zoom
 
     def focusOn(self, x, y):
@@ -308,22 +308,19 @@ class Player():
         return (x, y)
 
     def zoomBy(self, zoom):
-        if self.zoom + zoom > 0.5:
+        if self.zoom + zoom > 0.4:
             self.zoom += zoom
-            #self.calcBounds() # Replace this with the panBy function
-            self.panBy((self.width / (self.zoom - zoom) - self.width / self.zoom) / 2, (self.height / (self.zoom - zoom) - self.height / self.zoom) / 2)
-            #print "("+str(self.width)+" / ("+str(self.zoom)+" - "+str(zoom)+") - "+str(self.width)+" / "+str(self.zoom)+") / 2"
-            #player.newwidth = player.width/player.zoom
-            #player.oldwidth = player.width/(player.zoom - zoom)
-            #difference between widths = player.newwidth - player.oldwidth
-            #divide by 
-            #and subtract
-            #player.x -= (player.width/player.zoom - player.width/(player.zoom + GLOBAL_ZOOMAMOUNT))
-            #player.y -= (player.height/player.zoom - player.height/(player.zoom + GLOBAL_ZOOMAMOUNT))
-
+            self.panBy(((self.width / (self.zoom - zoom) - self.width / self.zoom) / 2), ((self.height / (self.zoom - zoom) - self.height / self.zoom) / 2))
+            
     def panBy(self, x, y):
-        self.x += x
-        self.y += y
+        if self.x + x < 0.0:
+            self.x = 0.0
+        else:
+            self.x += x
+        if self.y + y < 0.0:
+            self.y = 0.0
+        else:
+            self.y += y
         self.calcBounds()
             
 player = Player()
@@ -380,10 +377,10 @@ while running:
         elif (event.dict['button'] == 2) or (event.dict['button'] == 3): # If right mouse button clicked
             if pygame.KMOD_SHIFT & pygame.key.get_mods():
                 for ship in player.selectedShips:
-                    ship.queueOrder(MoveToXY(((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom))
+                    ship.queueOrder(MoveToXY((float(event.dict['pos'][0])/ player.zoom + player.x), (float(event.dict['pos'][1])) / player.zoom + player.y))
             else:
                 for ship in player.selectedShips:
-                    ship.setOrder(MoveToXY(((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom))
+                    ship.setOrder(MoveToXY((float(event.dict['pos'][0])/ player.zoom + player.x), (float(event.dict['pos'][1])) / player.zoom + player.y))
         elif (event.dict['button'] == 4):
             player.panBy(0,-10)
         elif (event.dict['button'] == 5):
@@ -402,7 +399,10 @@ while running:
             if player.selStartPos[1] > player.selEndPos[1]:
                 player.selEndPos, player.selStartPos = (player.selEndPos[0], player.selStartPos[1]), (player.selStartPos[0], player.selEndPos[1])
             for ship in ships:
-                if (player.selEndPos[0] >= ((ship.x - ship.radius)*player.zoom - player.x) and player.selStartPos[0] <= ((ship.x + ship.radius)*player.zoom - player.x)) and (player.selEndPos[1] >= ((ship.y - ship.radius)*player.zoom - player.y) and player.selStartPos[1] <= ((ship.y + ship.radius)*player.zoom - player.y)): # If player clicked on this ship
+                if  player.selEndPos[0] >= (ship.x - ship.radius - player.x) * player.zoom and\
+                    player.selStartPos[0] <= (ship.x + ship.radius - player.x) * player.zoom and\
+                    player.selEndPos[1] >= (ship.y - ship.radius - player.y) * player.zoom and\
+                    player.selStartPos[1] <= (ship.y + ship.radius - player.y) * player.zoom: # If player clicked on this ship
                     player.selectedShips.append(ship) # Set player's selected ship
     for event in pygame.event.get(pygame.MOUSEMOTION):
         if player.selecting:
