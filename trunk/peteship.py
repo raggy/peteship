@@ -158,9 +158,15 @@ class Ship():
             self.moving = False
             self.orders.append(Idle())
 
-    def addOrder(self, order):
-        self.orders.append(order)
-        self.orders[-1].setShip(self)
+    def queueOrder(self, order):
+        if len(self.orders) > 0:
+            if not isinstance(self.orders[0], Idle):
+                self.orders.append(order)
+                self.orders[-1].setShip(self)
+            else:
+                self.setOrder(order)
+        else:
+            self.setOrder(order)
 
     def setOrder(self, order):
         self.orders = []
@@ -339,6 +345,12 @@ running = True
 while running:
     clock.tick(30)
     pygame.msg.message
+
+    for event in pygame.event.get(pygame.KEYDOWN):
+        keysHeld[event.key] = True
+        
+    for event in pygame.event.get(pygame.KEYUP):
+        keysHeld[event.key] = False
     
     for event in pygame.event.get(pygame.MOUSEBUTTONDOWN): # Loop through all MOUSEBUTTONDOWN events on the buffer
         if event.dict['button'] == 1: # If left mouse button clicked
@@ -347,8 +359,12 @@ while running:
             player.selStartPos = player.selEndPos = event.dict['pos']
             player.selecting = True
         elif (event.dict['button'] == 2) or (event.dict['button'] == 3): # If right mouse button clicked
-            for ship in player.selectedShips:
-                ship.setOrder(MoveToXY(((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom))
+            if pygame.KMOD_SHIFT & pygame.key.get_mods():
+                for ship in player.selectedShips:
+                    ship.queueOrder(MoveToXY(((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom))
+            else:
+                for ship in player.selectedShips:
+                    ship.setOrder(MoveToXY(((float(event.dict['pos'][0]) + player.x)/ player.zoom), ((float(event.dict['pos'][1])) + player.y) / player.zoom))
     for event in pygame.event.get(pygame.MOUSEBUTTONUP):
         if event.dict['button'] == 1:
             player.selectedShips = []
@@ -364,10 +380,6 @@ while running:
     for event in pygame.event.get(pygame.MOUSEMOTION):
         if player.selecting:
             player.selEndPos = event.dict['pos']
-    for event in pygame.event.get(pygame.KEYDOWN):
-        keysHeld[event.key] = True
-    for event in pygame.event.get(pygame.KEYUP):
-        keysHeld[event.key] = False
 
     # Check keys
     if keysHeld[pygame.K_UP]:
