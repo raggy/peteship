@@ -1,5 +1,7 @@
 #!/usr/local/bin/python
-import sys, pygame, math, random, formations
+import sys, os, pygame, math, random
+sys.path.append(os.path.abspath(".."))
+import formations
 pygame.init()
 
 """ rev12 : set framerate to 30, hopefully """
@@ -355,12 +357,14 @@ ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
 
 ships = []
 #shipsOnScreen = []
-#for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
-    #ships.append(S1s1(player, (random.random()*width), (random.random()*height)))
-ships.append(S1s6(player, (player.width/2), (player.height/2)))
-ships[0].built = True
+for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
+    ships.append(S1s1(player, (random.random()*width), (random.random()*height)))
+    ships[i].built = True
+#ships.append(S1s6(player, (player.width/2), (player.height/2)))
+#ships[0].built = True
     #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
+lollerLine = formations.Formation(ships)
 
 
 """ build test code """
