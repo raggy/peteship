@@ -1,4 +1,4 @@
-import peteship.py
+import peteship
 
 class Formation:
     pattern = 0
