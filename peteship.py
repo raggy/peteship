@@ -103,6 +103,7 @@ class Ship():
         self.x, self.y = x, y
         self.orders = [Idle()]
         self.moving = False
+        self.built = False
         self.calcPoints()
         self.calcExtras() # For buildships.
 
@@ -172,7 +173,7 @@ class Ship():
 
     def queueOrder(self, order):
         if len(self.orders) > 0:
-            if not isinstance(self.orders[0], Idle):
+            if not isinstance(self.orders[-1], Idle):
                 self.orders.append(order)
                 self.orders[-1].setShip(self)
             else:
@@ -181,9 +182,16 @@ class Ship():
             self.setOrder(order)
 
     def setOrder(self, order):
-        self.orders = []
-        self.orders.append(order)
-        self.orders[0].setShip(self)
+        if ship.built:
+            self.orders = [order]
+            self.orders[0].setShip(self)
+        else:
+            self.orders = [Idle(), order]
+            self.orders[1].setShip(self)
+
+    def justBuilt(self):
+        self.nextOrder()
+        self.built = True
 
 class S1s1(Ship):
     """ as of rev 12 now a list"""
@@ -276,7 +284,8 @@ class S1s6(Ship):
             #print self.buildShip.colour
 
             if self.buildTimeRemaining == 1:
-                self.buildShip.setOrder(MoveToXY(10,10))
+                #self.buildShip.setOrder(MoveToXY(10,10))
+                self.buildShip.justBuilt()
                 self.building = False            
 
     def addToBuildQueue(self): #Currently only produces triangles.
@@ -349,6 +358,7 @@ ships = []
 #for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
     #ships.append(S1s1(player, (random.random()*width), (random.random()*height)))
 ships.append(S1s6(player, (player.width/2), (player.height/2)))
+ships[0].built = True
     #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
 
