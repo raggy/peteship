@@ -110,7 +110,7 @@ class Ship():
     def draw(self):
         if self.needsToCalcPoints:
             self.calcPoints()
-        self.drawOrders()
+        #self.drawOrders()
         pygame.draw.polygon(screen, black, self.offsetPoints())
         pygame.draw.aalines(screen, player.colour, True, self.offsetPoints())
 
@@ -186,6 +186,7 @@ class S1s1(Ship):
     """ as of rev 12 now a list"""
     intEnginePoint = [2]
     radius = 3
+    rotateSpeed = 0.1 
     #buildInfo
     buildCost = 10
     buildTime = 50
@@ -429,9 +430,6 @@ while running:
     """if keysHeld[pygame.K_SPACE]:
         if player.selectedShip != False:
             player.focusOn(player.selectedShip.x, player.selectedShip.y)"""
-    if keysHeld[pygame.K_ESCAPE]:
-        pygame.quit()
-        running = False
     if keysHeld[pygame.K_q]: # petenote: When i figure out how many pixels this changes by i'll move the display so the zoom is centered.
         player.zoomBy(-GLOBAL_ZOOMAMOUNT)
     if keysHeld[pygame.K_w]:
@@ -448,6 +446,9 @@ while running:
 
     #shipsOnScreen = []
     #Update ships x & y. If the ship is onscreen, add to shipsOnScreen list. If it's not moving, don't calculate the points again = saves proc time. Will lag more and more with more ships moving though.
+    for ship in ships:
+        ship.drawOrders()
+
     for ship in ships: # Rev 43: Will work better when ships Idle properly. At the moment they stay with a move order.
         ship.poll()
         if ship.x > player.lBound and ship.x < player.rBound and ship.y > player.tBound and ship.y < player.bBound:
@@ -468,6 +469,9 @@ while running:
         pygame.draw.line(screen, darkgrey, (player.selEndPos[0], player.selStartPos[1]), player.selStartPos)
         
     pygame.display.flip()
+    if keysHeld[pygame.K_ESCAPE]:
+        pygame.quit()
+        running = False
     for event in pygame.event.get(pygame.QUIT):
         pygame.quit()
         running = False
