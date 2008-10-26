@@ -98,6 +98,13 @@ def main(player):
             pygame.draw.line(player.screen, misc.DARKGREY, (player.selStartPos[0], player.selEndPos[1]), player.selEndPos)
             pygame.draw.line(player.screen, misc.DARKGREY, player.selEndPos, (player.selEndPos[0], player.selStartPos[1]))
             pygame.draw.line(player.screen, misc.DARKGREY, (player.selEndPos[0], player.selStartPos[1]), player.selStartPos)
+
+        # minimap draw code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if player.mmShow: #showing the MiniMap?
+            pygame.draw.rect(player.screen, misc.BLACK, player.mmBoundaryRect, 0) #Black out the background of the MM
+            pygame.draw.rect(player.screen, misc.WHITE, player.mmBoundaryRect, 1) #Border it.
+            
+
             
         pygame.display.flip()
 
