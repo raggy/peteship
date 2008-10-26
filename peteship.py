@@ -103,6 +103,10 @@ def main(player):
         if player.mmShow: #showing the MiniMap?
             pygame.draw.rect(player.screen, misc.BLACK, player.mmBoundaryRect, 0) #Black out the background of the MM
             pygame.draw.rect(player.screen, misc.WHITE, player.mmBoundaryRect, 1) #Border it.
+            for ship in player.ships:
+                tempX = player.mmBoundaryRect.left + ship.x / player.width * player.mmBoundaryRect.size[0] # arbitrary amount. Represents map size.
+                tempY = player.mmBoundaryRect.top + ship.y / player.height * player.mmBoundaryRect.size[1] # as above.
+                pygame.draw.line(player.screen, misc.WHITE, (tempX, tempY), (tempX, tempY))
             
 
             
