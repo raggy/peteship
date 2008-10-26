@@ -7,6 +7,10 @@ class Player():
     name = "Ronco"
     resources = 9001 # MONEY, GET BACK.
     """ End of player specific stats """
+    # Minimap stats
+    mmShow = True # Are we displaying the minimap?
+    mmViewRect = pygame.Rect(0,0,0,0) # See below init.
+    mmBoundaryRect = pygame.Rect(0,0,0,0) # " " "
     def __init__(self):
         self.width, self.height = 800, 480  # width of the screen, from left, and height of the screen, from top, in pixels.
         self.screen = pygame.display.set_mode((self.width, self.height)) # Initialise the pygame surface
@@ -16,6 +20,10 @@ class Player():
         self.tBound = self.bBound = self.lBound = self.rBound = 0
         self.ships = self.selectedShips = []
         self.calcBounds()
+
+        #minimap init.
+        self.mmViewRect = pygame.Rect(self.x, self.y, 10, 10) # Defines an area of the players view to use as the minimap.
+        self.mmBoundaryRect = pygame.Rect(self.width - 60, self.height - 60, 50, 50) # Defines the boundary of the map on the game screen.
 
     def calcBounds(self):
         self.tBound = self.y - 10 / self.zoom # 10 is the biggest radius so far, will replace when we have more ships.
@@ -45,3 +53,8 @@ class Player():
         else:
             self.y += y
         self.calcBounds()
+
+    # Minimap code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    def updateMM(self):
+        #Remember kids, the draw code for the mm is in the peteship.py file, under selection code! Last thing drawn before the flip, so it's over ships & other UI!
+        self.mmViewRect.left, self.mmViewRect.top = self.x, self.y
