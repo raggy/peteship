@@ -13,6 +13,9 @@ GREY     = 150, 150, 150
 DARKGREY = 50, 50, 50
 GUINESS  = 20, 10, 10
 
+GLOBAL_MAPWIDTH  = 800 # Here for now. Map class / module later :)
+GLOBAL_MAPHEIGHT = 800
+
 def positive(number):
     #Convert negative numbers to their positive equivalent.
     #If the number is positive, return it.

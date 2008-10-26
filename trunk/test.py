@@ -1,6 +1,7 @@
 import peteship, players, ships, formations, random, orders, misc
 
-GLOBAL_TESTSHIPS = 10 #Generic int for creating multimples of tsetingships.
+GLOBAL_TESTSHIPS = 10 #Generic int for creating multiples of tsetingships.
+# misc contains GLOBAL_MAPWIDTH, GLOBAL_MAPHEIGHT. This should probably be moved to a map class at some point. But not today. Maybe monday morning. Pete. r70.
 
 """
 ships = [S1s1(player, 100.0, 50.0), S1s2(player, 100.0, 100.0), S1s1(player, 150, 75)]
@@ -34,4 +35,4 @@ lollerLine.calcAssignPattern()
 
 #player.focusOn(ships[0].x, ships[0].y)
 
-peteship.main(player) # run the game
+peteship.main(player, misc.GLOBAL_MAPWIDTH, misc.GLOBAL_MAPHEIGHT) # run the game
