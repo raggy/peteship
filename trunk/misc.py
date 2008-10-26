@@ -11,6 +11,7 @@ BLUE     = 0, 0, 255
 MIDBLUE  = 0, 0, 170
 GREY     = 150, 150, 150
 DARKGREY = 50, 50, 50
+GUINESS  = 20, 10, 10
 
 def positive(number):
     #Convert negative numbers to their positive equivalent.
