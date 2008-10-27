@@ -6,7 +6,7 @@ GLOBAL_ZOOMAMOUNT = 0.05
 
 def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DEFINES BOUNDARRRIESSSSSSSSS.....
     clock = pygame.time.Clock()
-    keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_w:False,pygame.K_SPACE:False,pygame.K_i:False,pygame.K_k:False}
+    keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_a:False,pygame.K_SPACE:False,pygame.K_w:False,pygame.K_s:False}
     running = True
 
     # Note on possible efficiency improvement: make a list of all ships on screen at the start of the frame
@@ -79,13 +79,13 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
         if keysHeld[pygame.K_q]: # petenote: When i figure out how many pixels this changes by i'll move the display so the zoom is centered.
             player.zoomBy(-GLOBAL_ZOOMAMOUNT)
 
-        if keysHeld[pygame.K_w]:
+        if keysHeld[pygame.K_a]:
             player.zoomBy(GLOBAL_ZOOMAMOUNT)
             
-        if keysHeld[pygame.K_k]:
+        if keysHeld[pygame.K_s]:
             player.resizeMM(-4, -4)
             
-        if keysHeld[pygame.K_i]:
+        if keysHeld[pygame.K_w]:
             player.resizeMM(4, 4)
 
         player.screen.fill(misc.BLACK) #ARRR.
