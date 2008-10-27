@@ -12,6 +12,7 @@ MIDBLUE  = 0, 0, 170
 GREY     = 150, 150, 150
 DARKGREY = 50, 50, 50
 GUINESS  = 20, 10, 10
+RESOURCEBROWN = 128, 64, 0
 
 GLOBAL_MAPWIDTH  = 800 # Here for now. Map class / module later :)
 GLOBAL_MAPHEIGHT = 800
