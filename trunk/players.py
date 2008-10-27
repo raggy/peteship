@@ -46,14 +46,14 @@ class Player():
     def panBy(self, x, y): # argghhhh
         if self.x + x < 0.0:
             self.x = 0.0
-        elif self.x + x > misc.GLOBAL_MAPWIDTH - self.width:
-            self.x = misc.GLOBAL_MAPWIDTH - self.width
+        elif self.x + x > misc.GLOBAL_MAPWIDTH - self.width / self.zoom:
+            self.x = misc.GLOBAL_MAPWIDTH - self.width / self.zoom
         else:
             self.x += x
         if self.y + y < 0.0:
             self.y = 0.0
-        elif self.y + y > misc.GLOBAL_MAPHEIGHT - self.height:
-            self.y = misc.GLOBAL_MAPHEIGHT - self.height
+        elif self.y + y > misc.GLOBAL_MAPHEIGHT - self.height / self.zoom:
+            self.y = misc.GLOBAL_MAPHEIGHT - self.height / self.zoom
         else:
             self.y += y
         self.calcBounds()
@@ -68,6 +68,7 @@ class Player():
         #self.mmViewRect.height = self.height / self.mmBoundaryRect.size[1]
         self.mmViewRect.width = (self.width / self.zoom) / misc.GLOBAL_MAPWIDTH * self.mmBoundaryRect.size[0]
         self.mmViewRect.height = (self.height / self.zoom) / misc.GLOBAL_MAPHEIGHT * self.mmBoundaryRect.size[1]
+        #print self.mmViewRect
 
     def resizeMM(self, xChange, yChange):
         self.mmBoundaryRect.left -= xChange
