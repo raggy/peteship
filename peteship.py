@@ -6,7 +6,7 @@ GLOBAL_ZOOMAMOUNT = 0.05
 
 def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DEFINES BOUNDARRRIESSSSSSSSS.....
     clock = pygame.time.Clock()
-    keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_w:False,pygame.K_SPACE:False}
+    keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_w:False,pygame.K_SPACE:False,pygame.K_i:False,pygame.K_k:False}
     running = True
 
     # Note on possible efficiency improvement: make a list of all ships on screen at the start of the frame
@@ -81,6 +81,12 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
 
         if keysHeld[pygame.K_w]:
             player.zoomBy(GLOBAL_ZOOMAMOUNT)
+            
+        if keysHeld[pygame.K_k]:
+            player.resizeMM(-4, -4)
+            
+        if keysHeld[pygame.K_i]:
+            player.resizeMM(4, 4)
 
         player.screen.fill(misc.BLACK) #ARRR.
 
@@ -107,6 +113,7 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
                 tempX = player.mmBoundaryRect.left + ship.x / MAPWIDTH * player.mmBoundaryRect.size[0] # arbitrary amount. Represents map size.
                 tempY = player.mmBoundaryRect.top + ship.y / MAPHEIGHT * player.mmBoundaryRect.size[1] # as above.
                 pygame.draw.line(player.screen, misc.WHITE, (tempX, tempY), (tempX, tempY))
+
             pygame.draw.rect(player.screen, misc.DARKGREY, player.mmViewRect, 1)
             pygame.draw.rect(player.screen, misc.WHITE, player.mmBoundaryRect, 1) #Border the minimap. Drawn after that lot so that the border overwrites the view indicator.
 
