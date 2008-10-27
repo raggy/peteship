@@ -64,8 +64,10 @@ class Player():
         self.mmViewRect.left = self.mmBoundaryRect.left + self.x / misc.GLOBAL_MAPWIDTH * self.mmBoundaryRect.size[0]
         self.mmViewRect.top = self.mmBoundaryRect.top + self.y / misc.GLOBAL_MAPHEIGHT * self.mmBoundaryRect.size[1]
         # Needs some code here to resize the rect to represent the player view.
-        self.mmViewRect.width = ((misc.GLOBAL_MAPWIDTH - self.width) / misc.GLOBAL_MAPWIDTH) * self.mmBoundaryRect.size[0] 
-        self.mmViewRect.height = self.height / self.mmBoundaryRect.size[1]
+        #self.mmViewRect.width = ((misc.GLOBAL_MAPWIDTH - self.width) / misc.GLOBAL_MAPWIDTH) * self.mmBoundaryRect.size[0] 
+        #self.mmViewRect.height = self.height / self.mmBoundaryRect.size[1]
+        self.mmViewRect.width = (self.width / self.zoom) / misc.GLOBAL_MAPWIDTH * self.mmBoundaryRect.size[0]
+        self.mmViewRect.height = (self.height / self.zoom) / misc.GLOBAL_MAPHEIGHT * self.mmBoundaryRect.size[1]
 
     def resizeMM(self, xChange, yChange):
         self.mmBoundaryRect.left -= xChange
