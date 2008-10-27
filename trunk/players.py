@@ -12,13 +12,14 @@ class Player():
     mmViewRect = pygame.Rect(0,0,0,0) # See below init.
     mmBoundaryRect = pygame.Rect(0,0,0,0) # " " "
     def __init__(self):
-        self.width, self.height = 400, 400  # width of the screen, from left, and height of the screen, from top, in pixels.
+        self.width, self.height = 1024, 600  # width of the screen, from left, and height of the screen, from top, in pixels.
         self.screen = pygame.display.set_mode((self.width, self.height)) # Initialise the pygame surface
         self.x = self.y = 0.0               # upper left position of the player's view
         self.zoom = 1.0                     # player's current zoom %
         self.selecting = False
         self.tBound = self.bBound = self.lBound = self.rBound = 0
         self.ships = self.selectedShips = []
+        self.panBy(0.0, 0.0)
         self.calcBounds()
 
         #minimap init.
@@ -44,13 +45,17 @@ class Player():
             self.panBy(((self.width / (self.zoom - zoom) - self.width / self.zoom) / 2), ((self.height / (self.zoom - zoom) - self.height / self.zoom) / 2))
             
     def panBy(self, x, y): # argghhhh
-        if self.x + x < 0.0:
+        if self.width / self.zoom > misc.GLOBAL_MAPWIDTH:
+            self.x = (misc.GLOBAL_MAPWIDTH - (self.width / self.zoom)) / 2
+        elif self.x + x < 0.0:
             self.x = 0.0
         elif self.x + x > misc.GLOBAL_MAPWIDTH - self.width / self.zoom:
             self.x = misc.GLOBAL_MAPWIDTH - self.width / self.zoom
         else:
             self.x += x
-        if self.y + y < 0.0:
+        if self.height / self.zoom > misc.GLOBAL_MAPHEIGHT:
+            self.y = (misc.GLOBAL_MAPHEIGHT - (self.height / self.zoom)) / 2
+        elif self.y + y < 0.0:
             self.y = 0.0
         elif self.y + y > misc.GLOBAL_MAPHEIGHT - self.height / self.zoom:
             self.y = misc.GLOBAL_MAPHEIGHT - self.height / self.zoom
@@ -64,11 +69,8 @@ class Player():
         self.mmViewRect.left = self.mmBoundaryRect.left + self.x / misc.GLOBAL_MAPWIDTH * self.mmBoundaryRect.size[0]
         self.mmViewRect.top = self.mmBoundaryRect.top + self.y / misc.GLOBAL_MAPHEIGHT * self.mmBoundaryRect.size[1]
         # Needs some code here to resize the rect to represent the player view.
-        #self.mmViewRect.width = ((misc.GLOBAL_MAPWIDTH - self.width) / misc.GLOBAL_MAPWIDTH) * self.mmBoundaryRect.size[0] 
-        #self.mmViewRect.height = self.height / self.mmBoundaryRect.size[1]
         self.mmViewRect.width = (self.width / self.zoom) / misc.GLOBAL_MAPWIDTH * self.mmBoundaryRect.size[0]
         self.mmViewRect.height = (self.height / self.zoom) / misc.GLOBAL_MAPHEIGHT * self.mmBoundaryRect.size[1]
-        #print self.mmViewRect
 
     def resizeMM(self, xChange, yChange):
         self.mmBoundaryRect.left -= xChange
