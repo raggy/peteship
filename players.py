@@ -12,8 +12,8 @@ class Player():
     mmViewRect = pygame.Rect(0,0,0,0) # See below init.
     mmBoundaryRect = pygame.Rect(0,0,0,0) # " " "
     def __init__(self):
-        self.width, self.height = 800, 480  # width of the screen, from left, and height of the screen, from top, in pixels.
-        self.screen = pygame.display.set_mode((self.width, self.height)) # Initialise the pygame surface
+        self.width, self.height = 1024, 600  # width of the screen, from left, and height of the screen, from top, in pixels.
+        self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN) # Initialise the pygame surface
         self.x = self.y = 0.0               # upper left position of the player's view
         self.zoom = 1.0                     # player's current zoom %
         self.selecting = False
