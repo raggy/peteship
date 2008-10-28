@@ -44,9 +44,9 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
                         for ship in player.selectedShips:
                             ship.queueOrder(orders.MoveToShip(shipAtCursor))
             elif (event.dict['button'] == 4):
-                player.zoomBy(GLOBAL_ZOOMAMOUNT)
+                player.zoomInBy(1.05)
             elif (event.dict['button'] == 5):
-                player.zoomBy(-GLOBAL_ZOOMAMOUNT)
+                player.zoomOutBy(1.05)
             """elif (event.dict['button'] == 6):
                 player.panBy(-10,0)
             elif (event.dict['button'] == 7):
@@ -86,10 +86,10 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
             player.panBy(10,0)
 
         if keysHeld[pygame.K_q]: # petenote: When i figure out how many pixels this changes by i'll move the display so the zoom is centered.
-            player.zoomBy(GLOBAL_ZOOMAMOUNT)
+            player.zoomInBy(1.05)
 
         if keysHeld[pygame.K_a]:
-            player.zoomBy(-GLOBAL_ZOOMAMOUNT)
+            player.zoomOutBy(1.05)
             
         if keysHeld[pygame.K_s]:
             player.resizeMM(-4, -4)
