@@ -27,10 +27,10 @@ class Player():
         self.mmBoundaryRect = pygame.Rect(self.width - 60, self.height - 60, 50, 50) # Defines the boundary of the map on the game screen.
 
     def calcBounds(self):
-        self.tBound = self.y - 10 / self.zoom # 10 is the biggest radius so far, will replace when we have more ships.
-        self.bBound = self.y + (self.height + 10) / self.zoom # same kinda thing
-        self.lBound = self.x - 10 / self.zoom
-        self.rBound = self.x + (self.width + 10) / self.zoom
+        self.tBound = self.y - 10 # 10 is the biggest radius so far, will replace when we have more ships.
+        self.bBound = self.y + 10 + self.height / self.zoom # same kinda thing
+        self.lBound = self.x - 10
+        self.rBound = self.x + 10 + self.width / self.zoom
 
     def focusOn(self, x, y):
         self.x = (x - (self.width / 2)) / player.zoom
