@@ -1,3 +1,5 @@
+#!/usr/bin/env python2.5
+
 import peteship, players, ships, formations, random, orders, misc
 
 GLOBAL_TESTSHIPS = 10 #Generic int for creating multiples of tsetingships.
