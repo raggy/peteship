@@ -39,11 +39,21 @@ class Player():
     def xy(self): # Return x, y as a tuple
         return (x, y)
 
+    def zoomInBy(self, zoom):
+        self.zoom = self.zoom * zoom
+        self.panBy(((self.width / (self.zoom / zoom) - self.width / self.zoom) / 2), ((self.height / (self.zoom / zoom) - self.height / self.zoom) / 2))
+
+    def zoomOutBy(self, zoom):
+        self.zoom = self.zoom / zoom
+        self.panBy(((self.width / (self.zoom * zoom) - self.width / self.zoom) / 2), ((self.height / (self.zoom * zoom) - self.height / self.zoom) / 2))
+
+    """ Depreciated, now use zoomInBy and zoomOutBy
     def zoomBy(self, zoom):
         if self.zoom + zoom > 0.05:
             self.zoom += zoom
             self.panBy(((self.width / (self.zoom - zoom) - self.width / self.zoom) / 2), ((self.height / (self.zoom - zoom) - self.height / self.zoom) / 2))
-            
+    """
+    
     def panBy(self, x, y): # argghhhh
         if self.width / self.zoom > misc.GLOBAL_MAPWIDTH:
             self.x = (misc.GLOBAL_MAPWIDTH - (self.width / self.zoom)) / 2
