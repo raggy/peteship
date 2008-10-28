@@ -41,10 +41,11 @@ class Ship():
     def drawOrders(self):
         lastx, lasty = self.x, self.y
         for order in self.orders:
-            if not (order.x is False and order.y is False):
-                pygame.draw.line(self.player.screen, (20,20,20), ((lastx - self.player.x) * self.player.zoom, (lasty - self.player.y) * self.player.zoom), ((order.x  - self.player.x) * self.player.zoom, (order.y - self.player.y) * self.player.zoom))
+            tempxy = order.xy()
+            if not tempxy is False:
+                pygame.draw.line(self.player.screen, misc.DARKGREY, ((lastx - self.player.x) * self.player.zoom, (lasty - self.player.y) * self.player.zoom), ((tempxy[0]  - self.player.x) * self.player.zoom, (tempxy[1] - self.player.y) * self.player.zoom))
                 #pygame.draw.circle(screen, (20,20,20), ((order.x - player.x) * player.zoom, (order.y - player.y) * player.zoom), 2)
-                lastx, lasty = order.x, order.y
+                lastx, lasty = tempxy[0], tempxy[1]
         
     def rotateTowardAngle(self, angle):
         if misc.positive(angle - self.rotation) < self.rotateSpeed: # If rotation speed is bigger than the amount which you need to turn

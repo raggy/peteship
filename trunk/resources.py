@@ -1,4 +1,4 @@
-import pygame, misc, player
+import pygame, misc, players
 
 class Asteroid():
     def __init__(self, x, y, amount, baseSize):

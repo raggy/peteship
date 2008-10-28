@@ -63,6 +63,26 @@ class Player():
             self.y += y
         self.calcBounds()
 
+    def shipOnScreenAtXY(self, x, y):
+        tempShip = False
+        for ship in self.ships:
+            if x >= (ship.x - ship.radius - self.x) * self.zoom and\
+                        x <= (ship.x + ship.radius - self.x) * self.zoom and\
+                        y >= (ship.y - ship.radius - self.y) * self.zoom and\
+                        y <= (ship.y + ship.radius - self.y) * self.zoom:
+                tempShip = ship
+        return tempShip
+
+    def shipAtXY(self, x, y):
+        tempShip = False
+        for ship in self.ships:
+            if x >= ship.x - ship.radius and\
+                        x <= ship.x + ship.radius and\
+                        y >= ship.y - ship.radius and\
+                        y <= ship.y + ship.radius:
+                tempShip = ship
+        return tempShip
+        
     # Minimap code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     def updateMM(self):
         #Remember kids, the draw code for the mm is in the peteship.py file, under selection code! Last thing drawn before the flip, so it's over ships & other UI!
