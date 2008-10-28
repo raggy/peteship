@@ -40,7 +40,7 @@ class Player():
         return (x, y)
 
     def zoomBy(self, zoom):
-        if self.zoom + zoom > 0.4:
+        if self.zoom + zoom > 0.05:
             self.zoom += zoom
             self.panBy(((self.width / (self.zoom - zoom) - self.width / self.zoom) / 2), ((self.height / (self.zoom - zoom) - self.height / self.zoom) / 2))
             
