@@ -6,7 +6,7 @@ GLOBAL_ZOOMAMOUNT = 0.05
 
 def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DEFINES BOUNDARRRIESSSSSSSSS.....
     clock = pygame.time.Clock()
-    keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_a:False,pygame.K_SPACE:False,pygame.K_w:False,pygame.K_s:False}
+    keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_a:False,pygame.K_SPACE:False,pygame.K_w:False,pygame.K_s:False,pygame.K_d:False}
     running = True
 
     # Note on possible efficiency improvement: make a list of all ships on screen at the start of the frame
@@ -102,10 +102,15 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
         for ship in player.ships:
             ship.drawOrders()
 
+        tempint = 0
         for ship in player.ships: # Rev 43: Will work better when ships Idle properly. At the moment they stay with a move order.
             ship.poll()
             if ship.x > player.lBound and ship.x < player.rBound and ship.y > player.tBound and ship.y < player.bBound:
                 ship.draw()
+                tempint += 1
+
+        if keysHeld[pygame.K_d]:
+            print tempint
 
         if player.selecting: # If the player is currently holding down the left mouse button
             # Draw a nice box for selection
@@ -124,8 +129,7 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
         pygame.draw.line(player.screen, misc.WHITE, ((-player.x) * player.zoom, (-player.y) * player.zoom), ((MAPWIDTH - player.x) * player.zoom, (-player.y) * player.zoom))
         pygame.draw.line(player.screen, misc.WHITE, ((MAPWIDTH - player.x) * player.zoom, (-player.y) * player.zoom), ((MAPWIDTH - player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom))
         pygame.draw.line(player.screen, misc.WHITE, ((MAPWIDTH - player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom), ((-player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom))
-        pygame.draw.line(player.screen, misc.WHITE, ((-player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom), ((-player.x) * player.zoom, (-player.y) * player.zoom))
-        
+        pygame.draw.line(player.screen, misc.WHITE, ((-player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom), ((-player.x) * player.zoom, (-player.y) * player.zoom))        
 
         # minimap draw code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if player.mmShow: #showing the MiniMap?
