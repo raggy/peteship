@@ -74,16 +74,16 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
 
         # Check keys
         if keysHeld[pygame.K_UP]:
-            player.panBy(0,-10)
+            player.panBy(0, -15 / player.zoom)
 
         if keysHeld[pygame.K_DOWN]:
-            player.panBy(0,10)
+            player.panBy(0, 15 / player.zoom)
 
         if keysHeld[pygame.K_LEFT]:
-            player.panBy(-10,0)
+            player.panBy(-15 / player.zoom, 0)
 
         if keysHeld[pygame.K_RIGHT]:
-            player.panBy(10,0)
+            player.panBy(15 / player.zoom, 0)
 
         if keysHeld[pygame.K_q]: # petenote: When i figure out how many pixels this changes by i'll move the display so the zoom is centered.
             player.zoomInBy(1.05)
