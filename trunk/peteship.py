@@ -26,28 +26,32 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
                 player.selStartPos = player.selEndPos = event.dict['pos']
                 player.selecting = True
             elif (event.dict['button'] == 2) or (event.dict['button'] == 3): # If right mouse button clicked
-                #shipAtCursor = player.shipOnScreenAtXY(event.dict['pos'][0], event.dict['pos'][1])
-                shipAtCursor = False
-                for ship in player.shipsOnScreen:
-                    if event.dict['pos'][0] >= ship.x - ship.radius and\
-                        event.dict['pos'][0] <= ship.x + ship.radius and\
-                        event.dict['pos'][1] >= ship.y - ship.radius and\
-                        event.dict['pos'][1] <= ship.y + ship.radius:
-                        shipAtCursor = ship
-                if shipAtCursor == False:
-                    if pygame.KMOD_SHIFT & pygame.key.get_mods():
-                        for ship in player.selectedShips:
-                            ship.queueOrder(orders.MoveToXY((float(event.dict['pos'][0])/ player.zoom + player.x), (float(event.dict['pos'][1])) / player.zoom + player.y))
+                if (event.dict['pos'][0] / player.zoom) + player.x >= 0.0 and\
+                (event.dict['pos'][1] / player.zoom) + player.y >= 0.0 and\
+                (event.dict['pos'][0] / player.zoom) + player.x <= MAPWIDTH and\
+                (event.dict['pos'][1] / player.zoom) + player.y <= MAPHEIGHT: # If player clicked somewhere on the map
+                    #shipAtCursor = player.shipOnScreenAtXY(event.dict['pos'][0], event.dict['pos'][1])
+                    shipAtCursor = False
+                    for ship in player.shipsOnScreen:
+                        if event.dict['pos'][0] >= (ship.x - ship.radius - player.x) * player.zoom and\
+                        event.dict['pos'][0] <= (ship.x + ship.radius - player.x) * player.zoom and\
+                        event.dict['pos'][1] >= (ship.y - ship.radius - player.y) * player.zoom and\
+                        event.dict['pos'][1] <= (ship.y + ship.radius - player.y) * player.zoom:
+                            shipAtCursor = ship
+                    if shipAtCursor == False:
+                        if pygame.KMOD_SHIFT & pygame.key.get_mods():
+                            for ship in player.selectedShips:
+                                ship.queueOrder(orders.MoveToXY((float(event.dict['pos'][0])/ player.zoom + player.x), (float(event.dict['pos'][1])) / player.zoom + player.y))
+                        else:
+                            for ship in player.selectedShips:
+                                ship.setOrder(orders.MoveToXY((float(event.dict['pos'][0])/ player.zoom + player.x), (float(event.dict['pos'][1])) / player.zoom + player.y))
                     else:
-                        for ship in player.selectedShips:
-                            ship.setOrder(orders.MoveToXY((float(event.dict['pos'][0])/ player.zoom + player.x), (float(event.dict['pos'][1])) / player.zoom + player.y))
-                else:
-                    if pygame.KMOD_SHIFT & pygame.key.get_mods():
-                        for ship in player.selectedShips:
-                            ship.queueOrder(orders.MoveToShip(shipAtCursor))
-                    else:
-                        for ship in player.selectedShips:
-                            ship.queueOrder(orders.MoveToShip(shipAtCursor))
+                        if pygame.KMOD_SHIFT & pygame.key.get_mods():
+                            for ship in player.selectedShips:
+                                ship.queueOrder(orders.MoveToShip(shipAtCursor))
+                        else:
+                            for ship in player.selectedShips:
+                                ship.queueOrder(orders.MoveToShip(shipAtCursor))
             elif (event.dict['button'] == 4):
                 player.zoomInBy(1.05)
             elif (event.dict['button'] == 5):
