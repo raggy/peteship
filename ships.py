@@ -7,7 +7,7 @@ class Ship():
                                     # r43 : Changed to rotation instead of intRotation
     
     #speed stats.
-    speed = 2.5       # Movementdisabled
+    speed = 2.5
     rotateSpeed = 0.05 # Rotation
 
     intSI = 1 # integer for the health of the ship
@@ -124,7 +124,7 @@ class S1s1(Ship):
     buildCost = 10
     buildTime = 50
     rotateSpeed = 0.1
-
+    
     def calcPoints(self):
     #calculate the three points of the triangle relative to the center xy of the ship
     #and the radius given to the ship.
