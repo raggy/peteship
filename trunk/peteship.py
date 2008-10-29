@@ -120,16 +120,14 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
             pygame.draw.line(player.screen, misc.DARKGREY, (player.selEndPos[0], player.selStartPos[1]), player.selStartPos)
 
         # Draw edges of map
-        """ This will be uncommented when maps are implemented properly
-        pygame.draw.line(player.screen, misc.WHITE, ((-player.x) * player.zoom, (-player.y) * player.zoom), ((Map.width - player.x) * player.zoom, (-player.y) * player.zoom))
-        pygame.draw.line(player.screen, misc.WHITE, ((Map.width - player.x) * player.zoom, (-player.y) * player.zoom), ((Map.width - player.x) * player.zoom,(Map.height - player.y) * player.zoom))
-        pygame.draw.line(player.screen, misc.WHITE, ((Map.width - player.x) * player.zoom,(Map.height - player.y) * player.zoom), ((-player.x) * player.zoom,(Map.height - player.y) * player.zoom))
-        pygame.draw.line(player.screen, misc.WHITE, ((-player.x) * player.zoom,(Map.height - player.y) * player.zoom), ((-player.x) * player.zoom, (-player.y) * player.zoom))
-        """
-        pygame.draw.line(player.screen, misc.WHITE, ((-player.x) * player.zoom, (-player.y) * player.zoom), ((MAPWIDTH - player.x) * player.zoom, (-player.y) * player.zoom))
-        pygame.draw.line(player.screen, misc.WHITE, ((MAPWIDTH - player.x) * player.zoom, (-player.y) * player.zoom), ((MAPWIDTH - player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom))
-        pygame.draw.line(player.screen, misc.WHITE, ((MAPWIDTH - player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom), ((-player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom))
-        pygame.draw.line(player.screen, misc.WHITE, ((-player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom), ((-player.x) * player.zoom, (-player.y) * player.zoom))        
+        if player.width / player.zoom > MAPWIDTH: # If the player view is wider than the map width
+            # Draw horizontal edges
+            pygame.draw.line(player.screen, misc.WHITE, ((-player.x) * player.zoom, (-player.y) * player.zoom), ((MAPWIDTH - player.x) * player.zoom, (-player.y) * player.zoom))
+            pygame.draw.line(player.screen, misc.WHITE, ((MAPWIDTH - player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom), ((-player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom))
+        if player.height / player.zoom > MAPHEIGHT: # If the player view is taller than the map height
+            # Draw vertical edges
+            pygame.draw.line(player.screen, misc.WHITE, ((MAPWIDTH - player.x) * player.zoom, (-player.y) * player.zoom), ((MAPWIDTH - player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom))
+            pygame.draw.line(player.screen, misc.WHITE, ((-player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom), ((-player.x) * player.zoom, (-player.y) * player.zoom))        
 
         # minimap draw code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if player.mmShow: #showing the MiniMap?
