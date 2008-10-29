@@ -24,8 +24,8 @@ class Player():
 
         #minimap init.
         self.mmViewRect = pygame.Rect(self.x, self.y, 10, 10) # Defines an area of the players view to use as the minimap.
-        self.mmBoundaryRect = pygame.Rect(self.width - 60, self.height - 60, 50, 50) # Defines the boundary of the map on the game screen.
-
+        self.mmBoundaryRect = pygame.Rect(self.width - 60, self.height - 50 * misc.GLOBAL_MAPHEIGHT / misc.GLOBAL_MAPWIDTH - 10, 50, 50 * misc.GLOBAL_MAPHEIGHT / misc.GLOBAL_MAPWIDTH) # Defines the boundary of the map on the game screen.
+       
     def calcBounds(self):
         self.tBound = self.y - 10 # 10 is the biggest radius so far, will replace when we have more ships.
         self.bBound = self.y + 10 + self.height / self.zoom # same kinda thing
@@ -106,8 +106,5 @@ class Player():
         if self.mmBoundaryRect.width + xChange >= 5 and self.mmBoundaryRect.width + xChange <= self.width - 20 and self.mmBoundaryRect.height + yChange >= 5 and self.mmBoundaryRect.height + yChange <= self.height - 20:
             self.mmBoundaryRect.left -= xChange
             self.mmBoundaryRect.width += xChange        
-            self.mmBoundaryRect.top -= yChange
-            self.mmBoundaryRect.height += yChange
-
-
-
+            self.mmBoundaryRect.top -= yChange * misc.GLOBAL_MAPHEIGHT / misc.GLOBAL_MAPWIDTH
+            self.mmBoundaryRect.height += yChange * misc.GLOBAL_MAPHEIGHT / misc.GLOBAL_MAPWIDTH

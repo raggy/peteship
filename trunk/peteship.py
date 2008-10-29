@@ -2,8 +2,6 @@
 import sys, os, pygame, math, ships, orders, players, misc, formations
 pygame.init()
 
-GLOBAL_ZOOMAMOUNT = 0.05
-
 def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DEFINES BOUNDARRRIESSSSSSSSS.....
     clock = pygame.time.Clock()
     keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_a:False,pygame.K_SPACE:False,pygame.K_w:False,pygame.K_s:False,pygame.K_d:False}
@@ -28,7 +26,14 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
                 player.selStartPos = player.selEndPos = event.dict['pos']
                 player.selecting = True
             elif (event.dict['button'] == 2) or (event.dict['button'] == 3): # If right mouse button clicked
-                shipAtCursor = player.shipOnScreenAtXY(event.dict['pos'][0], event.dict['pos'][1])
+                #shipAtCursor = player.shipOnScreenAtXY(event.dict['pos'][0], event.dict['pos'][1])
+                shipAtCursor = False
+                for ship in player.shipsOnScreen:
+                    if event.dict['pos'][0] >= ship.x - ship.radius and\
+                        event.dict['pos'][0] <= ship.x + ship.radius and\
+                        event.dict['pos'][1] >= ship.y - ship.radius and\
+                        event.dict['pos'][1] <= ship.y + ship.radius:
+                        shipAtCursor = ship
                 if shipAtCursor == False:
                     if pygame.KMOD_SHIFT & pygame.key.get_mods():
                         for ship in player.selectedShips:
@@ -61,7 +66,7 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
                     player.selStartPos, player.selEndPos = (player.selEndPos[0], player.selStartPos[1]), (player.selStartPos[0], player.selEndPos[1]) # then swap the x positions of start and end
                 if player.selStartPos[1] > player.selEndPos[1]:
                     player.selEndPos, player.selStartPos = (player.selEndPos[0], player.selStartPos[1]), (player.selStartPos[0], player.selEndPos[1])
-                for ship in player.ships:
+                for ship in player.shipsOnScreen:
                     if  player.selEndPos[0] >= (ship.x - ship.radius - player.x) * player.zoom and\
                         player.selStartPos[0] <= (ship.x + ship.radius - player.x) * player.zoom and\
                         player.selEndPos[1] >= (ship.y - ship.radius - player.y) * player.zoom and\
@@ -85,7 +90,7 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
         if keysHeld[pygame.K_RIGHT]:
             player.panBy(15 / player.zoom, 0)
 
-        if keysHeld[pygame.K_q]: # petenote: When i figure out how many pixels this changes by i'll move the display so the zoom is centered.
+        if keysHeld[pygame.K_q]:
             player.zoomInBy(1.05)
 
         if keysHeld[pygame.K_a]:
@@ -102,15 +107,13 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
         for ship in player.ships:
             ship.drawOrders()
 
-        tempint = 0
+        player.shipsOnScreen = []
+        
         for ship in player.ships: # Rev 43: Will work better when ships Idle properly. At the moment they stay with a move order.
             ship.poll()
             if ship.x > player.lBound and ship.x < player.rBound and ship.y > player.tBound and ship.y < player.bBound:
                 ship.draw()
-                tempint += 1
-
-        if keysHeld[pygame.K_d]:
-            print tempint
+                player.shipsOnScreen.append(ship) # Make a list of all ships on screen
 
         if player.selecting: # If the player is currently holding down the left mouse button
             # Draw a nice box for selection
@@ -120,11 +123,11 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
             pygame.draw.line(player.screen, misc.DARKGREY, (player.selEndPos[0], player.selStartPos[1]), player.selStartPos)
 
         # Draw edges of map
-        if player.width / player.zoom > MAPWIDTH: # If the player view is wider than the map width
+        if player.height / player.zoom > MAPHEIGHT: # If the player view is taller than the map height
             # Draw horizontal edges
             pygame.draw.line(player.screen, misc.WHITE, ((-player.x) * player.zoom, (-player.y) * player.zoom), ((MAPWIDTH - player.x) * player.zoom, (-player.y) * player.zoom))
             pygame.draw.line(player.screen, misc.WHITE, ((MAPWIDTH - player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom), ((-player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom))
-        if player.height / player.zoom > MAPHEIGHT: # If the player view is taller than the map height
+        if player.width / player.zoom > MAPWIDTH: # If the player view is wider than the map width
             # Draw vertical edges
             pygame.draw.line(player.screen, misc.WHITE, ((MAPWIDTH - player.x) * player.zoom, (-player.y) * player.zoom), ((MAPWIDTH - player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom))
             pygame.draw.line(player.screen, misc.WHITE, ((-player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom), ((-player.x) * player.zoom, (-player.y) * player.zoom))        
