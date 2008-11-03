@@ -31,10 +31,10 @@ class MoveToXY(Order):
             self.ship.moving = True
             if (self.ship.x, self.ship.y) != (x, y): # stop the ship on target
                 if self.ship.distanceFrom(x, y) < self.ship.speed: # If the destintion is a shorter distance than the move distance...
-                    self.ship.order = self.ship.nextOrder() # get next orders and
+                    self.ship.nextOrder() # get next orders and
                 self.ship.moveForward()          # cover the rest of the distance.
             else:
-                self.ship.order = self.ship.nextOrder() # Get next orders
+                self.ship.nextOrder() # Get next orders
 
     def rotateTowards(self, x, y):
         if self.ship.rotation != self.angleToXY: # If the ship isn't already facing the right way
