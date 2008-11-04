@@ -108,7 +108,7 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
         
         if keysHeld[pygame.K_d]:
             for ship in player.selectedShips:
-                ship.remove()
+                ship.die()
 
         player.screen.fill(misc.BLACK) #ARRR.
 
@@ -143,10 +143,10 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
         # Draw explosions. Pyrotechnic Glee.
         for effect in player.effects:
             if effect.lifetime <= 0:
-                del effect
+                effect.remove()
             else:
                effect.poll()
-               # check to see if onscreen.
+               # check to see if onscreen to go here.
                effect.draw()
 
         # minimap draw code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
