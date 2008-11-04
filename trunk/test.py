@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.5
 
-import peteship, players, ships, formations, random, orders, misc
+import peteship, players, ships, formations, random, orders, misc, effects
 
 GLOBAL_TESTSHIPS = 10 #Generic int for creating multiples of tsetingships.
 # misc contains GLOBAL_MAPWIDTH, GLOBAL_MAPHEIGHT. This should probably be moved to a map class at some point. But not today. Maybe monday morning. Pete. r70.
@@ -26,6 +26,8 @@ for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this
 player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))
 lollerLine = formations.Formation(player.ships)
 lollerLine.calcAssignPattern()
+
+player.effects.append(effects.Explosion((200, 200), 0.5, 20, player, misc.EXPLOSIONRED))
 
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!

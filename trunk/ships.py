@@ -27,6 +27,18 @@ class Ship():
         self.built = False
         self.calcPoints()
         self.calcExtras() # For buildships.
+        
+    def remove(self):
+        # needs adding in, not sure how though ...
+        pass
+        
+    def die(self):
+        #also needs adding in
+        #death animation goes here.
+        #and remove the ship when done.
+        self.remove()
+        
+        #any player related stats go here. like death count and such. Dunno if we want need these but hum.
 
     def calcExtras(self):
         pass
@@ -210,5 +222,5 @@ class S1s6(Ship):
                 self.buildShip.justBuilt()
                 self.building = False            
 
-    def addToBuildQueue(self): #Currently only produces triangles.
+    def addToBuildQueue(self): #Currently only produces triangles. only works on buildships.
         self.buildQueue.append(S1s1(self.player, self.buildPoints[0][0], self.buildPoints[0][1])) # Pete, you forgot the self. prefix

@@ -7,6 +7,9 @@ class Player():
     name = "Ronco"
     resources = 9001 # MONEY, GET BACK.
     """ End of player specific stats """
+    # effects are lurking here for now. I'm not sure why.
+    effects = []
+    
     # Minimap stats
     mmShow = True # Are we displaying the minimap?
     mmViewRect = pygame.Rect(0,0,0,0) # See below init.
