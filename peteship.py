@@ -75,7 +75,7 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
                         player.selStartPos[0] <= (ship.x + ship.radius - player.x) * player.zoom and\
                         player.selEndPos[1] >= (ship.y - ship.radius - player.y) * player.zoom and\
                         player.selStartPos[1] <= (ship.y + ship.radius - player.y) * player.zoom: # If player clicked on this ship
-                        player.selectedShips.append(ship) # Set player's selected ship
+                        ship.select() # Append to selected ships
 
         for event in pygame.event.get(pygame.MOUSEMOTION):
             if player.selecting:

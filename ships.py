@@ -135,6 +135,9 @@ class Ship():
         self.nextOrder()
         self.built = True
 
+    def select(self):
+	self.player.selectedShips.append(self)
+
 class S1s1(Ship):
     """ as of rev 12 now a list"""
     intEnginePoint = [2]
