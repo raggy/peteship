@@ -10,6 +10,7 @@ class Explosion():
         self.lifetime = length
         self.player = player # to enable the explosion to draw itself
         self.colour = colour
+        self.backColour = (colour[0] / 2, colour[1] / 2, colour[2] / 2)
         
     def poll(self):
         # Explosion() relies on peteship.py checking to see if each explosions lifetime == 0 and removing them before polling them.
@@ -18,4 +19,7 @@ class Explosion():
         
     def draw(self):
         # draw a circle based on the lifetime of the explosion. So it shrinks. Cool.
-        pygame.draw.circle(self.player.screen, self.colour, self.xy, self.lifetime * self.size)
+        tempSize = self.lifetime * self.size # less cycles.
+        pygame.draw.circle(self.player.screen, self.backColour, self.xy, tempSize)
+        if tempSize > 2:
+            pygame.draw.circle(self.player.screen, self.colour, self.xy, tempSize, 1)

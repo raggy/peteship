@@ -27,7 +27,7 @@ player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))
 lollerLine = formations.Formation(player.ships)
 lollerLine.calcAssignPattern()
 
-player.effects.append(effects.Explosion((200, 200), 0.5, 20, player, misc.EXPLOSIONRED))
+player.effects.append(effects.Explosion((200, 200), 0.5, 100, player, misc.EXPLOSIONRED))
 player.effects.append(effects.Explosion((20, 20), 0.5, 20, player, misc.EXPLOSIONRED))
 player.effects.append(effects.Explosion((204, 100), 0.5, 20, player, misc.EXPLOSIONRED))
 
