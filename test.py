@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.5
 
-import peteship, players, ships, formations, random, orders, misc, effects
+import peteship, players, ships, formations, random, orders, misc, effects, weapons
 
 GLOBAL_TESTSHIPS = 10 #Generic int for creating multiples of tsetingships.
 # misc contains GLOBAL_MAPWIDTH, GLOBAL_MAPHEIGHT. This should probably be moved to a map class at some point. But not today. Maybe monday morning. Pete. r70.
@@ -27,16 +27,18 @@ player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))
 lollerLine = formations.Formation(player.ships)
 lollerLine.calcAssignPattern()
 
-player.effects.append(effects.Explosion((200, 200), 0.5, 100, player, misc.EXPLOSIONRED))
-player.effects.append(effects.Explosion((20, 20), 0.5, 20, player, misc.EXPLOSIONRED))
-player.effects.append(effects.Explosion((204, 100), 0.5, 20, player, misc.EXPLOSIONRED))
+player.ships.append(weapons.Missile(player, (300, 300, 1), player.ships[3]))
+
+# Explosion test code. Woo!
+#player.effects.append(effects.Explosion((200, 200), 0.5, 100, player, misc.EXPLOSIONRED))
+#player.effects.append(effects.Explosion((20, 20), 0.5, 20, player, misc.EXPLOSIONRED))
+#player.effects.append(effects.Explosion((204, 100), 0.5, 20, player, misc.EXPLOSIONRED))
 
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!
 #player.ships[0].addToBuildQueue()
 #ships[0].addToBuildQueue()
 #print ships[0].buildQueue
-
 """ end build test code """
 
 #player.focusOn(ships[0].x, ships[0].y)

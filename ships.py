@@ -85,6 +85,7 @@ class Ship():
         #update the ships data
         self.orders[0].poll()
         self.calcExtras
+        
 
     def angleToXY(self, x, y):
         #calculate the angle from the referenced ships heading to the
