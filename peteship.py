@@ -136,6 +136,15 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
             pygame.draw.line(player.screen, misc.WHITE, ((MAPWIDTH - player.x) * player.zoom, (-player.y) * player.zoom), ((MAPWIDTH - player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom))
             pygame.draw.line(player.screen, misc.WHITE, ((-player.x) * player.zoom,(MAPHEIGHT - player.y) * player.zoom), ((-player.x) * player.zoom, (-player.y) * player.zoom))        
 
+        # Draw explosions. Pyrotechnic Glee.
+        for effect in player.effects:
+            if effect.lifetime <= 0:
+                del effect
+            else:
+               effect.poll()
+               # check to see if onscreen.
+               effect.draw()
+
         # minimap draw code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if player.mmShow: #showing the MiniMap?
             pygame.draw.rect(player.screen, misc.BLACK, player.mmBoundaryRect, 0) #Black out the background of the MM
@@ -147,6 +156,8 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
 
             pygame.draw.rect(player.screen, misc.DARKGREY, player.mmViewRect, 1)
             pygame.draw.rect(player.screen, misc.WHITE, player.mmBoundaryRect, 1) #Border the minimap. Drawn after that lot so that the border overwrites the view indicator.
+       # end of minimap draw code!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            
             
         pygame.display.flip()
 
