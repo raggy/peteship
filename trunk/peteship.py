@@ -105,6 +105,10 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
             
         if keysHeld[pygame.K_w]:
             player.resizeMM(4, 4)
+        
+        if keysHeld[pygame.K_d]:
+            for ship in player.selectedShips:
+                ship.remove()
 
         player.screen.fill(misc.BLACK) #ARRR.
 
