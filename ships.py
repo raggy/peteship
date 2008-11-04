@@ -1,4 +1,4 @@
-import misc, math, orders, pygame.draw
+import misc, math, orders, pygame, effects
 
 class Ship():
     #basic stats for drawing & position.
@@ -41,9 +41,10 @@ class Ship():
     def die(self):
         #also needs adding in
         #death animation goes here.
+        self.player.effects.append(effects.ExplosionShip(self))
+        self.player.effects.append(effects.Explosion((self.x, self.y), 0.5, (self.radius * 4), self.player, misc.WHITE))
         #and remove the ship when done.
         self.remove()
-        
         #any player related stats go here. like death count and such. Dunno if we want need these but hum.
 
     def calcExtras(self):

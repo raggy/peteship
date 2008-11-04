@@ -1,8 +1,25 @@
-import pygame, players
+import pygame, players, random, math
 
 # Module for effects within the game e.g. explosions
 
-class Explosion():
+class Effect():
+    
+    def __init__(self):
+        pass
+        
+    def poll(self):
+        pass
+        
+    def draw(self):
+        pass
+    
+    def remove(self):
+        for i in range(len(self.player.effects)):
+            if self.player.effects[i] == self:
+                del self.player.effects[i]
+                break
+
+class Explosion(Effect):
     
     def __init__(self, xyAsTuple, size, length, player, colour):
         self.xy = xyAsTuple
@@ -20,6 +37,47 @@ class Explosion():
     def draw(self):
         # draw a circle based on the lifetime of the explosion. So it shrinks. Cool.
         tempSize = self.lifetime * self.size # less cycles.
-        pygame.draw.circle(self.player.screen, self.backColour, self.xy, tempSize)
-        if tempSize > 2:
-            pygame.draw.circle(self.player.screen, self.colour, self.xy, tempSize, 1)
+        if tempSize * self.player.zoom >= 1:
+            pygame.draw.circle(self.player.screen, self.colour, ((self.xy[0] - self.player.x) * self.player.zoom, (self.xy[1] - self.player.y) * self.player.zoom), tempSize * self.player.zoom, 1) # alter the last value for thicker rings.
+        
+class Particle():
+    
+    def __init__(self, player, rotation, x, y, lifetime):
+        self.player = player
+        self.rotation = rotation
+        self.x = x
+        self.y = y
+        self.maxlife = self.lifetime = lifetime #lollercaust
+        
+    def poll(self):
+        self.y -= math.cos(self.rotation) * 0.4
+        self.x += math.sin(self.rotation) * 0.4
+        self.colour = ((255 * self.lifetime / self.maxlife),\
+                       (255 * self.lifetime / self.maxlife),\
+                       (255 * self.lifetime / self.maxlife))    # kept seperate so that different coloured particles can be made.
+                       
+        self.lifetime -= 1
+        
+    def draw(self):
+        pygame.draw.line(self.player.screen, self.colour, ((self.x - self.player.x) * self.player.zoom, (self.y - self.player.y) * self.player.zoom), ((self.x - self.player.x) * self.player.zoom, (self.y - self.player.y) * self.player.zoom))
+        
+        
+class ExplosionShip(Effect):
+    
+    particles = []
+    lifetime = 500 # how long the particle lasts
+    colour = (255, 255, 255) #white powe... particle!
+        
+    def __init__(self, ship):
+        self.particles = []
+        self.player    = ship.player
+        for i in range(10):
+            self.particles.append(Particle(self.player, (random.random() * math.pi * 2), ((random.random() * 2) - 1) * ship.radius + ship.x, ((random.random() * 2) - 1) * ship.radius + ship.y, self.lifetime))
+    def poll(self):
+        for particle in self.particles:
+            particle.poll()
+        self.lifetime -= 1
+            
+    def draw(self):
+        for particle in self.particles:
+            particle.draw()
