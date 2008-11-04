@@ -28,6 +28,8 @@ lollerLine = formations.Formation(player.ships)
 lollerLine.calcAssignPattern()
 
 player.effects.append(effects.Explosion((200, 200), 0.5, 20, player, misc.EXPLOSIONRED))
+player.effects.append(effects.Explosion((20, 20), 0.5, 20, player, misc.EXPLOSIONRED))
+player.effects.append(effects.Explosion((204, 100), 0.5, 20, player, misc.EXPLOSIONRED))
 
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!

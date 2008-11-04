@@ -29,8 +29,14 @@ class Ship():
         self.calcExtras() # For buildships.
         
     def remove(self):
-        # needs adding in, not sure how though ...
-        pass
+        for i in range(len(self.player.ships)):
+            if self.player.ships[i] == self:
+                del self.player.ships[i]
+                break
+        for i in range(len(self.player.selectedShips)):
+            if self.player.selectedShips[i] == self:
+                del self.player.selectedShips[i]
+                break
         
     def die(self):
         #also needs adding in
