@@ -27,7 +27,8 @@ player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))
 lollerLine = formations.Formation(player.ships)
 lollerLine.calcAssignPattern()
 
-player.ships.append(weapons.Missile(player, (300, 300, 1), player.ships[3]))
+for i in range (100):
+    player.ships.append(weapons.Missile(player, (random.random()*player.width, random.random()*player.height, random.random()*3), player.ships[3]))
 
 # Explosion test code. Woo!
 #player.effects.append(effects.Explosion((200, 200), 0.5, 100, player, misc.EXPLOSIONRED))

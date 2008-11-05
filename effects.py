@@ -102,9 +102,9 @@ class Contrail(Effect):
         
     def poll(self):
         self.lifetime -= 1
-        self.colour = ((100 * self.lifetime / self.maxlife),\
-                       (100 * self.lifetime / self.maxlife),\
-                       (100 * self.lifetime / self.maxlife))
+        self.colour = ((75 * self.lifetime / self.maxlife),\
+                       (75 * self.lifetime / self.maxlife),\
+                       (75 * self.lifetime / self.maxlife))
         if self.updateStartPoint:
             self.x1 = self.parent.x
             self.y1 = self.parent.y
