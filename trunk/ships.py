@@ -147,6 +147,8 @@ class S1s1(Ship):
     buildCost = 10
     buildTime = 50
     rotateSpeed = 0.1
+    canAttack = True # this ship has a weapon! useful for setting ui & making sure that ships that can't attack when selected
+                            # with those that can don't get an erroneus attack order.
     
     def calcPoints(self):
     #calculate the three points of the triangle relative to the center xy of the ship

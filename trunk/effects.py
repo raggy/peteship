@@ -81,3 +81,36 @@ class ExplosionShip(Effect):
     def draw(self):
         for particle in self.particles:
             particle.draw()
+            
+class Contrail(Effect):
+    # putting this in each weapon made no sense as contrails would dissapear when the projectile hit (maybe desireable ?)
+    def __init__(self, parent):
+        self.parent = parent #woooooo
+        
+        self.x1 = parent.x # !!! x1 & y1 constitue the startPoint, while x2 & y2 constitue the endPoint.
+        self.y1 = parent.y
+        
+        self.x2 = parent.x
+        self.y2 = parent.y
+        
+
+        self.maxlife = self.lifetime = parent.contrailLifetime
+        self.thickness = parent.contrailThickness
+        #self.colour = colour    # do we need specific colours for player contrails? hmm...
+        self.player = parent.player
+        self.updateStartPoint = True # do we need to move the startPoint? be obvious in calcExtras
+        
+    def poll(self):
+        self.lifetime -= 1
+        self.colour = ((100 * self.lifetime / self.maxlife),\
+                       (100 * self.lifetime / self.maxlife),\
+                       (100 * self.lifetime / self.maxlife))
+        if self.updateStartPoint:
+            self.x1 = self.parent.x
+            self.y1 = self.parent.y
+        
+        if self.parent.contrailTimer == 0:
+            self.updateStartPoint = False
+                       
+    def draw(self): 
+        pygame.draw.line(self.player.screen, self.colour, ((self.x1 - self.player.x) * self.player.zoom, (self.y1 - self.player.y) * self.player.zoom), ((self.x2 - self.player.x) * self.player.zoom, (self.y2 -self.player.y) * self.player.zoom), self.thickness)
