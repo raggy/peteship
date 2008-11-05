@@ -12,10 +12,10 @@ class Missile(ships.Ship):
         self.rotation = hardPoint[2]
         self.setOrder(orders.MoveToShip(targetShip))
         # contrail stuff
-        self.contrailLength = self.contrailTimer = 20 # frames before a new contrail is added.
+        self.contrailLength = self.contrailTimer = 5 # frames before a new contrail is added.
         self.contrailLifetime = 100 # how long the trails last.
         # Number of contrails in use when moving = contrailLifetime / contrailLength (3000 / 300 = 10 for example.)
-        self.contrailThickness = 1 # thickness passed to contrail. 
+        self.contrailThickness = 2 # thickness passed to contrail. 
         #add an initial contrail.
         self.contrail = self.player.effects.append(effects.Contrail(self)) # this'll make yer eyes bleed.
        
