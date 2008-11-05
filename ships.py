@@ -155,6 +155,9 @@ class S1s1(Ship):
         (self.x + self.radius * math.sin(self.rotation + 2.3 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 2.3 * math.pi / 3))),\
         (self.x + self.radius * math.sin(self.rotation + 3.7 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 3.7 * math.pi / 3)))]
         self.needsToCalcPoints = False
+    
+    def calcExtras(self):
+        self.hardpoints = [(self.x + self.radius * math.sin(self.rotation), self.y - self.radius * math.cos(self.rotation), self.rotation)]
 
 class S1s2(Ship):
     """ as of rev 12, now a list """
