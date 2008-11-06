@@ -21,10 +21,10 @@ player.ships[0].built = True
 
 for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
     player.ships.append(ships.S1s1(player, (random.random()*player.width), (random.random()*player.height)))
-    player.ships[i].built = True
+    player.ships[len(player.ships) - 1].built = True
     #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
-player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))
+#player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))
 lollerLine = formations.Formation(player.ships)
 lollerLine.calcAssignPattern()
 
