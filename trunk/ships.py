@@ -145,7 +145,7 @@ class S1s1(Ship):
     rotateSpeed = 0.1 
     #buildInfo
     buildCost = 10
-    buildTime = 50
+    buildTime = 500
     rotateSpeed = 0.1
     canAttack = True # this ship has a weapon! useful for setting ui & making sure that ships that can't attack when selected
                             # with those that can don't get an erroneus attack order.
@@ -216,7 +216,7 @@ class S1s6(Ship):
             self.buildShip.rotation = self.rotation
             self.player.resources -= self.buildShip.buildCost
             self.buildTimeRemaining = self.buildShip.buildTime
-            ships.append(self.buildShip) # Add to list of ships.
+            self.player.ships.append(self.buildShip) # Add to list of ships.
 #            print ships
             self.building = True
         elif self.building == True:
