@@ -23,6 +23,7 @@ class Missile(ships.Ship):
         # changing the look of missiles.
         
         self.radius = 2
+	self.shieldRadius = self.radius
        
     def draw(self):
         #calculate a simple single line to show the missile. Default thing.
@@ -54,8 +55,9 @@ class Missile(ships.Ship):
 	pass
 
     def colliding(self):
+	""" Function to check if missile is colliding with anything """
 	for ship in self.player.ships:
 	    if ship != self:
-		if self.distanceFrom(ship.x, ship.y) <= ship.radius + self.radius:
+		if self.distanceFrom(ship.x, ship.y) <= ship.shieldRadius + self.shieldRadius:
 		    return ship
 	return False
