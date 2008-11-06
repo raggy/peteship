@@ -13,8 +13,7 @@ class Player():
     
     # Star effects lurking here
     drawStars = True # Are we drawing stars?
-    upperStars = [] # list of all the stars. format (x, y, colour)
-    lowerStars = []
+    stars = [] # list of all the stars. format (x, y, colour, depth)
     
     # contrail specific.
     drawContrails = True # rev 100: is the player drawing contrails or not? detail option.
@@ -47,11 +46,11 @@ class Player():
         # This is going to assume a MINIMUM MAP WIDTH OR HEIGHT of 10. Woo.
         # First of all check if we're drawing stars.
         if self.drawStars:
-            # create a set of stars using a tuple of (x, y, colour). We're using misc.GLOBAL_MAPHEIGHT instead of map at the moment.
+            # create a set of stars using a tuple of (x, y, colour, depth). We're using misc.GLOBAL_MAPHEIGHT instead of map at the moment.
             # In future revs when an instance of the Map class is passed to Player class this will need to be changed.
             for i in xrange(misc.GLOBAL_MAPAREA / 10000):
-                self.upperStars.append((random.random() * misc.GLOBAL_MAPWIDTH, random.random() * misc.GLOBAL_MAPHEIGHT)) #brighter upperstar
-                self.lowerStars.append((random.random() * misc.GLOBAL_MAPWIDTH / 0.7, random.random() * misc.GLOBAL_MAPHEIGHT / 0.7)) #darker lowerstar
+		depth = random.random() * 0.5 + 0.5
+                self.stars.append((random.random() * misc.GLOBAL_MAPWIDTH / depth, random.random() * misc.GLOBAL_MAPHEIGHT / depth, (120 * depth, 120 * depth, 120 * depth), depth))
         #Stars are drawn in peteship.py, as the first draw.
                    
     def calcBounds(self):
