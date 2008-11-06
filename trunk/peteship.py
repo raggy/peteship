@@ -113,24 +113,18 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
         player.screen.fill(misc.BLACK) #ARRR.
         
     # Draw stars. Sticking it all in one place to reduce calls.
-        if player.drawStars:
-            for star in player.upperStars:
-		colour = (150 * player.zoom, 150 * player.zoom, 150 * player.zoom)
-		if colour[0] > 255:
-		    colour = (255, 255, 255)
-                if star[0] > player.lBound and star[0] < player.rBound and star[1] > player.tBound and star[1] < player.bBound:
-                    pygame.draw.line(player.screen, colour, ((star[0] - player.x)*player.zoom, (star[1] - player.y)*player.zoom), ((star[0] - player.x)*player.zoom, (star[1] - player.y)*player.zoom))
-	    if player.width / player.zoom <= misc.GLOBAL_MAPWIDTH and player.height / player.zoom <= misc.GLOBAL_MAPHEIGHT:
-		colour = (90 * player.zoom, 90 * player.zoom, 90 * player.zoom)
-		if colour[0] > 255:
-		    colour = (255, 255, 255)
-		for star in player.lowerStars:
-		    if star[0] * 0.7 > player.x * 0.7 and\
-		    star[0] * 0.7 < player.x * 0.7 + player.width / player.zoom and\
-		    star[1] * 0.7 > player.y * 0.7 and\
-		    star[1] * 0.7 < player.y * 0.7 + player.height / player.zoom:
-			pygame.draw.line(player.screen, colour, ((star[0] * 0.7 - player.x * 0.7) * player.zoom, (star[1] * 0.7 - player.y * 0.7) * player.zoom), ((star[0] * 0.7 - player.x * 0.7) * player.zoom, (star[1] * 0.7 - player.y * 0.7) * player.zoom))
-
+        if player.drawStars: # If player wants to draw stars
+	    if player.width / player.zoom <= misc.GLOBAL_MAPWIDTH and player.height / player.zoom <= misc.GLOBAL_MAPHEIGHT: # And they're not zoomed out too much
+		for star in player.stars:
+		    if star[0] > player.x and\
+		    star[0] * star[3] < player.x * star[3] + player.width / player.zoom and\
+		    star[1] > player.y and\
+		    star[1] * star[3] < player.y * star[3] + player.height / player.zoom:
+			colour = (star[2][0] * player.zoom, star[2][1] * player.zoom, star[2][2] * player.zoom)
+			if colour[0] > 255:
+			    colour = (255, 255, 255)
+			pygame.draw.line(player.screen, colour, ((star[0] - player.x) * player.zoom * star[3], (star[1] - player.y) * player.zoom * star[3]), ((star[0] - player.x) * player.zoom * star[3], (star[1] - player.y) * player.zoom * star[3]))
+            
 	# Draw contrails.
         for effect in player.lowEffects:
             if effect.lifetime <= 0:
