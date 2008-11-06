@@ -16,18 +16,19 @@ ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
 
 player = players.Player()
 
+player.ships.append(ships.S1s6(player, (player.width/2), (player.height/2)))
+player.ships[0].built = True
+
 for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
     player.ships.append(ships.S1s1(player, (random.random()*player.width), (random.random()*player.height)))
     player.ships[i].built = True
-#ships.append(S1s6(player, (player.width/2), (player.height/2)))
-#ships[0].built = True
     #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
 player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))
 lollerLine = formations.Formation(player.ships)
 lollerLine.calcAssignPattern()
 
-for i in range (100):
+for i in range (10):
     player.ships.append(weapons.Missile(player, (random.random()*player.width, random.random()*player.height, random.random()*3), player.ships[3]))
 
 # Explosion test code. Woo!
@@ -37,8 +38,9 @@ for i in range (100):
 
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!
-#player.ships[0].addToBuildQueue()
-#ships[0].addToBuildQueue()
+player.ships[0].addToBuildQueue()
+player.ships[0].addToBuildQueue()
+player.ships[0].addToBuildQueue()
 #print ships[0].buildQueue
 """ end build test code """
 

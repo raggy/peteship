@@ -18,6 +18,10 @@ class Missile(ships.Ship):
         self.contrailThickness = 2 # thickness passed to contrail. 
         #add an initial contrail.
         self.contrail = self.player.effects.append(effects.Contrail(self)) # this'll make yer eyes bleed.
+        
+        # changing the look of missiles.
+        
+        self.radius = 2
        
     def draw(self):
         #calculate a simple single line to show the missile. Default thing.
