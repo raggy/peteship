@@ -9,6 +9,7 @@ class Player():
     """ End of player specific stats """
     # effects are lurking here for now. I'm not sure why.
     effects = []
+    lowEffects = [] # Effects to be drawn underneath the ships
     drawContrails = True # rev 100: is the player drawing contrails or not? detail option.
     
     # Minimap stats

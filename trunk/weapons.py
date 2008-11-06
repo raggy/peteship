@@ -17,7 +17,7 @@ class Missile(ships.Ship):
         # Number of contrails in use when moving = contrailLifetime / contrailLength (3000 / 300 = 10 for example.)
         self.contrailThickness = 2 # thickness passed to contrail. 
         #add an initial contrail.
-        self.contrail = self.player.effects.append(effects.Contrail(self)) # this'll make yer eyes bleed.
+        self.contrail = self.player.lowEffects.append(effects.Contrail(self)) # this'll make yer eyes bleed.
         
         # changing the look of missiles.
         
@@ -41,7 +41,7 @@ class Missile(ships.Ship):
         self.calcExtras()
         if self.contrailTimer == 0:
             self.contrailTimer = self.contrailLength
-            self.contrail = self.player.effects.append(effects.Contrail(self)) # weyyy
+            self.contrail = self.player.lowEffects.append(effects.Contrail(self)) # weyyy
         else:
             self.contrailTimer -= 1
             
