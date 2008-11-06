@@ -49,9 +49,9 @@ class Player():
         if self.drawStars:
             # create a set of stars using a tuple of (x, y, colour). We're using misc.GLOBAL_MAPHEIGHT instead of map at the moment.
             # In future revs when an instance of the Map class is passed to Player class this will need to be changed.
-            for i in range(misc.GLOBAL_MAPAREA / 10000):
-                self.upperStars.append([random.random()*misc.GLOBAL_MAPWIDTH, random.random()*misc.GLOBAL_MAPHEIGHT, (90, 90 ,90)]) #brighter upperstar
-                self.lowerStars.append([random.random()*misc.GLOBAL_MAPWIDTH, random.random()*misc.GLOBAL_MAPHEIGHT, (50, 50, 50)]) #darker lowerstar
+            for i in xrange(misc.GLOBAL_MAPAREA / 10000):
+                self.upperStars.append((random.random() * misc.GLOBAL_MAPWIDTH, random.random() * misc.GLOBAL_MAPHEIGHT)) #brighter upperstar
+                self.lowerStars.append((random.random() * misc.GLOBAL_MAPWIDTH / 0.7, random.random() * misc.GLOBAL_MAPHEIGHT / 0.7)) #darker lowerstar
         #Stars are drawn in peteship.py, as the first draw.
                    
     def calcBounds(self):
