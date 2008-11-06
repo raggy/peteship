@@ -112,6 +112,15 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
 
         player.screen.fill(misc.BLACK) #ARRR.
 
+	# Draw contrails.
+        for effect in player.lowEffects:
+            if effect.lifetime <= 0:
+                effect.remove()
+            else:
+               effect.poll()
+               # check to see if onscreen to go here.
+               effect.draw()
+
         for ship in player.ships:
             ship.drawOrders()
 

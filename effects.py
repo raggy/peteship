@@ -114,3 +114,9 @@ class Contrail(Effect):
                        
     def draw(self): 
         pygame.draw.line(self.player.screen, self.colour, ((self.x1 - self.player.x) * self.player.zoom, (self.y1 - self.player.y) * self.player.zoom), ((self.x2 - self.player.x) * self.player.zoom, (self.y2 -self.player.y) * self.player.zoom), self.thickness)
+
+    def remove(self):
+        for i in range(len(self.player.lowEffects)):
+            if self.player.lowEffects[i] == self:
+                del self.player.lowEffects[i]
+                break
