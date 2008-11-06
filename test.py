@@ -25,11 +25,12 @@ for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this
     #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
 player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))
-lollerLine = formations.Formation(player.ships)
-lollerLine.calcAssignPattern()
+player.formations.append(formations.Formation(player.ships)) # updated in r109 to actually make it work ish.
 
+"""
 for i in range (10):
     player.missiles.append(weapons.Missile(player, (random.random()*player.width, random.random()*player.height, random.random()*3), player.ships[3]))
+"""
 
 # Explosion test code. Woo!
 #player.effects.append(effects.Explosion((200, 200), 0.5, 100, player, misc.EXPLOSIONRED))

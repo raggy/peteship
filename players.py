@@ -32,6 +32,7 @@ class Player():
         self.selecting = False
         self.tBound = self.bBound = self.lBound = self.rBound = 0
         self.ships = []
+        self.formations = [] # formations of ships being used by the player.
 	self.selectedShips = []
 	self.missiles = []
         self.panBy(0.0, 0.0)

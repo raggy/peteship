@@ -129,6 +129,11 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
                effect.poll()
                # check to see if onscreen to go here.
                effect.draw()
+               
+        # SHIP CALCULATIONS START HERE.
+        # formations, so the orders are all good.
+        for formation in player.formations:
+            formation.poll() # always needs to be done.
 
         for ship in player.ships:
             ship.drawOrders()
