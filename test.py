@@ -14,7 +14,11 @@ ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
 ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
 """
 
-player = players.Player()
+#player = players.Player()
+
+# MAP TEST CODEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+testMap = maps.Map(1000, 1000, 500, 1) # 1000 x 1000 map with 500 resources and 1 player.
+# END OF MAP TEST CODEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
 #player.ships.append(ships.S1s6(player, (player.width/2), (player.height/2)))
 #player.ships[0].built = True

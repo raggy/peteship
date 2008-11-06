@@ -5,7 +5,6 @@ class Player():
     """ Player specific stats. """
     colour = misc.WHITE # hahaha why not.
     name = "Ronco"
-    resources = 9001 # MONEY, GET BACK.
     """ End of player specific stats """
     # effects are lurking here for now. I'm not sure why.
     effects = []
@@ -23,7 +22,7 @@ class Player():
     mmViewRect = pygame.Rect(0,0,0,0) # See below init.
     mmBoundaryRect = pygame.Rect(0,0,0,0) # 
     
-    def __init__(self):
+    def __init__(self, levelMap, startPoint, startingResources):
         self.width, self.height = 800, 480  # width of the screen, from left, and height of the screen, from top, in pixels.
         self.screen = pygame.display.set_mode((self.width, self.height)) # Initialise the pygame surface
         self.x = self.y = 0.0               # upper left position of the player's view
@@ -32,14 +31,17 @@ class Player():
         self.tBound = self.bBound = self.lBound = self.rBound = 0
         self.ships = []
         self.formations = [] # formations of ships being used by the player.
-	self.selectedShips = []
-	self.missiles = []
+    	self.selectedShips = []
+	    self.missiles = []
         self.panBy(0.0, 0.0)
         self.calcBounds()
-
+        self.map = levelMap
+        self.startX = startX
+        self.startY = startY
+        self.resources = startingResources
         #minimap init.
         self.mmViewRect = pygame.Rect(self.x, self.y, 10, 10) # Defines an area of the players view to use as the minimap.
-        self.mmBoundaryRect = pygame.Rect(self.width - 60, self.height - 50 * misc.GLOBAL_MAPHEIGHT / misc.GLOBAL_MAPWIDTH - 10, 50, 50 * misc.GLOBAL_MAPHEIGHT / misc.GLOBAL_MAPWIDTH) # Defines the boundary of the map on the game screen.
+        self.mmBoundaryRect = pygame.Rect(self.width - 60, self.height - 50 * self.map.height / self.map.width - 10, 50, 50 * misc.GLOBAL_MAPHEIGHT / self.map.width) # Defines the boundary of the map on the game screen.
         
         #Stars init.
         
@@ -48,9 +50,9 @@ class Player():
         if self.drawStars:
             # create a set of stars using a tuple of (x, y, colour, depth). We're using misc.GLOBAL_MAPHEIGHT instead of map at the moment.
             # In future revs when an instance of the Map class is passed to Player class this will need to be changed.
-            for i in xrange(misc.GLOBAL_MAPAREA / 10000):
+            for i in xrange(self.map.area / 10000):
 		depth = random.random() * 0.5 + 0.5
-                self.stars.append((random.random() * misc.GLOBAL_MAPWIDTH / depth, random.random() * misc.GLOBAL_MAPHEIGHT / depth, (120 * depth, 120 * depth, 120 * depth), depth))
+                self.stars.append((random.random() * self.map.width / depth, random.random() * misc.GLOBAL_MAPHEIGHT / depth, (120 * depth, 120 * depth, 120 * depth), depth))
         #Stars are drawn in peteship.py, as the first draw.
                    
     def calcBounds(self):
@@ -82,12 +84,12 @@ class Player():
     """
     
     def panBy(self, x, y): # argghhhh
-        if self.width / self.zoom > misc.GLOBAL_MAPWIDTH:
-            self.x = (misc.GLOBAL_MAPWIDTH - (self.width / self.zoom)) / 2
+        if self.width / self.zoom > self.map.width:
+            self.x = (self.map.width - (self.width / self.zoom)) / 2
         elif self.x + x < 0.0:
             self.x = 0.0
-        elif self.x + x > misc.GLOBAL_MAPWIDTH - self.width / self.zoom:
-            self.x = misc.GLOBAL_MAPWIDTH - self.width / self.zoom
+        elif self.x + x > self.map.width - self.width / self.zoom:
+            self.x = self.map.width - self.width / self.zoom
         else:
             self.x += x
         if self.height / self.zoom > misc.GLOBAL_MAPHEIGHT:
@@ -121,15 +123,15 @@ class Player():
     # Minimap code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     def updateMM(self):
         #Remember kids, the draw code for the mm is in the peteship.py file, under selection code! Last thing drawn before the flip, so it's over ships & other UI!
-        self.mmViewRect.left = self.mmBoundaryRect.left + self.x / misc.GLOBAL_MAPWIDTH * self.mmBoundaryRect.size[0]
+        self.mmViewRect.left = self.mmBoundaryRect.left + self.x / self.map.width * self.mmBoundaryRect.size[0]
         self.mmViewRect.top = self.mmBoundaryRect.top + self.y / misc.GLOBAL_MAPHEIGHT * self.mmBoundaryRect.size[1]
         # Needs some code here to resize the rect to represent the player view.
-        self.mmViewRect.width = (self.width / self.zoom) / misc.GLOBAL_MAPWIDTH * self.mmBoundaryRect.size[0]
+        self.mmViewRect.width = (self.width / self.zoom) / self.map.width * self.mmBoundaryRect.size[0]
         self.mmViewRect.height = (self.height / self.zoom) / misc.GLOBAL_MAPHEIGHT * self.mmBoundaryRect.size[1]
 
     def resizeMM(self, xChange, yChange):
         if self.mmBoundaryRect.width + xChange >= 5 and self.mmBoundaryRect.width + xChange <= self.width - 20 and self.mmBoundaryRect.height + yChange >= 5 and self.mmBoundaryRect.height + yChange <= self.height - 20:
             self.mmBoundaryRect.left -= xChange
             self.mmBoundaryRect.width += xChange        
-            self.mmBoundaryRect.top -= yChange * misc.GLOBAL_MAPHEIGHT / misc.GLOBAL_MAPWIDTH
-            self.mmBoundaryRect.height += yChange * misc.GLOBAL_MAPHEIGHT / misc.GLOBAL_MAPWIDTH
+            self.mmBoundaryRect.top -= yChange * misc.GLOBAL_MAPHEIGHT / self.map.width
+            self.mmBoundaryRect.height += yChange * misc.GLOBAL_MAPHEIGHT / self.map.width
