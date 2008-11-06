@@ -22,6 +22,7 @@ class Ship():
         self.player = player
         self.colour = self.player.colour
         self.x, self.y = x, y
+	self.shieldRadius = self.radius + 2
         self.orders = [orders.Idle()]
         self.moving = False
         self.built = False
