@@ -11,7 +11,7 @@ class Missile(ships.Ship):
         self.x = hardPoint[0]
         self.y = hardPoint[1]
         self.rotation = hardPoint[2]
-        self.setOrder(orders.MoveToShip(targetShip))
+        self.setOrder(orders.MoveToTarget(targetShip))
         # contrail stuff
         self.contrailLength = self.contrailTimer = 5 # frames before a new contrail is added.
         self.contrailLifetime = 100 # how long the trails last.
@@ -39,7 +39,7 @@ class Missile(ships.Ship):
         self.needsToCalcPoints = False
         
     def poll(self):
-        self.orders[0].poll()
+	self.orders[0].poll()
         self.calcExtras()
         if self.contrailTimer == 0:
             self.contrailTimer = self.contrailLength
@@ -53,11 +53,18 @@ class Missile(ships.Ship):
             
     def select(self):
 	pass
+    
+    def remove(self):
+	self.dead = True
+        for i in range(len(self.player.missiles)):
+            if self.player.missiles[i] == self:
+                del self.player.missiles[i]
+                break
+	del self
 
     def colliding(self):
 	""" Function to check if missile is colliding with anything """
 	for ship in self.player.ships:
-	    if ship != self:
-		if self.distanceFrom(ship.x, ship.y) <= ship.shieldRadius + self.shieldRadius:
-		    return ship
+	    if self.distanceFrom(ship.x, ship.y) <= ship.shieldRadius + self.shieldRadius:
+		return ship
 	return False

@@ -5,7 +5,7 @@ class Ship():
     radius = 8                      # Size of the ship from the centre - size of largest part (if multiple parts are added)
     rotation = math.radians(270.0)  # Initial rotation of the ship. Changes every now and then for testing, doesn't matter usually.
                                     # r43 : Changed to rotation instead of intRotation
-    
+    dead = False
     #speed stats.
     speed = 2.5
     rotateSpeed = 0.05 # Rotation
@@ -30,6 +30,7 @@ class Ship():
         self.calcExtras() # For buildships.
         
     def remove(self):
+	self.dead = True
         for i in range(len(self.player.ships)):
             if self.player.ships[i] == self:
                 del self.player.ships[i]
@@ -38,6 +39,7 @@ class Ship():
             if self.player.selectedShips[i] == self:
                 del self.player.selectedShips[i]
                 break
+	del self
         
     def die(self):
         #also needs adding in
