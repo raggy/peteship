@@ -86,7 +86,7 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
             player.panBy(0, -15 / player.zoom)
 
         if keysHeld[pygame.K_DOWN]:
-            player.panBy(0, 15 / player.zoom)
+            player.panBy(0, 15 / player.zoom)   
 
         if keysHeld[pygame.K_LEFT]:
             player.panBy(-15 / player.zoom, 0)
@@ -111,6 +111,15 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
                 ship.die()
 
         player.screen.fill(misc.BLACK) #ARRR.
+        
+    # Draw stars. Sticking it all in one place to reduce calls.
+        if player.drawStars:
+            for star in player.upperStars:
+                if star[0] > player.lBound and star[0] < player.rBound and star[1] > player.tBound and star[1] < player.bBound:
+                    pygame.draw.line(player.screen, star[2], ((star[0] - player.x)*player.zoom, (star[1] - player.y)*player.zoom), ((star[0] - player.x)*player.zoom, (star[1] - player.y)*player.zoom))
+            for star in player.lowerStars:
+                if star[0] > player.lBound and star[0] < player.rBound and star[1] > player.tBound and star[1] < player.bBound:
+                    pygame.draw.line(player.screen, star[2], ((star[0] - player.x)*player.zoom * 0.7, (star[1] - player.y)*player.zoom * 0.7), ((star[0] - player.x)*player.zoom * 0.7, (star[1] - player.y)*player.zoom * 0.7))
 
 	# Draw contrails.
         for effect in player.lowEffects:
