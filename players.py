@@ -1,4 +1,4 @@
-import misc, pygame
+import misc, pygame, random
 pygame.init()
 
 class Player():
@@ -10,12 +10,20 @@ class Player():
     # effects are lurking here for now. I'm not sure why.
     effects = []
     lowEffects = [] # Effects to be drawn underneath the ships
+    
+    # Star effects lurking here
+    drawStars = True # Are we drawing stars?
+    upperStars = [] # list of all the stars. format (x, y, colour)
+    lowerStars = []
+    
+    # contrail specific.
     drawContrails = True # rev 100: is the player drawing contrails or not? detail option.
     
-    # Minimap stats
+    # Minimap specific
     mmShow = True # Are we displaying the minimap?
     mmViewRect = pygame.Rect(0,0,0,0) # See below init.
-    mmBoundaryRect = pygame.Rect(0,0,0,0) # " " "
+    mmBoundaryRect = pygame.Rect(0,0,0,0) # 
+    
     def __init__(self):
         self.width, self.height = 800, 480  # width of the screen, from left, and height of the screen, from top, in pixels.
         self.screen = pygame.display.set_mode((self.width, self.height)) # Initialise the pygame surface
@@ -30,7 +38,19 @@ class Player():
         #minimap init.
         self.mmViewRect = pygame.Rect(self.x, self.y, 10, 10) # Defines an area of the players view to use as the minimap.
         self.mmBoundaryRect = pygame.Rect(self.width - 60, self.height - 50 * misc.GLOBAL_MAPHEIGHT / misc.GLOBAL_MAPWIDTH - 10, 50, 50 * misc.GLOBAL_MAPHEIGHT / misc.GLOBAL_MAPWIDTH) # Defines the boundary of the map on the game screen.
-       
+        
+        #Stars init.
+        
+        # This is going to assume a MINIMUM MAP WIDTH OR HEIGHT of 10. Woo.
+        # First of all check if we're drawing stars.
+        if self.drawStars:
+            # create a set of stars using a tuple of (x, y, colour). We're using misc.GLOBAL_MAPHEIGHT instead of map at the moment.
+            # In future revs when an instance of the Map class is passed to Player class this will need to be changed.
+            for i in range(misc.GLOBAL_MAPAREA / 10000):
+                self.upperStars.append([random.random()*misc.GLOBAL_MAPWIDTH, random.random()*misc.GLOBAL_MAPHEIGHT, (90, 90 ,90)]) #brighter upperstar
+                self.lowerStars.append([random.random()*misc.GLOBAL_MAPWIDTH, random.random()*misc.GLOBAL_MAPHEIGHT, (50, 50, 50)]) #darker lowerstar
+        #Stars are drawn in peteship.py, as the first draw.
+                   
     def calcBounds(self):
         self.tBound = self.y - 10 # 10 is the biggest radius so far, will replace when we have more ships.
         self.bBound = self.y + 10 + self.height / self.zoom # same kinda thing
