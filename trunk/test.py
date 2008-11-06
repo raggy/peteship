@@ -24,12 +24,12 @@ for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this
     player.ships[len(player.ships) - 1].built = True
     #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
-#player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))
+player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))
 lollerLine = formations.Formation(player.ships)
 lollerLine.calcAssignPattern()
 
 for i in range (10):
-    player.ships.append(weapons.Missile(player, (random.random()*player.width, random.random()*player.height, random.random()*3), player.ships[3]))
+    player.missiles.append(weapons.Missile(player, (random.random()*player.width, random.random()*player.height, random.random()*3), player.ships[3]))
 
 # Explosion test code. Woo!
 #player.effects.append(effects.Explosion((200, 200), 0.5, 100, player, misc.EXPLOSIONRED))
@@ -43,7 +43,5 @@ player.ships[0].addToBuildQueue()
 player.ships[0].addToBuildQueue()
 #print ships[0].buildQueue
 """ end build test code """
-
-#player.focusOn(ships[0].x, ships[0].y)
 
 peteship.main(player, misc.GLOBAL_MAPWIDTH, misc.GLOBAL_MAPHEIGHT) # run the game

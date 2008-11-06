@@ -135,7 +135,7 @@ def main(player, MAPWIDTH, MAPHEIGHT): # NEEDS MAP HEIGHT! MAKES GAME BIGGER, DE
 
         player.shipsOnScreen = []
         
-        for ship in player.ships: # Rev 43: Will work better when ships Idle properly. At the moment they stay with a move order.
+        for ship in (player.ships + player.missiles): # Rev 43: Will work better when ships Idle properly. At the moment they stay with a move order.
             ship.poll()
             if ship.x > player.lBound and ship.x < player.rBound and ship.y > player.tBound and ship.y < player.bBound:
                 ship.draw()

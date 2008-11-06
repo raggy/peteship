@@ -31,7 +31,9 @@ class Player():
         self.zoom = 1.0                     # player's current zoom %
         self.selecting = False
         self.tBound = self.bBound = self.lBound = self.rBound = 0
-        self.ships = self.selectedShips = []
+        self.ships = []
+	self.selectedShips = []
+	self.missiles = []
         self.panBy(0.0, 0.0)
         self.calcBounds()
 
@@ -99,24 +101,22 @@ class Player():
         self.calcBounds()
 
     def shipOnScreenAtXY(self, x, y):
-        tempShip = False
         for ship in self.ships:
             if x >= (ship.x - ship.radius - self.x) * self.zoom and\
                         x <= (ship.x + ship.radius - self.x) * self.zoom and\
                         y >= (ship.y - ship.radius - self.y) * self.zoom and\
                         y <= (ship.y + ship.radius - self.y) * self.zoom:
-                tempShip = ship
-        return tempShip
+                return ship
+        return False
 
     def shipAtXY(self, x, y):
-        tempShip = False
         for ship in self.ships:
             if x >= ship.x - ship.radius and\
                         x <= ship.x + ship.radius and\
                         y >= ship.y - ship.radius and\
                         y <= ship.y + ship.radius:
-                tempShip = ship
-        return tempShip
+                return ship
+        return False
         
     # Minimap code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     def updateMM(self):
