@@ -30,4 +30,4 @@ class Formation:
             print "No other patterns than 0, stop messing with the code without more formation!!!!"
             
     def poll(self): # if the orders change, this can be called to recalc nicely.
-        calcAssignPattern()
+        self.calcAssignPattern()
