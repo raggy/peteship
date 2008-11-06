@@ -1,4 +1,5 @@
 import players, pygame, ships, orders, math, effects
+from misc import *
 
 class Missile(ships.Ship):
     # Super class for weapons that are launched and home in towards a target.
@@ -44,6 +45,17 @@ class Missile(ships.Ship):
             self.contrail = self.player.lowEffects.append(effects.Contrail(self)) # weyyy
         else:
             self.contrailTimer -= 1
+	colliding = self.colliding()
+	if not (not colliding):
+	    colliding.die()
+	    self.die()
             
     def select(self):
 	pass
+
+    def colliding(self):
+	for ship in self.player.ships:
+	    if ship != self:
+		if self.distanceFrom(ship.x, ship.y) <= ship.radius + self.radius:
+		    return ship
+	return False
