@@ -15,10 +15,6 @@ GUINESS  = 20, 10, 10
 RESOURCEBROWN = 128, 64, 0
 EXPLOSIONRED = 120, 0, 0
 
-GLOBAL_MAPWIDTH  = 3200 # Here for now. Map class / module later :)
-GLOBAL_MAPHEIGHT = 4800
-GLOBAL_MAPAREA = GLOBAL_MAPWIDTH * GLOBAL_MAPHEIGHT # for various bits. New as of r104.
-
 def positive(number):
     #Convert negative numbers to their positive equivalent.
     #If the number is positive, return it.

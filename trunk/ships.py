@@ -10,19 +10,18 @@ class Ship():
     speed = 2.5
     rotateSpeed = 0.05 # Rotation
 
-    intSI = 1 # integer for the health of the ship
-
-    intSide = 0 #game side. e.g 4th player in 4 player match = side 3
+    si = 1 # integer for the health of the ship
 
     points = [] # List of veticies that make up the ship.
 
     formation = False
     
-    def __init__(self, player, x, y):
+    def __init__(self, view, player, x, y):
         self.player = player
+        self.view = view
         self.colour = self.player.colour
         self.x, self.y = x, y
-	self.shieldRadius = self.radius + 2
+        self.shieldRadius = self.radius + 2
         self.orders = [orders.Idle()]
         self.moving = False
         self.built = False
@@ -30,22 +29,20 @@ class Ship():
         self.calcExtras() # For buildships.
         
     def remove(self):
-	self.dead = True
+        self.dead = True
         for i in range(len(self.player.ships)):
             if self.player.ships[i] == self:
                 del self.player.ships[i]
                 break
-        for i in range(len(self.player.selectedShips)):
-            if self.player.selectedShips[i] == self:
-                del self.player.selectedShips[i]
+        for i in range(len(self.view.selectedShips)):
+            if self.view.selectedShips[i] == self:
+                del self.view.selectedShips[i]
                 break
-	del self
+        del self
         
     def die(self):
-        #also needs adding in
-        #death animation goes here.
-        self.player.effects.append(effects.ExplosionShip(self))
-        self.player.effects.append(effects.Explosion((self.x, self.y), 0.5, (self.radius * 4), self.player, misc.WHITE))
+        self.view.effects.append(effects.ExplosionShip(self.view, self))
+        self.view.effects.append(effects.Explosion(self.view, (self.x, self.y), 0.5, (self.radius * 4), misc.WHITE))
         #and remove the ship when done.
         self.remove()
         #any player related stats go here. like death count and such. Dunno if we want need these but hum.
@@ -57,16 +54,16 @@ class Ship():
         if self.needsToCalcPoints:
             self.calcPoints()
         #self.drawOrders()
-        pygame.draw.polygon(self.player.screen, misc.BLACK, self.offsetPoints())
-        pygame.draw.aalines(self.player.screen, self.player.colour, True, self.offsetPoints())
+        pygame.draw.polygon(self.view.screen, misc.BLACK, self.offsetPoints())
+        pygame.draw.aalines(self.view.screen, self.player.colour, True, self.offsetPoints())
 
     def drawOrders(self):
         lastx, lasty = self.x, self.y
         for order in self.orders:
             tempxy = order.xy()
             if not tempxy is False:
-                pygame.draw.line(self.player.screen, misc.DARKGREY, ((lastx - self.player.x) * self.player.zoom, (lasty - self.player.y) * self.player.zoom), ((tempxy[0]  - self.player.x) * self.player.zoom, (tempxy[1] - self.player.y) * self.player.zoom))
-                #pygame.draw.circle(screen, (20,20,20), ((order.x - player.x) * player.zoom, (order.y - player.y) * player.zoom), 2)
+                pygame.draw.line(self.view.screen, misc.DARKGREY, ((lastx - self.view.x) * self.view.zoom, (lasty - self.view.y) * self.view.zoom), ((tempxy[0]  - self.view.x) * self.view.zoom, (tempxy[1] - self.view.y) * self.view.zoom))
+                #pygame.draw.circle(screen, (20,20,20), ((order.x - view.x) * view.zoom, (order.y - view.y) * view.zoom), 2)
                 lastx, lasty = tempxy[0], tempxy[1]
         
     def rotateTowardAngle(self, angle):
@@ -87,7 +84,7 @@ class Ship():
     def poll(self):
         #update the ships data
         self.orders[0].poll()
-        self.calcExtras
+        self.calcExtras()
         
 
     def angleToXY(self, x, y):
@@ -107,7 +104,7 @@ class Ship():
     def offsetPoints(self):
         points = []
         for point in self.points:
-            points.append(((point[0] - self.player.x) * self.player.zoom, (point[1] - self.player.y) * self.player.zoom))
+            points.append(((point[0] - self.view.x) * self.view.zoom, (point[1] - self.view.y) * self.view.zoom))
         return points
 
     def nextOrder(self):
@@ -139,7 +136,7 @@ class Ship():
         self.built = True
 
     def select(self):
-	self.player.selectedShips.append(self)
+        self.view.selectedShips.append(self)
 
 class S1s1(Ship):
     """ as of rev 12 now a list"""
@@ -242,4 +239,4 @@ class S1s6(Ship):
                 self.building = False            
 
     def addToBuildQueue(self): #Currently only produces triangles. only works on buildships.
-        self.buildQueue.append(S1s1(self.player, self.buildPoints[0][0], self.buildPoints[0][1])) # Pete, you forgot the self. prefix
+        self.buildQueue.append(S1s1(self.view, self.player, self.buildPoints[0][0], self.buildPoints[0][1])) # Pete, you forgot the self. prefix
