@@ -1,4 +1,4 @@
-import pygame, players, random, math
+import pygame, random, math
 
 # Module for effects within the game e.g. explosions
 
@@ -14,18 +14,18 @@ class Effect():
         pass
     
     def remove(self):
-        for i in range(len(self.player.effects)):
-            if self.player.effects[i] == self:
-                del self.player.effects[i]
+        for i in range(len(self.view.effects)):
+            if self.view.effects[i] == self:
+                del self.view.effects[i]
                 break
 
 class Explosion(Effect):
     
-    def __init__(self, xyAsTuple, size, length, player, colour):
+    def __init__(self, view, xyAsTuple, size, length, colour):
         self.xy = xyAsTuple
         self.size = size # this is a multiplier, so should be done as such.
         self.lifetime = length
-        self.player = player # to enable the explosion to draw itself
+        self.view = view # to enable the explosion to draw itself
         self.colour = colour
         self.backColour = (colour[0] / 2, colour[1] / 2, colour[2] / 2)
         
@@ -37,13 +37,13 @@ class Explosion(Effect):
     def draw(self):
         # draw a circle based on the lifetime of the explosion. So it shrinks. Cool.
         tempSize = self.lifetime * self.size # less cycles.
-        if tempSize * self.player.zoom >= 1:
-            pygame.draw.circle(self.player.screen, self.colour, ((self.xy[0] - self.player.x) * self.player.zoom, (self.xy[1] - self.player.y) * self.player.zoom), tempSize * self.player.zoom, 1) # alter the last value for thicker rings.
+        if tempSize * self.view.zoom >= 1:
+            pygame.draw.circle(self.view.screen, self.colour, ((self.xy[0] - self.view.x) * self.view.zoom, (self.xy[1] - self.view.y) * self.view.zoom), tempSize * self.view.zoom, 1) # alter the last value for thicker rings.
         
 class Particle():
     
-    def __init__(self, player, rotation, x, y, lifetime):
-        self.player = player
+    def __init__(self, view, rotation, x, y, lifetime):
+        self.view = view
         self.rotation = rotation
         self.x = x
         self.y = y
@@ -59,7 +59,7 @@ class Particle():
         self.lifetime -= 1
         
     def draw(self):
-        pygame.draw.line(self.player.screen, self.colour, ((self.x - self.player.x) * self.player.zoom, (self.y - self.player.y) * self.player.zoom), ((self.x - self.player.x) * self.player.zoom, (self.y - self.player.y) * self.player.zoom))
+        pygame.draw.line(self.view.screen, self.colour, ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom), ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom))
         
         
 class ExplosionShip(Effect):
@@ -68,11 +68,11 @@ class ExplosionShip(Effect):
     lifetime = 500 # how long the particle lasts
     colour = (255, 255, 255) #white powe... particle!
         
-    def __init__(self, ship):
+    def __init__(self, view, ship):
         self.particles = []
-        self.player    = ship.player
+        self.view      = view
         for i in range(10):
-            self.particles.append(Particle(self.player, (random.random() * math.pi * 2), ((random.random() * 2) - 1) * ship.radius + ship.x, ((random.random() * 2) - 1) * ship.radius + ship.y, self.lifetime))
+            self.particles.append(Particle(self.view, (random.random() * math.pi * 2), ((random.random() * 2) - 1) * ship.radius + ship.x, ((random.random() * 2) - 1) * ship.radius + ship.y, self.lifetime))
     def poll(self):
         for particle in self.particles:
             particle.poll()
@@ -84,7 +84,7 @@ class ExplosionShip(Effect):
             
 class Contrail(Effect):
     # putting this in each weapon made no sense as contrails would dissapear when the projectile hit (maybe desireable ?)
-    def __init__(self, parent):
+    def __init__(self, view, parent):
         self.parent = parent #woooooo
         
         self.x1 = parent.x # !!! x1 & y1 constitue the startPoint, while x2 & y2 constitue the endPoint.
@@ -96,8 +96,8 @@ class Contrail(Effect):
 
         self.maxlife = self.lifetime = parent.contrailLifetime
         self.thickness = parent.contrailThickness
-        #self.colour = colour    # do we need specific colours for player contrails? hmm...
-        self.player = parent.player
+        #self.colour = colour    # do we need specific colours for view contrails? hmm...
+        self.view = view
         self.updateStartPoint = True # do we need to move the startPoint? be obvious in calcExtras
         
     def poll(self):
@@ -113,10 +113,10 @@ class Contrail(Effect):
             self.updateStartPoint = False
                        
     def draw(self): 
-        pygame.draw.line(self.player.screen, self.colour, ((self.x1 - self.player.x) * self.player.zoom, (self.y1 - self.player.y) * self.player.zoom), ((self.x2 - self.player.x) * self.player.zoom, (self.y2 -self.player.y) * self.player.zoom), self.thickness)
+        pygame.draw.line(self.view.screen, self.colour, ((self.x1 - self.view.x) * self.view.zoom, (self.y1 - self.view.y) * self.view.zoom), ((self.x2 - self.view.x) * self.view.zoom, (self.y2 -self.view.y) * self.view.zoom), self.thickness)
 
     def remove(self):
-        for i in range(len(self.player.lowEffects)):
-            if self.player.lowEffects[i] == self:
-                del self.player.lowEffects[i]
+        for i in range(len(self.view.lowEffects)):
+            if self.view.lowEffects[i] == self:
+                del self.view.lowEffects[i]
                 break

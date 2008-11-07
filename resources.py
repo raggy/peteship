@@ -1,9 +1,10 @@
 import pygame, misc, players
 
 class Asteroid():
-    def __init__(self, x, y, amount, baseSize):
+    def __init__(self, view, x, y, amount, baseSize):
         self.radius = amount + baseSize # cool idea no?
         self.x, self.y = x, y
+        self.view = view
         # this section defines if a resource asteroid blocks radar.
         if self.radius > 500:
             self.blocksRadar = True
@@ -15,8 +16,9 @@ class Asteroid():
         self.colour = misc.RESOURCEBROWN #mmmm mocha.
 
         self.si = self.radius # arbitrary health amount.
+
     def draw(self):
-        pygame.draw.circle(player.screen, self.colour, (self.x, self.y), self.radius, 0) 
+        pygame.draw.circle(self.view.screen, self.colour, (self.x, self.y), self.radius, 0) 
 
     def poll(self):
         if self.dead == False: #skips alot of stuff if the asteroid isn't going to change.

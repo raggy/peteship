@@ -1,45 +1,30 @@
 #!/usr/bin/env python2.5
 
-import peteship, players, ships, formations, random, orders, misc, effects, weapons
+import peteship, players, ships, formations, random, orders, misc, effects, weapons, views, maps
 
 GLOBAL_TESTSHIPS = 10 #Generic int for creating multiples of tsetingships.
-# misc contains GLOBAL_MAPWIDTH, GLOBAL_MAPHEIGHT. This should probably be moved to a map class at some point. But not today. Maybe monday morning. Pete. r70.
 
-"""
-ships = [S1s1(player, 100.0, 50.0), S1s2(player, 100.0, 100.0), S1s1(player, 150, 75)]
-ships[0].rotation = math.radians(270)
-ships[1].rotation = math.radians(269)
-ships[0].order = MoveToXY(ships[0], 300.0, 50.0)
-ships[1].order = MoveToXY(ships[1], 500.0, 100.0)
-ships[2].order = MoveToXY(ships[2], 152.0, 75.0)
-"""
-
-#player = players.Player()
-
-# MAP TEST CODEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-testMap = maps.Map(1000, 1000, 500, 1) # 1000 x 1000 map with 500 resources and 1 player.
-# END OF MAP TEST CODEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+map = maps.Map(1000, 1000, 500, 2) # 1000 x 1000 map with 500 resources and 2 players.
+view = views.View(800, 480, 0, map)
 
 #player.ships.append(ships.S1s6(player, (player.width/2), (player.height/2)))
 #player.ships[0].built = True
-"""
-for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
-    player.ships.append(ships.S1s1(player, (random.random()*player.width), (random.random()*player.height)))
-    player.ships[len(player.ships) - 1].built = True
-    #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
 
+map.players[0].colour = misc.RED
+map.players[1].colour = misc.BLUE
+
+for player in map.players:
+    for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
+        player.ships.append(ships.S1s1(view, player, (random.random()*view.width), (random.random()*view.height)))
+        player.ships[len(player.ships) - 1].built = True
+        #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
+"""
 player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))
 player.formations.append(formations.Formation(player.ships)) # updated in r109 to actually make it work ish.
 """
-"""
-for i in range (10):
-    player.missiles.append(weapons.Missile(player, (random.random()*player.width, random.random()*player.height, random.random()*3), player.ships[3]))
-"""
 
-# Explosion test code. Woo!
-#player.effects.append(effects.Explosion((200, 200), 0.5, 100, player, misc.EXPLOSIONRED))
-#player.effects.append(effects.Explosion((20, 20), 0.5, 20, player, misc.EXPLOSIONRED))
-#player.effects.append(effects.Explosion((204, 100), 0.5, 20, player, misc.EXPLOSIONRED))
+for i in range (10):
+    map.players[0].missiles.append(weapons.Missile(view, map.players[0], (random.random()*map.width, random.random()*map.height, random.random()*3), map.players[1].ships[3]))
 
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!
@@ -49,4 +34,4 @@ for i in range (10):
 #print ships[0].buildQueue
 """ end build test code """
 
-peteship.main(player, misc.GLOBAL_MAPWIDTH, misc.GLOBAL_MAPHEIGHT) # run the game
+peteship.main(view, map) # run the game
