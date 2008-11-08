@@ -4,7 +4,7 @@ pygame.init()
 
 def main(view, map):
     clock = pygame.time.Clock()
-    keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_a:False,pygame.K_SPACE:False,pygame.K_w:False,pygame.K_s:False,pygame.K_d:False}
+    keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_a:False,pygame.K_SPACE:False,pygame.K_w:False,pygame.K_s:False,pygame.K_d:False,pygame.K_1:False,pygame.K_2:False}
     running = True
     currentPlayer = map.players[0]
 
@@ -48,10 +48,10 @@ def main(view, map):
                                 ship.setOrder(orders.MoveToXY((float(event.dict['pos'][0])/ view.zoom + view.x), (float(event.dict['pos'][1])) / view.zoom + view.y))
                     else:
                         if pygame.KMOD_SHIFT & pygame.key.get_mods():
-                            for ship in currentPlayer.selectedShips:
+                            for ship in view.selectedShips:
                                 ship.queueOrder(orders.MoveToShip(shipAtCursor))
                         else:
-                            for ship in currentPlayer.selectedShips:
+                            for ship in view.selectedShips:
                                 ship.queueOrder(orders.MoveToShip(shipAtCursor))
             elif (event.dict['button'] == 4):
                 view.zoomInBy(1.05)
@@ -111,6 +111,14 @@ def main(view, map):
         if keysHeld[pygame.K_d]:
             for ship in view.selectedShips:
                 ship.die()
+
+        if keysHeld[pygame.K_1]:
+            view.selectedShips = []
+            currentPlayer = map.players[0]
+
+        if keysHeld[pygame.K_2]:
+            view.selectedShips = []
+            currentPlayer = map.players[1]
 
         view.screen.fill(misc.BLACK) #ARRR.
         
