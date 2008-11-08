@@ -136,8 +136,7 @@ def main(view, map):
                # check to see if onscreen to go here.
                effect.draw()
        
-        # SHIP CALCULATIONS START HERE.
-        # formations, so the orders are all good.
+        # SHIP CALCULATIONS START HERE.s
         view.shipsOnScreen = []
         for player in map.players:
             for formation in player.formations:
