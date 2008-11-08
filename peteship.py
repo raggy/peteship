@@ -147,7 +147,7 @@ def main(view, map):
                 ship.drawOrders()
         
             for ship in (player.ships + player.missiles): # Rev 43: Will work better when ships Idle properly. At the moment they stay with a move order.
-                ship.poll()
+                ship.poll();
                 if ship.x > view.lBound and ship.x < view.rBound and ship.y > view.tBound and ship.y < view.bBound:
                     ship.draw()
                     view.shipsOnScreen.append(ship) # Make a list of all ships on screen
@@ -159,7 +159,16 @@ def main(view, map):
             pygame.draw.line(view.screen, misc.DARKGREY, view.selEndPos, (view.selEndPos[0], view.selStartPos[1]))
             pygame.draw.line(view.screen, misc.DARKGREY, (view.selEndPos[0], view.selStartPos[1]), view.selStartPos)
 
-        # Draw edges of map
+        # Draw explosions. Pyrotechnic Glee.
+        for effect in view.effects:
+            if effect.lifetime <= 0:
+                effect.remove()
+            else:
+               effect.poll()
+               # check to see if onscreen to go here.
+               effect.draw()
+		
+		# draw map boundary.s
         if view.height / view.zoom > map.height: # If the player view is taller than the map height
             # Draw horizontal edges
             pygame.draw.line(view.screen, misc.WHITE, ((-view.x) * view.zoom, (-view.y) * view.zoom), ((map.width - view.x) * view.zoom, (-view.y) * view.zoom))
@@ -169,14 +178,6 @@ def main(view, map):
             pygame.draw.line(view.screen, misc.WHITE, ((map.width - view.x) * view.zoom, (-view.y) * view.zoom), ((map.width - view.x) * view.zoom,(map.height - view.y) * view.zoom))
             pygame.draw.line(view.screen, misc.WHITE, ((-view.x) * view.zoom,(map.height - view.y) * view.zoom), ((-view.x) * view.zoom, (-view.y) * view.zoom))        
 
-        # Draw explosions. Pyrotechnic Glee.
-        for effect in view.effects:
-            if effect.lifetime <= 0:
-                effect.remove()
-            else:
-               effect.poll()
-               # check to see if onscreen to go here.
-               effect.draw()
 
         # Draw minimap
         view.minimap.draw()
