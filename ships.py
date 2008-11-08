@@ -5,12 +5,12 @@ class Ship():
     radius = 8                      # Size of the ship from the centre - size of largest part (if multiple parts are added)
     rotation = math.radians(270.0)  # Initial rotation of the ship. Changes every now and then for testing, doesn't matter usually.
                                     # r43 : Changed to rotation instead of intRotation
-    dead = False
+    dead = False # I'M ALIVEEEE
     #speed stats.
     speed = 2.5
     rotateSpeed = 0.05 # Rotation
 
-    si = 1 # integer for the health of the ship
+    health = 1 # integer for the health of the ship
 
     points = [] # List of veticies that make up the ship.
 
@@ -26,7 +26,7 @@ class Ship():
         self.moving = False
         self.built = False
         self.calcPoints()
-        self.calcExtras() # For buildships.
+        self.calcExtras() # Stuff that isn't points but needs to be calced.
         
     def remove(self):
         self.dead = True
@@ -137,11 +137,15 @@ class Ship():
 
     def select(self):
         self.view.selectedShips.append(self)
+		
+        # SPECIFC SHIP CLASSES START HERE ! ! ! !  ! !  ! !  !   ! !  ! !  ! !  ! ! !  ! !  !
 
 class S1s1(Ship):
     """ as of rev 12 now a list"""
+    health = 900
     intEnginePoint = [2]
     radius = 3
+    shieldRadius = 5
     rotateSpeed = 0.1 
     #buildInfo
     buildCost = 10
@@ -149,6 +153,11 @@ class S1s1(Ship):
     rotateSpeed = 0.1
     canAttack = True # this ship has a weapon! useful for setting ui & making sure that ships that can't attack when selected
                             # with those that can don't get an erroneus attack order.
+                            
+    weapons = []    # weapon related values
+    hardpoints = []
+							
+	
     
     def calcPoints(self):
     #calculate the three points of the triangle relative to the center xy of the ship
@@ -157,9 +166,10 @@ class S1s1(Ship):
         (self.x + self.radius * math.sin(self.rotation + 2.3 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 2.3 * math.pi / 3))),\
         (self.x + self.radius * math.sin(self.rotation + 3.7 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 3.7 * math.pi / 3)))]
         self.needsToCalcPoints = False
+        self.hardpoints = [self.points[0]]
     
     def calcExtras(self):
-        self.hardpoints = [(self.x + self.radius * math.sin(self.rotation), self.y - self.radius * math.cos(self.rotation), self.rotation)]
+        pass
 
 class S1s2(Ship):
     """ as of rev 12, now a list """
