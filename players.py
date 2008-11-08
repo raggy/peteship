@@ -15,6 +15,16 @@ class Player():
         self.formations = []
         self.missiles = []
 
+    def enemyShipClosestToXY(self, x, y):
+        """
+        Returns closest enemy ship to x, y
+        """
+        listOfShips = []
+        for player in self.players:
+            if player != self:
+                listOfShips += player.ships
+        return self.map.shipClosestToXY(listOfShips, x, y)
+
     """def shipOnScreenAtXY(self, x, y):
         for ship in self.ships:
             if x >= (ship.x - ship.radius - self.x) * self.zoom and\

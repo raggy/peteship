@@ -39,13 +39,3 @@ class Map():
                 closest = ship
                 closestXY = tempXY
         return closest
-
-    def enemyShipClosestToXY(self, currentPlayer, x, y):
-        """
-        Returns closest enemy ship to x, y
-        """
-        listOfShips = []
-        for player in self.players:
-            if player != currentPlayer:
-                listOfShips += player.ships
-        return self.shipClosestToXY(listOfShips, x, y)
