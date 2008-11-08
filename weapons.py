@@ -27,7 +27,8 @@ class Missile(ships.Ship):
         self.shieldRadius = self.radius # hit detection radius.
         
         #basic stats in case this class is called.
-        self.range = 500 # ehh seems good.
+        self.range = self.launcher.range 
+        self.lifetime = self.launcher.lifetime
         self.speed = 3 # ninja fast.
         # those two stats are very much related, as the range determines how many *LOGICAL TICKS* the missile will live for.
         self.damage = 5 # half of S1s1 as of r 116
@@ -57,8 +58,8 @@ class Missile(ships.Ship):
         if not (not colliding):
             colliding.die()
             self.die()
-        self.range -= 1
-        if self.range <= 0:
+        self.lifetime -= 1
+        if self.lifetime <= 0:
             self.die()
             
     def select(self):
@@ -100,11 +101,19 @@ class State():
         pass
         
 class Idle(State):
-    # do nothing. if parent is aggressive then scan for targets. < to be coded later when i have a working getEnemyTarget
+    # sit in place and fire at passing ships.
     def poll(self):
-        if len(self.launcher.targets) > 0:
-            self.launcher.fire()
-                
+        # first of all see if we have a target. 
+        if len(self.launcher.targets) == 0:
+            # add the closest enemy ship to the launcher to it's target list.
+            if self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]).distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) < self.range:
+                self.launcher.addTarget(self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]))
+        else: # we have a target
+            if self.launcher.targets[0].distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) > self.launcher.range:
+                self.launcher.targets = [] # if it's too far away then remov it, we'll find a new one.
+            else:
+                self.launcher.fire(self.launcher.targets[0])
+        
 class Launcher(): # Superclass that handles the launching of weapons, wether they be point to point, missile, turret or otherwise.
     def __init__(self, parent, hardpoint):
         # uses parent to pull most of it's data out, but uses the hardpoint reference so we don't need to keep doing
@@ -123,8 +132,17 @@ class Launcher(): # Superclass that handles the launching of weapons, wether the
         
         self.refire = 50 # time between firing.
         self.refireWait = 50
+        self.range = 500
+        self.lifetime = 600
         
-    def fire(self):
+    def addTarget(self, object):
+        self.targets.append([object])
+    
+    def setState(self, state):
+        self.targets = []
+        self.state = state
+        
+    def fire(self, target):
         self.weapons.append([Missile(self.parent.view, self.parent.player, target)])
         self.targets[0].pop()
         # any fx code goes here.
@@ -132,14 +150,13 @@ class Launcher(): # Superclass that handles the launching of weapons, wether the
     def poll(self):
         if self.refireWait == 0 and len(self.targets) > 0:
             fire(self.targets[0])
+            self.refireWait = self.refire
         elif self.refireWait > 0:
             self.refireWait -= 1
             
-        
 class TestMIssile(Missile):
-    damage = 5 # han.
-    range = 500 # dy.
-    speed = 3 # much?
+    damage = 5
+    speed = 3  
         
 class TestMissileLauncher(Launcher):
     def __init__(self):

@@ -23,8 +23,8 @@ player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))
 player.formations.append(formations.Formation(player.ships)) # updated in r109 to actually make it work ish.
 """
 """"
-for i in range (10):
-    map.players[0].missiles.append(weapons.Missile(view, map.players[0], (random.random()*map.width, random.random()*map.height, random.random()*3), map.players[1].ships[3]))
+#for i in range (10):
+#    map.players[0].missiles.append(weapons.Missile(view, map.players[0], (random.random()*map.width, random.random()*map.height, random.random()*3), map.players[1].ships[3]))
 """
 """ build test code """
 #!Warning! ships[0] must be of class S1s6 or greater. !Warning!
