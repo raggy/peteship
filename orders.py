@@ -72,14 +72,7 @@ class MoveToTarget(MoveToShip):
 
     def poll(self):
         if self.target.dead:
-            for player in self.ship.player.map.players:
-                if player != self.ship.player: # If ship isn't on our team
-                    closestShip = player.ships[0] # Set first ship to closest
-                    for ship in player.ships[1:]: # Loop through the rest
-                    #if not (isinstance(ship, weapons.Missile)): # If it's not a missile
-                        if self.ship.distanceFrom(ship.x, ship.y) < self.ship.distanceFrom(closestShip.x, closestShip.y): # If current ship is closer than temp closest ship
-                            closestShip = ship # Replace it
-            self.target = closestShip # Retarget
+            self.target = self.ship.player.enemyShipClosestToXY(self.ship.x, self.ship.y) # Retarget
         self.x, self.y = self.target.x, self.target.y
         self.moveTowards(self.x, self.y)
         self.angleToXY = self.ship.angleToXY(self.x, self.y)
@@ -93,6 +86,6 @@ class RotateToAngle(Order):
         self.ship = ship
 
     def poll(self):
-        if self.ship.rotation == self.angle:
+        if self.ship.rotation == self.angle: 
             self.ship.nextOrder()
         self.ship.rotateTowardAngle(self.angle)
