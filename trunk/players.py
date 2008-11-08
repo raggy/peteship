@@ -20,7 +20,7 @@ class Player():
         Returns closest enemy ship to x, y
         """
         listOfShips = []
-        for player in self.players:
+        for player in self.map.players:
             if player != self:
                 listOfShips += player.ships
         return self.map.shipClosestToXY(listOfShips, x, y)
