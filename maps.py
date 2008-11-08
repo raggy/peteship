@@ -26,3 +26,26 @@ class Map():
 
     def addPlayerStart(self, x, y, player):
         pass # you know what this will do. Depends on how the start points are made.
+
+    def shipClosestToXY(self, listOfShips, x, y):
+        """
+        Returns closest ship to x, y within listOfShips
+        """
+        closest = listOfShips[0]
+        closestXY = listOfShips[0].distanceFrom(x, y)
+        for ship in listOfShips[1:]:
+            tempXY = ship.distanceFrom(x, y)
+            if tempXY < closestXY:
+                closest = ship
+                closestXY = tempXY
+        return closest
+
+    def enemyShipClosestToXY(self, currentPlayer, x, y):
+        """
+        Returns closest enemy ship to x, y
+        """
+        listOfShips = []
+        for player in self.players:
+            if player != currentPlayer:
+                listOfShips += player.ships
+        return self.shipClosestToXY(listOfShips, x, y)
