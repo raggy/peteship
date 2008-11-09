@@ -166,9 +166,12 @@ class S1s1(Ship):
         self.needsToCalcPoints = False
     
     def calcExtras(self):
-        self.hardpoints = [(self.x + self.radius * math.sin(self.rotation), (self.y - self.radius * math.cos(self.rotation)), self.rotation)]
+        self.hardpoints = [(self.x + (self.radius + 20) * math.sin(self.rotation), (self.y - (self.radius + 20) * math.cos(self.rotation)), self.rotation)]
+        i = 0
         for launcher in self.launchers:
+            launcher.hardpoint = self.hardpoints[i]
             launcher.poll()
+            i += 1
 
 class S1s2(Ship):
     """ as of rev 12, now a list """
