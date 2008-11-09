@@ -56,7 +56,7 @@ class Missile(ships.Ship):
             self.contrailTimer -= 1
         colliding = self.colliding()
         if not (not colliding):
-            colliding.die()
+            colliding.damage(self.damage)
             self.die()
         self.lifetime -= 1
         if self.lifetime <= 0:
@@ -131,8 +131,8 @@ class Launcher(): # Superclass that handles the launching of weapons, wether the
         
         self.refire = 50 # time between firing.
         self.refireWait = self.refire
-        self.range = 500
-        self.lifetime = 600 # game ticks before the missile dies.
+        self.range = 40
+        self.lifetime = 60 # game ticks before the missile dies.
         
     def addTarget(self, object):
         self.targets.append(object)

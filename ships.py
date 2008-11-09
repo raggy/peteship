@@ -28,6 +28,11 @@ class Ship():
         self.calcPoints()
         self.calcExtras() # Stuff that isn't points but needs to be calced.
         
+    def damage(self, amount):
+        self.health -= amount
+        if self.health <= 0:
+            self.die
+        
     def remove(self):
         self.dead = True
         for i in range(len(self.player.ships)):
@@ -141,7 +146,7 @@ class Ship():
 
 class S1s1(Ship):
     """ as of rev 12 now a list"""
-    health = 900
+    health = 10
     intEnginePoint = [2]
     radius = 3
     shieldRadius = 5
