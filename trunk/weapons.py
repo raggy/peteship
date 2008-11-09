@@ -10,9 +10,9 @@ class Missile(ships.Ship):
         self.view = view
         self.player = player
         self.launcher = launcher
-        self.x = self.launcher.hardPoint[0]
-        self.y = self.launcher.hardPoint[1]
-        self.rotation = self.launcher.hardPoint[2]
+        self.x = self.launcher.hardpoint[0]
+        self.y = self.launcher.hardpoint[1]
+        self.rotation = self.launcher.hardpoint[2]
         self.setOrder(orders.MoveToTarget(targetShip))
         # contrail stuff
         self.contrailLength = self.contrailTimer = 5 # frames before a new contrail is added.
@@ -135,20 +135,20 @@ class Launcher(): # Superclass that handles the launching of weapons, wether the
         self.lifetime = 600 # game ticks before the missile dies.
         
     def addTarget(self, object):
-        self.targets.append([object])
+        self.targets.append(object)
     
     def setState(self, state):
         self.targets = []
         self.state = state
         
     def fire(self, target):
-        self.weapons.append([Missile(self.parent.view, self.parent.player, target)])
+        self.parent.player.missiles.append(Missile(self.parent.view, self.parent.player, self, target))
         # any fx code goes here.
         
     def poll(self):
         self.state.poll() # update state.
         if self.refireWait == 0 and len(self.targets) > 0:
-            fire(self.targets[0])
+            self.fire(self.targets[0])
             self.refireWait = self.refire
         elif self.refireWait > 0:
             self.refireWait -= 1
@@ -161,6 +161,6 @@ class TestMissileLauncher(Launcher):
     isMissile = True
         
     def fire(self, target):
-        self.weapons.append([TestMissile(self.parent.view, self.parent.player, target)])
+        self.parent.player.missiles.append(TestMissile(self.parent.view, self.parent.player, self, target))
         # any fx code goes here.
         
