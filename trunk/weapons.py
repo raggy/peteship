@@ -106,13 +106,12 @@ class Idle(State):
         # first of all see if we have a target. 
         if len(self.launcher.targets) == 0:
             # add the closest enemy ship to the launcher to it's target list.
-            if self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]).distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) < self.range:
+            if self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]).distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) < self.launcher.range:
                 self.launcher.addTarget(self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]))
         else: # we have a target
             if self.launcher.targets[0].distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) > self.launcher.range:
-                self.launcher.targets = [] # if it's too far away then remov it, we'll find a new one.
-            else:
-                self.launcher.fire(self.launcher.targets[0])
+                self.launcher.targets = [] # if it's too far away then remove it, we'll find a new one.
+            # otherwise the launcher will handle firing itself. Wey.
         
 class Launcher(): # Superclass that handles the launching of weapons, wether they be point to point, missile, turret or otherwise.
     def __init__(self, parent, hardpoint):
@@ -126,14 +125,14 @@ class Launcher(): # Superclass that handles the launching of weapons, wether the
         self.isShot = False # pew pew
         
         # this way a ship just needs to call S1turret1 or whatever, and the turret can be changed in this file.
-        self.state = Idle()
+        self.state = Idle(self) # idle up
         self.targets = [] # list of targets
         self.weapons = [] # list of fired weapons.
         
         self.refire = 50 # time between firing.
-        self.refireWait = 50
+        self.refireWait = self.refire
         self.range = 500
-        self.lifetime = 600
+        self.lifetime = 600 # game ticks before the missile dies.
         
     def addTarget(self, object):
         self.targets.append([object])
@@ -144,21 +143,24 @@ class Launcher(): # Superclass that handles the launching of weapons, wether the
         
     def fire(self, target):
         self.weapons.append([Missile(self.parent.view, self.parent.player, target)])
-        self.targets[0].pop()
         # any fx code goes here.
         
     def poll(self):
+        self.state.poll() # update state.
         if self.refireWait == 0 and len(self.targets) > 0:
             fire(self.targets[0])
             self.refireWait = self.refire
         elif self.refireWait > 0:
             self.refireWait -= 1
             
-class TestMIssile(Missile):
+class TestMissile(Missile):
     damage = 5
-    speed = 3  
+    speed = 3
         
 class TestMissileLauncher(Launcher):
-    def __init__(self):
-        self.isMissile = True
+    isMissile = True
+        
+    def fire(self, target):
+        self.weapons.append([TestMissile(self.parent.view, self.parent.player, target)])
+        # any fx code goes here.
         
