@@ -31,7 +31,7 @@ class Ship():
     def damage(self, amount):
         self.health -= amount
         if self.health <= 0:
-            self.die
+            self.die()
         
     def remove(self):
         self.dead = True
@@ -159,8 +159,6 @@ class S1s1(Ship):
                             # with those that can don't get an erroneus attack order.
     launchers = []    # weapon related values
     hardpoints = []
-							
-	
     
     def calcPoints(self):
     #calculate the three points of the triangle relative to the center xy of the ship
