@@ -17,11 +17,12 @@ for player in map.players:
     for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
         player.ships.append(ships.S1s1(view, player, (random.random()*view.width), (random.random()*view.height)))
         player.ships[len(player.ships) - 1].built = True
+        player.ships[len(player.ships) - 1].launchers = [weapons.TestMissileLauncher(player.ships[len(player.ships) - 1], player.ships[len(player.ships) - 1].hardpoints[0])]
         #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
         
-dave = map.players[0].ships[0]
-dave.colour = misc.GREEN
-dave.launchers = [weapons.TestMissileLauncher(dave, dave.hardpoints[0])]
+#dave = map.players[0].ships[0]
+#dave.colour = misc.GREEN
+#dave.launchers = [weapons.TestMissileLauncher(dave, dave.hardpoints[0])]
 
 
 """

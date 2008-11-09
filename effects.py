@@ -52,9 +52,12 @@ class Particle():
     def poll(self):
         self.y -= math.cos(self.rotation) * 0.4
         self.x += math.sin(self.rotation) * 0.4
-        self.colour = ((255 * self.lifetime / self.maxlife),\
+        self.colour = [(255 * self.lifetime / self.maxlife),\
                        (255 * self.lifetime / self.maxlife),\
-                       (255 * self.lifetime / self.maxlife))    # kept seperate so that different coloured particles can be made.
+                       (255 * self.lifetime / self.maxlife)]    # kept seperate so that different coloured particles can be made.
+        self.tempColour = [self.colour[0] * self.view.zoom, self.colour[1] * self.view.zoom, self.colour[2] * self.view.zoom]
+        if self.tempColour[0] < self.colour[0]:
+            self.colour = self.tempColour
                        
         self.lifetime -= 1
         
@@ -105,6 +108,10 @@ class Contrail(Effect):
         self.colour = ((75 * self.lifetime / self.maxlife),\
                        (75 * self.lifetime / self.maxlife),\
                        (75 * self.lifetime / self.maxlife))
+        self.tempColour = [self.colour[0] * self.view.zoom, self.colour[1] * self.view.zoom, self.colour[2] * self.view.zoom]
+        if self.tempColour[0] < self.colour[0]:
+            self.colour = self.tempColour
+
         if self.updateStartPoint:
             self.x1 = self.parent.x
             self.y1 = self.parent.y
@@ -112,8 +119,13 @@ class Contrail(Effect):
         if self.parent.contrailTimer == 0:
             self.updateStartPoint = False
                        
-    def draw(self): 
-        pygame.draw.line(self.view.screen, self.colour, ((self.x1 - self.view.x) * self.view.zoom, (self.y1 - self.view.y) * self.view.zoom), ((self.x2 - self.view.x) * self.view.zoom, (self.y2 -self.view.y) * self.view.zoom), self.thickness)
+    def draw(self):
+        self.tempThickness = self.thickness * self.view.zoom
+        if self.tempThickness > self.thickness:
+            self.tempThickness = self.thickness
+        elif self.tempThickness < 1:
+            self.tempThickness = 1
+        pygame.draw.line(self.view.screen, self.colour, ((self.x1 - self.view.x) * self.view.zoom, (self.y1 - self.view.y) * self.view.zoom), ((self.x2 - self.view.x) * self.view.zoom, (self.y2 -self.view.y) * self.view.zoom), self.tempThickness)
 
     def remove(self):
         for i in range(len(self.view.lowEffects)):
