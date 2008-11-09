@@ -55,7 +55,7 @@ class Ship():
             self.calcPoints()
         #self.drawOrders()
         pygame.draw.polygon(self.view.screen, misc.BLACK, self.offsetPoints())
-        pygame.draw.aalines(self.view.screen, self.player.colour, True, self.offsetPoints())
+        pygame.draw.aalines(self.view.screen, self.colour, True, self.offsetPoints())
 
     def drawOrders(self):
         lastx, lasty = self.x, self.y
@@ -85,7 +85,6 @@ class Ship():
         #update the ships data
         self.orders[0].poll()
         self.calcExtras()
-        
 
     def angleToXY(self, x, y):
         #calculate the angle from the referenced ships heading to the
@@ -153,8 +152,7 @@ class S1s1(Ship):
     rotateSpeed = 0.1
     canAttack = True # this ship has a weapon! useful for setting ui & making sure that ships that can't attack when selected
                             # with those that can don't get an erroneus attack order.
-                            
-    weapons = []    # weapon related values
+    launchers = []    # weapon related values
     hardpoints = []
 							
 	
@@ -166,10 +164,11 @@ class S1s1(Ship):
         (self.x + self.radius * math.sin(self.rotation + 2.3 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 2.3 * math.pi / 3))),\
         (self.x + self.radius * math.sin(self.rotation + 3.7 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 3.7 * math.pi / 3)))]
         self.needsToCalcPoints = False
-        self.hardpoints = [self.points[0]]
     
     def calcExtras(self):
-        pass
+        self.hardpoints = [(self.x + self.radius * math.sin(self.rotation), (self.y - self.radius * math.cos(self.rotation)), self.rotation)]
+        for launcher in self.launchers:
+            launcher.poll()
 
 class S1s2(Ship):
     """ as of rev 12, now a list """
