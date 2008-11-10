@@ -103,15 +103,20 @@ class State():
 class Idle(State):
     # sit in place and fire at passing ships.
     def poll(self):
-        # first of all see if we have a target. 
-        if len(self.launcher.targets) == 0:
-            # add the closest enemy ship to the launcher to it's target list.
-            if self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]).distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) < self.launcher.range:
-                self.launcher.addTarget(self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]))
-        else: # we have a target
-            if self.launcher.targets[0].distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) > self.launcher.range:
-                self.launcher.targets = [] # if it's too far away then remove it, we'll find a new one.
-            # otherwise the launcher will handle firing itself. Wey.
+        if self.launcher.isTurret: # code for turrets.
+            pass # nothing yet.
+        elif self.launcher.isShot: # code for shot weapons e.g. railgun, beam.
+            pass # nothing yet.
+        else: # code for missiles.
+            # first of all see if we have a target. 
+            if len(self.launcher.targets) == 0:
+                # add the closest enemy ship to the launcher to it's target list.
+                if self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]).distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) < self.launcher.range:
+                    self.launcher.addTarget(self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]))
+            else: # we have a target
+                if self.launcher.targets[0].distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) > self.launcher.range:
+                    self.launcher.targets = [] # if it's too far away then remove it, we'll find a new one.
+                # otherwise the launcher will handle firing itself. Wey.
         
 class Launcher(): # Superclass that handles the launching of weapons, wether they be point to point, missile, turret or otherwise.
     def __init__(self, parent, hardpoint):
@@ -120,8 +125,7 @@ class Launcher(): # Superclass that handles the launching of weapons, wether the
         self.parent = parent
         self.hardpoint = hardpoint # What's here? x, y & rotation.
         
-        self.isTurret = False # One of these three need to be set for things to work. Not the best way to do it
-        self.isMissile = True # but probably most readable. (first weapon evar was a missile so that's why the default is missile.)
+        self.isTurret = False # if neither of these are set, assumed to be a missile.
         self.isShot = False # pew pew
         
         # this way a ship just needs to call S1turret1 or whatever, and the turret can be changed in this file.
@@ -154,8 +158,11 @@ class Launcher(): # Superclass that handles the launching of weapons, wether the
             self.refireWait -= 1
             
 class TestMissile(Missile):
-    damage = 5
-    speed = 3
+    def __init__(self, view, player, launcher, targetShip):
+        Missile.__init__(self, view, player, launcher, targetShip)
+        self.damage = 5
+        self.speed = 5
+        self.rotateSpeed = 1
         
 class TestMissileLauncher(Launcher):
     isMissile = True
