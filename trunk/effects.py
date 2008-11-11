@@ -88,7 +88,7 @@ class ExplosionShip(Effect):
 class Contrail(Effect):
     # putting this in each weapon made no sense as contrails would dissapear when the projectile hit (maybe desireable ?)
     def __init__(self, view, parent):
-        self.parent = parent #woooooo
+        self.parent = parent #woooooo 
         
         self.x1 = parent.x # !!! x1 & y1 constitue the startPoint, while x2 & y2 constitue the endPoint.
         self.y1 = parent.y

@@ -4,8 +4,8 @@ import peteship, players, ships, formations, random, orders, misc, effects, weap
 
 GLOBAL_TESTSHIPS = 10 #Generic int for creating multiples of tsetingships.
 
-map = maps.Map(5000, 5000, 500, 2) # 1000 x 1000 map with 500 resources and 2 players.
-view = views.View(1024, 600, 0, map)
+map = maps.Map(1000, 1000, 500, 2) # 1000 x 1000 map with 500 resources and 2 players.
+view = views.View(800, 480, 0, map)
 
 #player.ships.append(ships.S1s6(player, (player.width/2), (player.height/2)))
 #player.ships[0].built = True
