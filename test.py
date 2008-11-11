@@ -13,17 +13,21 @@ view = views.View(800, 480, 0, map)
 map.players[0].colour = misc.RED
 map.players[1].colour = misc.BLUE
 
-for player in map.players:
+for player in map.players[:1]:
     for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
         player.ships.append(ships.S1s1(view, player, (random.random()*view.width), (random.random()*view.height)))
         player.ships[len(player.ships) - 1].built = True
         player.ships[len(player.ships) - 1].launchers = [weapons.TestMissileLauncher(player.ships[len(player.ships) - 1], player.ships[len(player.ships) - 1].hardpoints[0])]
         #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
-        
+
+for i in range(3):
+    map.players[1].ships.append(ships.S1s6(view, map.players[1], (random.random() * view.width), (random.random() * view.height)))
+    for j in range(100):
+        map.players[1].ships[i].addToBuildQueue()
+
 #dave = map.players[0].ships[0]
 #dave.colour = misc.GREEN
 #dave.launchers = [weapons.TestMissileLauncher(dave, dave.hardpoints[0])]
-
 
 """
 player.ships[0].setOrder(orders.MoveToXY(100.0, 100.0))

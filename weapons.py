@@ -2,7 +2,7 @@ import players, pygame, ships, orders, math, effects
 from misc import *
 
 class Beam():
-    def__init__(self, thickness, changeTime, launcher, target):
+    def __init__(self, thickness, changeTime, launcher, target):
         self.maxThickness = thickness
         self.thickness = 0
         self.maxTimer = changeTime
@@ -32,6 +32,7 @@ class Beam():
                     self.timer = 0
         
     def draw(self):
+        pass
         
 class Missile(ships.Ship):
     # Super class for weapons that are launched and home in towards a target.
@@ -205,10 +206,10 @@ class TestMissileLauncher(Launcher):
         self.parent.player.missiles.append(TestMissile(self.parent.view, self.parent.player, self, target))
         # any fx code goes here.
         
-class TestBeam(Beam):
+#class TestBeam(Beam):
         
 class TestBeamGun(Launcher):
     isShot = True
     
     def fire(self, thickness, changeTime, launcher, target):
-        
+        pass

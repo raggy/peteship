@@ -1,5 +1,5 @@
 #!/usr/local/bin/python
-import sys, os, pygame, math, orders, players, misc, formations, maps
+import sys, os, pygame, math, orders, players, misc, formations, maps, effects
 pygame.init()
 
 def main(view, map):
@@ -188,6 +188,56 @@ def main(view, map):
 
         # Draw minimap
         view.minimap.draw()
+        
+        # Test shipsAlongLine
+        startPoint = (50.0, 50.0)
+        endPoint   = (1000.0, 100.0)
+        
+        #startPoint, endPoint = endPoint, startPoint # reverse the line
+        
+        # Draw the line on screen
+        shipsAlongLine = map.closestShipsAlongLine(startPoint, endPoint)
+        if shipsAlongLine == []: # If no ships crossing the line
+            pygame.draw.aaline(view.screen, misc.WHITE, ((startPoint[0] - view.x) * view.zoom, (startPoint[1] - view.y) * view.zoom), ((endPoint[0] - view.x) * view.zoom, (endPoint[1] - view.y) * view.zoom)) # Draw the full beam
+            
+        else: # Else draw the beam up until the intersection
+            ship = shipsAlongLine[0]
+#            ship.damaged(1)
+            
+            offsetX = misc.positive(endPoint[0] - startPoint[0])
+            offsetY = endPoint[1] - startPoint[1]
+            
+            # Get the angle of the line
+            if offsetY > 0:
+                theta = misc.normalisedAngle(math.atan(offsetX / offsetY))
+            elif offsetY == 0:
+                theta = misc.normalisedAngle(math.atan(offsetX))
+            else:
+                theta = misc.normalisedAngle(math.atan(misc.positive(offsetX) / offsetY) + math.pi)
+#            theta = math.atan(offsetX / offsetY)
+            # Calculate new co-ordinates for end of line
+            cutX = math.sin(theta) * (math.sqrt((ship.x - startPoint[0]) ** 2 + (ship.y - startPoint[1]) ** 2) - ship.radius)
+            cutY = math.cos(theta) * (math.sqrt((ship.x - startPoint[0]) ** 2 + (ship.y - startPoint[1]) ** 2) - ship.radius)
+            if startPoint[0] > endPoint[0]:
+                cutX = - cutX
+            cutY += startPoint[1]
+            cutX += startPoint[0]
+            
+            
+            pygame.draw.aaline(view.screen, misc.WHITE, ((startPoint[0] - view.x) * view.zoom, (startPoint[1] - view.y) * view.zoom), ((cutX - view.x) * view.zoom, (cutY - view.y) * view.zoom)) # Draw beam until ship
+            view.effects.append(effects.ExplosionShip(view, ship, 1)) # Spark from ship
+            
+        pygame.draw.circle(view.screen, misc.WHITE, ((startPoint[0] - view.x) * view.zoom, (startPoint[1] - view.y) * view.zoom), 2, 1)
+        
+#        # Draw ships along the line in white
+#        for ship in map.closestShipsAlongLine(startPoint, endPoint):
+#            ship.colour = misc.WHITE
+#            ship.draw()
+#            ship.colour = ship.player.colour
+#        if len(map.closestShipsAlongLine(startPoint, endPoint)) > 0:
+#            ship.colour = misc.GREEN
+#            ship.draw()
+#            ship.colour = ship.player.colour
 
         pygame.display.flip()
 
