@@ -89,7 +89,7 @@ class Missile(ships.Ship):
             self.contrailTimer -= 1
         colliding = self.colliding()
         if not (not colliding):
-            colliding.damage(self.damage)
+            colliding.damaged(self.damage)
             self.die()
         self.lifetime -= 1
         if self.lifetime <= 0:

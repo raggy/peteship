@@ -52,7 +52,7 @@ def main(view, map):
                                 ship.queueOrder(orders.MoveToShip(shipAtCursor))
                         else:
                             for ship in view.selectedShips:
-                                ship.queueOrder(orders.MoveToShip(shipAtCursor))
+                                ship.setOrder(orders.MoveToShip(shipAtCursor))
             elif (event.dict['button'] == 4):
                 view.zoomInBy(1.05)
             elif (event.dict['button'] == 5):
