@@ -147,8 +147,8 @@ class Idle(State):
                 if self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]).distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) < self.launcher.range:
                     self.launcher.addTarget(self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]))
             else: # we have a target
-                if self.launcher.targets[0].distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) > self.launcher.range:
-                    self.launcher.targets = [] # if it's too far away then remove it, we'll find a new one.
+                if self.launcher.targets[0].distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) > self.launcher.range or self.launcher.targets[0].dead == True:
+                    self.launcher.targets = [] # if it's too far away or dead then remove it, we'll find a new one.
                 # otherwise the launcher will handle firing itself. Wey.
         
 class Launcher(): # Superclass that handles the launching of weapons, wether they be point to point, missile, turret or otherwise.
