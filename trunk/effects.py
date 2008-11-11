@@ -68,7 +68,7 @@ class Particle():
 class ExplosionShip(Effect):
     
     particles = []
-    lifetime = 500 # how long the particle lasts
+    lifetime = 50 # how long the particle lasts
     colour = (255, 255, 255) #white powe... particle!
         
     def __init__(self, view, ship, particles):

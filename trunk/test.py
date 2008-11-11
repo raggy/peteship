@@ -2,7 +2,7 @@
 
 import peteship, players, ships, formations, random, orders, misc, effects, weapons, views, maps, pygame
 
-GLOBAL_TESTSHIPS = 10 #Generic int for creating multiples of tsetingships.
+GLOBAL_TESTSHIPS = 100 #Generic int for creating multiples of tsetingships.
 
 map = maps.Map(1000, 1000, 500, 2) # 1000 x 1000 map with 500 resources and 2 players.
 view = views.View(800, 480, 0, map)
