@@ -1,6 +1,38 @@
 import players, pygame, ships, orders, math, effects
 from misc import *
 
+class Beam():
+    def__init__(self, thickness, changeTime, launcher, target):
+        self.maxThickness = thickness
+        self.thickness = 0
+        self.maxTimer = changeTime
+        self.timer = 0
+        self.launcher = launcher
+        self.target = target
+        self.nextState = True
+        self.state = False
+    def poll(self):
+        #check that we're in the correct state
+        if self.state != self.nextState:
+            # oh crikey, we need to change state...
+            if self.state:
+                # we were in on, need to turn off so:
+                self.timer += 1
+                self.thickness = self.maxThickness / (self.maxTimer - self.timer)
+                if self.timer == self.maxTimer:
+                    self.state = self.nextState
+                    self.timer = 0
+            else:
+                # was off, needs to go on.
+                self.timer += 1
+                self.thickness = self.maxThicckness / (self.maxTimer - self.timer)
+                if self.timer == self.maxTimer:
+                    #hurray! we're there!
+                    self.state = self.nextState
+                    self.timer = 0
+        
+    def draw(self):
+        
 class Missile(ships.Ship):
     # Super class for weapons that are launched and home in towards a target.
     # Quite specific but this covers the basics and is therefore useable.
@@ -161,8 +193,10 @@ class TestMissile(Missile):
     def __init__(self, view, player, launcher, targetShip):
         Missile.__init__(self, view, player, launcher, targetShip)
         self.damage = 5
-        self.speed = 5
-        self.rotateSpeed = 1
+        self.speed = 3
+        self.rotateSpeed = 0.2
+        self.contrailLength = self.contrailTimer = 3
+        self.contrailLifetime = 9
         
 class TestMissileLauncher(Launcher):
     isMissile = True
@@ -170,4 +204,11 @@ class TestMissileLauncher(Launcher):
     def fire(self, target):
         self.parent.player.missiles.append(TestMissile(self.parent.view, self.parent.player, self, target))
         # any fx code goes here.
+        
+class TestBeam(Beam):
+        
+class TestBeamGun(Launcher):
+    isShot = True
+    
+    def fire(self, thickness, changeTime, launcher, target):
         
