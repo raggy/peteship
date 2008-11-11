@@ -25,6 +25,9 @@ for i in range(3):
     for j in range(100):
         map.players[1].ships[i].addToBuildQueue()
 
+for ship in map.players[0].ships:
+    ship.setOrder(orders.Attack(ship.player.enemyShipClosestToXY(ship.x, ship.y), 30))
+
 #dave = map.players[0].ships[0]
 #dave.colour = misc.GREEN
 #dave.launchers = [weapons.TestMissileLauncher(dave, dave.hardpoints[0])]
