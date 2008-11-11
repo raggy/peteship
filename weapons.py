@@ -52,9 +52,6 @@ class Missile(ships.Ship):
         self.contrailLifetime = 100 # how long the trails last.
         # Number of contrails in use when moving = contrailLifetime / contrailLength (3000 / 300 = 10 for example.)
         self.contrailThickness = 2 # thickness passed to contrail. 
-        #add an initial contrail.
-        self.contrail = self.view.lowEffects.append(effects.Contrail(self.view, self)) # this'll make yer eyes bleed.
-        
         # changing the look of missiles
         self.radius = 2
         self.shieldRadius = self.radius # hit detection radius.
@@ -193,11 +190,15 @@ class Launcher(): # Superclass that handles the launching of weapons, wether the
 class TestMissile(Missile):
     def __init__(self, view, player, launcher, targetShip):
         Missile.__init__(self, view, player, launcher, targetShip)
+
         self.damage = 5
         self.speed = 3
         self.rotateSpeed = 0.2
-        self.contrailLength = self.contrailTimer = 3
-        self.contrailLifetime = 9
+        self.contrailLength = self.contrailTimer = 2
+        self.contrailLifetime = 8
+        
+                    #add an initial contrail. NESSECARY IN ALL MISSILE WEAPON
+        self.contrail = self.view.lowEffects.append(effects.Contrail(self.view, self)) # this'll make yer eyes bleed.
         
 class TestMissileLauncher(Launcher):
     isMissile = True

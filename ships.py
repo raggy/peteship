@@ -155,6 +155,7 @@ class S1s1(Ship):
     buildCost = 10
     buildTime = 500
     rotateSpeed = 0.1
+    speed = 1
     canAttack = True # this ship has a weapon! useful for setting ui & making sure that ships that can't attack when selected
                             # with those that can don't get an erroneus attack order.
     launchers = []    # weapon related values
