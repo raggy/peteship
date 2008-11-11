@@ -89,3 +89,27 @@ class RotateToAngle(Order):
         if self.ship.rotation == self.angle: 
             self.ship.nextOrder()
         self.ship.rotateTowardAngle(self.angle)
+        
+class Attack(MoveToShip):
+    """
+    Ship moves within range and then circles target
+    """
+    def __init__(self, target, range):
+        self.target = target
+        self.x, self.y = self.target.x, self.target.y
+        self.range = range
+        
+    def poll(self):
+        self.x, self.y = self.target.x, self.target.y
+        if not self.target.dead: # If target isn't dead
+            if self.ship.distanceFrom(self.target.x, self.target.y) > self.range: # If not yet within range
+                self.moveTowards(self.x, self.y)                             # Move closer
+                self.angleToXY = self.ship.angleToXY(self.x, self.y)
+                self.rotateTowards(self.x, self.y)
+            else:   # Else circle target
+                self.ship.moveForward() # Always keep moving
+    #            if self.ship.angleToXY(self.target.x, self.target.y) # check whether to turn left or right 
+                self.ship.rotateTowardAngle(misc.normalisedAngle(self.ship.angleToXY(self.target.x, self.target.y) + math.pi / 2))
+        else:
+            self.ship.setOrder(Attack(self.ship.player.enemyShipClosestToXY(self.ship.x, self.ship.y), 30)) # Acquire new target
+#            self.ship.nextOrder()
