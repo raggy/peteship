@@ -28,7 +28,7 @@ class Ship():
         self.calcPoints()
         self.calcExtras() # Stuff that isn't points but needs to be calced.
         
-    def damage(self, amount):
+    def damaged(self, amount):
         self.health -= amount
         if self.health <= 0:
             self.die()
@@ -46,7 +46,7 @@ class Ship():
         del self
         
     def die(self):
-        self.view.effects.append(effects.ExplosionShip(self.view, self))
+        self.view.effects.append(effects.ExplosionShip(self.view, self, 10))
         self.view.effects.append(effects.Explosion(self.view, (self.x, self.y), 0.5, (self.radius * 4), misc.WHITE))
         #and remove the ship when done.
         self.remove()
@@ -199,6 +199,8 @@ class S1s6(Ship):
     building = False
     buildTimeRemaining = 0
     buildShip = Ship
+
+    health = 40
 
     radius = 12
 

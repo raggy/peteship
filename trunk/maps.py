@@ -1,4 +1,4 @@
-import pygame, resources, random, misc, players
+import pygame, resources, random, misc, players, math
 
 class StartPoint():
     def __init__(self, x, y):
@@ -39,3 +39,49 @@ class Map():
                 closest = ship
                 closestXY = tempXY
         return closest
+    
+    def shipsAlongLine(self, startPoint, endPoint):
+        """
+        Function to check if a line passes through the radius of any ship.
+        Returns a list of ships
+        """
+        tempShips = []
+        
+        offsetX = misc.positive(endPoint[0] - startPoint[0])
+        offsetY = endPoint[1] - startPoint[1]
+        distance = math.sqrt(offsetX ** 2 + offsetY ** 2)
+        
+        if offsetY > 0:
+            theta = math.atan(offsetX / offsetY)
+        elif offsetY == 0:
+            theta = math.atan(offsetX)
+        else:
+            theta = misc.normalisedAngle(math.atan(offsetX / offsetY))
+            
+        for player in self.players:
+            for ship in player.ships:
+                if ship.distanceFrom(startPoint[0], startPoint[1]) - ship.radius <= distance: # If ship is within the radius
+                    shipX = misc.positive(ship.x - startPoint[0])
+                    shipY = ship.y - startPoint[1]
+                    r = math.sqrt(shipX ** 2 + shipY ** 2)
+                    if shipX > 0:
+                        shipTheta = math.atan(shipX / shipY)
+                    elif shipY == 0:
+                        shipTheta = math.atan(shipX)
+                    else:
+                        shipTheta = misc.normalisedAngle(math.atan(shipX / shipY))
+                    offsetTheta = misc.normalisedAngle(theta - shipTheta)
+                    rotateX = r * math.cos(offsetTheta)
+                    rotateY = r * math.sin(offsetTheta)
+                    if rotateY + ship.radius >= 0 and rotateY - ship.radius <= 0 and ship.distanceFrom(endPoint[0], endPoint[1]) - ship.radius < distance: # If line passes through the ship
+                        tempShips.append(ship) # Add ship to list
+        return tempShips
+        
+    def closestShipsAlongLine(self, startPoint, endPoint):
+        """
+        Returns ships along line sorted by distance from startPoint
+        """
+        tempShips = self.shipsAlongLine(startPoint, endPoint)
+        tempShips.sort(key=lambda ship: ship.distanceFrom(startPoint[0], startPoint[1]))
+#        tempShips.reverse()
+        return tempShips

@@ -71,10 +71,10 @@ class ExplosionShip(Effect):
     lifetime = 500 # how long the particle lasts
     colour = (255, 255, 255) #white powe... particle!
         
-    def __init__(self, view, ship):
+    def __init__(self, view, ship, particles):
         self.particles = []
         self.view      = view
-        for i in range(10):
+        for i in range(particles):
             self.particles.append(Particle(self.view, (random.random() * math.pi * 2), ((random.random() * 2) - 1) * ship.radius + ship.x, ((random.random() * 2) - 1) * ship.radius + ship.y, self.lifetime))
     def poll(self):
         for particle in self.particles:
