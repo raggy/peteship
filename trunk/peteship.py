@@ -247,4 +247,5 @@ def main(view, map):
 
         for event in pygame.event.get(pygame.QUIT):
             running = False
+
     pygame.quit()
