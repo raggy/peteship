@@ -14,11 +14,16 @@ class Effect():
         pass
     
     def remove(self):
-        if self in self.view.effects:
-            for i in range(len(self.view.effects)):
-                if self.view.effects[i] == self:
-                    del self.view.effects[i]
-                    break
+#    if self in self.view.effects:
+        for i in range(len(self.view.effects)):
+            if self.view.effects[i] == self:
+                del self.view.effects[i]
+                break
+#    elif self in self.view.lowEffects:
+        for i in range(len(self.view.lowEffects)):
+            if self.view.lowEffects[i] == self:
+                del self.view.lowEffects[i]
+                break
 
 class Explosion(Effect):
     
