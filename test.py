@@ -2,7 +2,7 @@
 
 import peteship, players, ships, formations, random, orders, misc, effects, weapons, views, maps, pygame
 
-GLOBAL_TESTSHIPS = 100 #Generic int for creating multiples of tsetingships.
+GLOBAL_TESTSHIPS = 20 #Generic int for creating multiples of tsetingships.
 
 map = maps.Map(1000, 1000, 500, 2) # 1000 x 1000 map with 500 resources and 2 players.
 view = views.View(800, 480, 0, map)
@@ -10,12 +10,12 @@ view = views.View(800, 480, 0, map)
 #player.ships.append(ships.S1s6(player, (player.width/2), (player.height/2)))
 #player.ships[0].built = True
 
-map.players[0].colour = misc.RED
-map.players[1].colour = misc.BLUE
+map.players[0].colour = misc.GREEN
+map.players[1].colour = misc.RED
 
 for player in map.players:
     for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
-        player.ships.append(ships.S1s1(view, player, (random.random()*view.width), (random.random()*view.height)))
+        player.ships.append(ships.S1s1(view, player, (random.random()*map.width), (random.random()*map.height)))
         player.ships[len(player.ships) - 1].built = True
         player.ships[len(player.ships) - 1].launchers = [weapons.TestMissileLauncher(player.ships[len(player.ships) - 1], player.ships[len(player.ships) - 1].hardpoints[0])]
         #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
