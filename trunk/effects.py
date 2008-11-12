@@ -103,7 +103,8 @@ class ExplosionShip(Effect):
         self.particles = []
         self.view      = view
         for i in range(particles):
-            self.particles.append(Particle(self.view, (random.random() * math.pi * 2), ((random.random() * 2) - 1) * ship.radius + ship.x, ((random.random() * 2) - 1) * ship.radius + ship.y, self.lifetime))
+            randomColour = random.random() * 255
+            self.particles.append(Particle(self.view, (random.random() * math.pi * 2), ((random.random() * 2) - 1) * ship.radius + ship.x, ((random.random() * 2) - 1) * ship.radius + ship.y, self.lifetime, (randomColour, randomColour, randomColour))) #(random.random() * 255, random.random() * 255, random.random() * 255)))
     def poll(self):
         for particle in self.particles:
             particle.poll()
