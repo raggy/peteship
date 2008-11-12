@@ -63,7 +63,11 @@ class Particle(Effect):
         self.lifetime -= 1
         
     def draw(self):
-        pygame.draw.line(self.view.screen, self.colour, ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom), ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom))
+        if self.x >= self.view.x and\
+        self.x <= self.view.x + self.view.width / self.view.zoom and\
+        self.y >= self.view.y and\
+        self.y <= self.view.y + self.view.height / self.view.zoom: # If particle is on screen
+            pygame.draw.line(self.view.screen, self.colour, ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom), ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom)) # Draw it
         
 class StaticParticle(Particle):
     
