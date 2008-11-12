@@ -14,10 +14,11 @@ class Effect():
         pass
     
     def remove(self):
-        for i in range(len(self.view.effects)):
-            if self.view.effects[i] == self:
-                del self.view.effects[i]
-                break
+        if self in self.view.effects:
+            for i in range(len(self.view.effects)):
+                if self.view.effects[i] == self:
+                    del self.view.effects[i]
+                    break
 
 class Explosion(Effect):
     
@@ -40,7 +41,7 @@ class Explosion(Effect):
         if tempSize * self.view.zoom >= 1:
             pygame.draw.circle(self.view.screen, self.colour, ((self.xy[0] - self.view.x) * self.view.zoom, (self.xy[1] - self.view.y) * self.view.zoom), tempSize * self.view.zoom, 1) # alter the last value for thicker rings.
         
-class Particle():
+class Particle(Effect):
     
     def __init__(self, view, rotation, x, y, lifetime):
         self.view = view
@@ -64,6 +65,22 @@ class Particle():
     def draw(self):
         pygame.draw.line(self.view.screen, self.colour, ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom), ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom))
         
+class StaticParticle(Particle):
+    
+    def __init__(self, view, x, y, lifetime):
+        self.view = view
+        self.x, self.y = x, y
+        self.maxlife = self.lifetime = lifetime
+        
+    def poll(self):
+        self.colour = [(255 * self.lifetime / self.maxlife),\
+                       (255 * self.lifetime / self.maxlife),\
+                       (255 * self.lifetime / self.maxlife)]    # kept seperate so that different coloured particles can be made.
+        self.tempColour = [self.colour[0] * self.view.zoom, self.colour[1] * self.view.zoom, self.colour[2] * self.view.zoom]
+        if self.tempColour[0] < self.colour[0]:
+            self.colour = self.tempColour
+                       
+        self.lifetime -= 1
         
 class ExplosionShip(Effect):
     
