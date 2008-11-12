@@ -91,7 +91,7 @@ class Missile(ships.Ship):
         self.lifetime -= 1
         if self.lifetime <= 0:
             self.die()
-        self.view.lowEffects.append(effects.StaticParticle(self.view, self.x + self.radius * math.sin(self.rotation + math.pi), (self.y - self.radius * math.cos(self.rotation + math.pi)), 10))
+        self.view.lowEffects.append(effects.StaticParticle(self.view, self.x, self.y, 20, (70, 70, 50)))
             
     def select(self):
         pass
