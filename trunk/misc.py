@@ -1,5 +1,11 @@
 import math
 
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
+
 # Colour definitions
 BLACK    = 0, 0, 0
 WHITE    = 255, 255, 255

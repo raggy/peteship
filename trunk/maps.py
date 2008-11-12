@@ -1,5 +1,11 @@
 import pygame, resources, random, misc, players, math
 
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
+
 class StartPoint():
     def __init__(self, x, y):
         self.x, self.y = x, y #simple but makes code more readable. meh.

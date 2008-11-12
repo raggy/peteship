@@ -1,6 +1,12 @@
 import players, pygame, ships, orders, math, effects
 from misc import *
 
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
+
 class Beam():
     def __init__(self, thickness, changeTime, launcher, target):
         self.maxThickness = thickness

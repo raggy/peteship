@@ -2,6 +2,12 @@
 import sys, os, pygame, math, orders, players, misc, formations, maps, effects
 pygame.init()
 
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
+
 def main(view, map):
     clock = pygame.time.Clock()
     keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_a:False,pygame.K_SPACE:False,pygame.K_w:False,pygame.K_s:False,pygame.K_d:False,pygame.K_1:False,pygame.K_2:False}

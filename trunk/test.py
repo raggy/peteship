@@ -1,10 +1,18 @@
 #!/usr/bin/env python2.5
 
-import peteship, players, ships, formations, random, orders, misc, effects, weapons, views, maps, pygame
+import peteship, players, ships, formations, random, orders, misc, effects, weapons, views, maps, pygame, psyco
 
-GLOBAL_TESTSHIPS = 20 #Generic int for creating multiples of tsetingships.
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
 
-map = maps.Map(1000, 1000, 500, 2) # 1000 x 1000 map with 500 resources and 2 players.
+GLOBAL_TESTSHIPS = 50 #Generic int for creating multiples of tsetingships.
+
+
+
+map = maps.Map(4000, 4000, 500, 2) # 1000 x 1000 map with 500 resources and 2 players.
 view = views.View(800, 480, 0, map)
 
 #player.ships.append(ships.S1s6(player, (player.width/2), (player.height/2)))
