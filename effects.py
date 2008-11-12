@@ -1,5 +1,12 @@
 import pygame, random, math
 
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
+
+
 # Module for effects within the game e.g. explosions
 
 class Effect():

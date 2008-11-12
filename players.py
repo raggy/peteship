@@ -1,6 +1,12 @@
 import misc, pygame, random
 pygame.init()
 
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
+
 class Player():
     """ Player specific stats. """
     colour = misc.WHITE # hahaha why not.

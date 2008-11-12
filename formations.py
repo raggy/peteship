@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
+
 import orders, math
 
 class Formation:

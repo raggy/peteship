@@ -1,5 +1,11 @@
 import pygame, pygame.draw, misc, random
 
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
+
 class View:
     """ Defines functions to interact with the pygame surface """
 

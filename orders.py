@@ -1,5 +1,11 @@
 import misc, math, ships
 
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
+
 class Order():
     def __init__(self):
         pass

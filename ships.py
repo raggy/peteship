@@ -1,5 +1,11 @@
 import misc, math, orders, pygame, effects
 
+try:
+    import psyco
+    psyco.full()
+except ImportError:
+    pass
+
 class Ship():
     #basic stats for drawing & position.
     radius = 8                      # Size of the ship from the centre - size of largest part (if multiple parts are added)
