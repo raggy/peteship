@@ -90,7 +90,7 @@ class Ship():
         #update the ships data
         self.orders[0].poll()
         self.calcExtras()
-        self.view.lowEffects.append(effects.StaticParticle(self.view, self.x + self.radius * math.sin(self.rotation + math.pi), (self.y - self.radius * math.cos(self.rotation + math.pi)), 5))
+#        self.view.lowEffects.append(effects.StaticParticle(self.view, self.x + self.radius * math.sin(self.rotation + math.pi), (self.y - self.radius * math.cos(self.rotation + math.pi)), 5))
 
     def angleToXY(self, x, y):
         #calculate the angle from the referenced ships heading to the

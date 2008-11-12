@@ -48,19 +48,20 @@ class Explosion(Effect):
         
 class Particle(Effect):
     
-    def __init__(self, view, rotation, x, y, lifetime):
+    def __init__(self, view, rotation, x, y, lifetime, colour = (255, 255, 255)):
         self.view = view
         self.rotation = rotation
         self.x = x
         self.y = y
         self.maxlife = self.lifetime = lifetime #lollercaust
+        self.maxColour = colour
         
     def poll(self):
         self.y -= math.cos(self.rotation) * 0.4
         self.x += math.sin(self.rotation) * 0.4
-        self.colour = [(255 * self.lifetime / self.maxlife),\
-                       (255 * self.lifetime / self.maxlife),\
-                       (255 * self.lifetime / self.maxlife)]    # kept seperate so that different coloured particles can be made.
+        self.colour = [(self.maxColour[0] * self.lifetime / self.maxlife),\
+                       (self.maxColour[1] * self.lifetime / self.maxlife),\
+                       (self.maxColour[2] * self.lifetime / self.maxlife)]    # kept seperate so that different coloured particles can be made.
         self.tempColour = [self.colour[0] * self.view.zoom, self.colour[1] * self.view.zoom, self.colour[2] * self.view.zoom]
         if self.tempColour[0] < self.colour[0]:
             self.colour = self.tempColour
@@ -76,15 +77,16 @@ class Particle(Effect):
         
 class StaticParticle(Particle):
     
-    def __init__(self, view, x, y, lifetime):
+    def __init__(self, view, x, y, lifetime, colour = (255, 255, 255)):
         self.view = view
         self.x, self.y = x, y
         self.maxlife = self.lifetime = lifetime
+        self.maxColour = colour
         
     def poll(self):
-        self.colour = [(255 * self.lifetime / self.maxlife),\
-                       (255 * self.lifetime / self.maxlife),\
-                       (255 * self.lifetime / self.maxlife)]    # kept seperate so that different coloured particles can be made.
+        self.colour = [(self.maxColour[0] * self.lifetime / self.maxlife),\
+                       (self.maxColour[1] * self.lifetime / self.maxlife),\
+                       (self.maxColour[2] * self.lifetime / self.maxlife)]    # kept seperate so that different coloured can be made.
         self.tempColour = [self.colour[0] * self.view.zoom, self.colour[1] * self.view.zoom, self.colour[2] * self.view.zoom]
         if self.tempColour[0] < self.colour[0]:
             self.colour = self.tempColour
