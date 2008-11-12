@@ -67,7 +67,7 @@ class Ship():
         for order in self.orders:
             tempxy = order.xy()
             if not tempxy is False:
-                pygame.draw.line(self.view.screen, misc.DARKGREY, ((lastx - self.view.x) * self.view.zoom, (lasty - self.view.y) * self.view.zoom), ((tempxy[0]  - self.view.x) * self.view.zoom, (tempxy[1] - self.view.y) * self.view.zoom))
+                pygame.draw.line(self.view.screen, order.colour, ((lastx - self.view.x) * self.view.zoom, (lasty - self.view.y) * self.view.zoom), ((tempxy[0]  - self.view.x) * self.view.zoom, (tempxy[1] - self.view.y) * self.view.zoom))
                 #pygame.draw.circle(screen, (20,20,20), ((order.x - view.x) * view.zoom, (order.y - view.y) * view.zoom), 2)
                 lastx, lasty = tempxy[0], tempxy[1]
         
@@ -148,13 +148,12 @@ class S1s1(Ship):
     """ as of rev 12 now a list"""
     health = 10
     intEnginePoint = [2]
-    radius = 3
+    radius = 5
     shieldRadius = 5
-    rotateSpeed = 0.1 
     #buildInfo
     buildCost = 10
     buildTime = 500
-    rotateSpeed = 0.1
+    rotateSpeed = 0.05
     speed = 1
     canAttack = True # this ship has a weapon! useful for setting ui & making sure that ships that can't attack when selected
                             # with those that can don't get an erroneus attack order.

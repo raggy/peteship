@@ -16,6 +16,8 @@ class Idle(Order):
         pass
 
 class MoveToXY(Order):
+    colour = (0, 50, 0) # Dark green
+    
     def __init__(self, x, y):
         self.x, self.y = x, y
 
@@ -94,6 +96,9 @@ class Attack(MoveToShip):
     """
     Ship moves within range and then circles target
     """
+    
+    colour = (50, 0, 0) # Dark red
+    
     def __init__(self, target, range):
         self.target = target
         self.x, self.y = self.target.x, self.target.y

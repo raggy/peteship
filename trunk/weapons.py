@@ -192,8 +192,8 @@ class TestMissile(Missile):
         Missile.__init__(self, view, player, launcher, targetShip)
 
         self.damage = 5
-        self.speed = 3
-        self.rotateSpeed = 0.2
+        self.speed = 1.5
+        self.rotateSpeed = 0.1
         self.contrailLength = self.contrailTimer = 2
         self.contrailLifetime = 8
         

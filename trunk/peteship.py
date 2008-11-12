@@ -143,6 +143,10 @@ def main(view, map):
                effect.poll()
                # check to see if onscreen to go here.
                effect.draw()
+
+
+        for ship in currentPlayer.ships:
+            ship.drawOrders()
        
         # SHIP CALCULATIONS START HERE.s
         view.shipsOnScreen = []
@@ -150,9 +154,6 @@ def main(view, map):
             for formation in player.formations:
                 formation.poll() # always needs to be done.
 
-            for ship in player.ships:
-                ship.drawOrders()
-        
             for ship in (player.ships + player.missiles): # Rev 43: Will work better when ships Idle properly. At the moment they stay with a move order.
                 ship.poll();
                 if ship.x > view.lBound and ship.x < view.rBound and ship.y > view.tBound and ship.y < view.bBound:
