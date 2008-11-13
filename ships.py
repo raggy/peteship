@@ -193,7 +193,7 @@ class S1s1(Ship):
         self.hardpoints = [(self.x + (self.radius + 20) * math.sin(self.rotation), (self.y - (self.radius + 20) * math.cos(self.rotation)), self.rotation)]
         # engine point calcs. THESE NEED TO BE MOVED TO CALCPOINTS WHEN THEY'RE ONLY DRAWING WHEN ONSCREEN.
         # calculate the xy.
-        self.enginePoint = ((self.x + self.radius  * math.sin(self.rotation + 3 * math.pi / 3)), (self.y + self.radius * math.cos(self.rotation + 3 * math.pi / 3)))
+        self.enginePoint = ((self.x + self.radius  * math.sin(self.rotation + 3 * math.pi / 3)), (self.y - self.radius * math.cos(self.rotation + 3 * math.pi / 3)))
         # update the xy.
         if self.moving:
             self.engineFlicker.xy = self.enginePoint
