@@ -77,7 +77,7 @@ class Missile(ships.Ship):
         #calculate a simple single line to show the missile. Default thing.
         if self.needsToCalcPoints:
             self.calcPoints()
-        pygame.draw.aalines(self.view.screen, self.player.colour, False, self.offsetPoints())
+        pygame.draw.lines(self.view.screen, self.player.colour, False, self.offsetPoints())
         self.engineGlow.xy = (self.x, self.y) # update engine glow location
     def drawOrders(self):
         pass

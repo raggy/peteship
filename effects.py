@@ -64,18 +64,18 @@ class FlickerCircle(Effect):
         self.view = view
         self.xy = xyAsTuple
         self.maxSize = size
-        self.minSize = size / 2
-        self.size = size # start small, else it'll just get smallized.
+        self.size = self.minSize = size / 2 # start small, else it'll just get smallized.
         self.speed = speed
         self.colour = colour
         self.lifetime = 1 # so that the effect can be removed on death easily.
         
     def poll(self):
+        if self.visible:
         # flicker size between the min & max. 
-        if self.size >= self.maxSize:
-            self.size = self.minSize
-        else:
-            self.size += self.speed # see what i did thar?
+            if self.size >= self.maxSize:
+                self.size = self.minSize
+            else:
+                self.size += self.speed # see what i did thar?
             # yes uber high speeds can go over the max size. but ho hum, don't do it. Doesn't need foolproofing
             
     def draw(self):
