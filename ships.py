@@ -176,7 +176,7 @@ class S1s1(Ship):
         """
         # and we create a FlickerCircle for it...
         # FlickerCircle.__init__(self, view, xyAsTuple, size, speed, colour):
-        self.engineFlicker = effects.FlickerCircle(view, self.enginePoint, 3, 1, misc.WHITE)
+        self.engineFlicker = effects.FlickerCircle(view, self.enginePoint, 2, 0.5, misc.WHITE)
         view.lowEffects.append(self.engineFlicker)
         # this needs to have it's xy updated in calcpoints.
         Ship.__init__(self, view, player, x, y)
@@ -190,10 +190,10 @@ class S1s1(Ship):
         self.needsToCalcPoints = False
     
     def calcExtras(self):
-        self.hardpoints = [(self.x + (self.radius + 20) * math.sin(self.rotation), (self.y - (self.radius + 20) * math.cos(self.rotation)), self.rotation)]
+        self.hardpoints = [(self.x + (self.radius + 8) * math.sin(self.rotation), (self.y - (self.radius + 8) * math.cos(self.rotation)), self.rotation)]
         # engine point calcs. THESE NEED TO BE MOVED TO CALCPOINTS WHEN THEY'RE ONLY DRAWING WHEN ONSCREEN.
         # calculate the xy.
-        self.enginePoint = ((self.x + self.radius  * math.sin(self.rotation + 3 * math.pi / 3)), (self.y - self.radius * math.cos(self.rotation + 3 * math.pi / 3)))
+        self.enginePoint = ((self.x + (self.radius - 2)  * math.sin(self.rotation + 3 * math.pi / 3)), (self.y - (self.radius - 2) * math.cos(self.rotation + 3 * math.pi / 3)))
         # update the xy.
         if self.moving:
             self.engineFlicker.xy = self.enginePoint
