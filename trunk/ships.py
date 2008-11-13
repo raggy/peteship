@@ -154,7 +154,6 @@ class Ship():
 class S1s1(Ship):
     """ as of rev 12 now a list"""
     health = 10
-    intEnginePoint = [2]
     radius = 5
     shieldRadius = 5
     #buildInfo
@@ -175,7 +174,6 @@ class S1s1(Ship):
         
         On S1s1 it's calcpointed as a point nearer the rear of the ship.
         """
-        
         # and we create a FlickerCircle for it...
         # FlickerCircle.__init__(self, view, xyAsTuple, size, speed, colour):
         self.engineFlicker = effects.FlickerCircle(view, self.enginePoint, 3, 1, misc.WHITE)
@@ -195,7 +193,7 @@ class S1s1(Ship):
         self.hardpoints = [(self.x + (self.radius + 20) * math.sin(self.rotation), (self.y - (self.radius + 20) * math.cos(self.rotation)), self.rotation)]
         # engine point calcs. THESE NEED TO BE MOVED TO CALCPOINTS WHEN THEY'RE ONLY DRAWING WHEN ONSCREEN.
         # calculate the xy.
-        self.enginePoint = ((self.x + self.radius - 2 * math.sin(self.rotation * math.pi)), (self.y + self.radius - 2 * math.cos(self.rotation * math.pi)))
+        self.enginePoint = ((self.x + self.radius  * math.sin(self.rotation + 3 * math.pi / 3)), (self.y + self.radius * math.cos(self.rotation + 3 * math.pi / 3)))
         # update the xy.
         if self.moving:
             self.engineFlicker.xy = self.enginePoint
@@ -207,6 +205,14 @@ class S1s1(Ship):
             launcher.hardpoint = self.hardpoints[i]
             launcher.poll()
             i += 1
+            
+    def die(self):
+        self.view.effects.append(effects.ExplosionShip(self.view, self, 10))
+        self.view.effects.append(effects.Explosion(self.view, (self.x, self.y), 0.5, (self.radius * 4), misc.WHITE))
+        #and remove the ship when done.
+        self.remove()
+        #any player related stats go here. like death count and such. Dunno if we want need these but hum.
+        self.engineFlicker.die()
 
 class S1s2(Ship):
     """ as of rev 12, now a list """
