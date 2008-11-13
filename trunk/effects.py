@@ -52,6 +52,41 @@ class Explosion(Effect):
         tempSize = self.lifetime * self.size # less cycles.
         if tempSize * self.view.zoom >= 1:
             pygame.draw.circle(self.view.screen, self.colour, ((self.xy[0] - self.view.x) * self.view.zoom, (self.xy[1] - self.view.y) * self.view.zoom), tempSize * self.view.zoom, 1) # alter the last value for thicker rings.
+            
+class FlickerCircle(Effect):
+    def __init__(self, view, xyAsTuple, size, speed, colour):
+        """
+        class that draws a flickery circle. designed to be inited and then activated / deactivated. e.g. engines, beams.
+        minimum size == 1 i guess. 2 is best.
+        best speed is probably 1.
+        """
+        self.visible = False # ships aren't moving by default. etc.
+        self.view = view
+        self.xy = xyAsTuple
+        self.maxSize = size
+        self.minSize = size / 2
+        self.size = size # start small, else it'll just get smallized.
+        self.speed = speed
+        self.colour = colour
+        self.lifetime = 1 # so that the effect can be removed on death easily.
+        
+    def poll(self):
+        # flicker size between the min & max. 
+        if self.size >= self.maxSize:
+            self.size = self.minSize
+        else:
+            self.size += self.speed # see what i did thar?
+            # yes uber high speeds can go over the max size. but ho hum, don't do it. Doesn't need foolproofing
+            
+    def draw(self):
+        if self.visible: # allows the flicker to be turned off.
+            if self.size * self.view.zoom >= 1: 
+                 pygame.draw.circle(self.view.screen, self.colour, ((self.xy[0] - self.view.x) * self.view.zoom, (self.xy[1] - self.view.y) * self.view.zoom), self.size * self.view.zoom, 1) # set to filled so it looks like that. can be changed. Meh.
+                 
+    def die(self):
+        self.lifetime = 0 # effects loop will remove the effect itself. 
+        # other code to tell it to ramp down can be added here and probably should be eventually.
+            
         
 class Particle(Effect):
     
