@@ -191,12 +191,20 @@ class Contrail(Effect):
             self.updateStartPoint = False
                        
     def draw(self):
-        self.tempThickness = self.thickness * self.view.zoom
-        if self.tempThickness > self.thickness:
-            self.tempThickness = self.thickness
-        elif self.tempThickness < 1:
-            self.tempThickness = 1
-        pygame.draw.line(self.view.screen, self.colour, ((self.x1 - self.view.x) * self.view.zoom, (self.y1 - self.view.y) * self.view.zoom), ((self.x2 - self.view.x) * self.view.zoom, (self.y2 -self.view.y) * self.view.zoom), self.tempThickness)
+        if (self.x1 >= self.view.x\
+        and self.x1 <= self.view.x + self.view.width / self.view.zoom\
+        and self.y1 >= self.view.y\
+        and self.y1 <= self.view.y + self.view.height / self.view.zoom)\
+        or (self.x2 >= self.view.x\
+        and self.x2 <= self.view.x + self.view.width / self.view.zoom\
+        and self.y2 >= self.view.y\
+        and self.y2 <= self.view.y + self.view.height / self.view.zoom): # If both points are on screen
+            self.tempThickness = self.thickness * self.view.zoom
+            if self.tempThickness > self.thickness:
+                self.tempThickness = self.thickness
+            elif self.tempThickness < 1:
+                self.tempThickness = 1
+            pygame.draw.line(self.view.screen, self.colour, ((self.x1 - self.view.x) * self.view.zoom, (self.y1 - self.view.y) * self.view.zoom), ((self.x2 - self.view.x) * self.view.zoom, (self.y2 -self.view.y) * self.view.zoom), self.tempThickness)
 
     def remove(self):
         for i in range(len(self.view.lowEffects)):
