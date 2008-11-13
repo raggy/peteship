@@ -34,7 +34,7 @@ for player in map.players:
 #        map.players[1].ships[i].addToBuildQueue()
 for player in map.players:
     for ship in player.ships:
-        ship.setOrder(orders.Attack(ship.player.enemyShipClosestToXY(ship.x, ship.y), 30))
+        ship.setOrder(orders.Attack(ship.player.enemyShipClosestToXY(ship.x, ship.y), 200))
 
 #dave = map.players[0].ships[0]
 #dave.colour = misc.GREEN

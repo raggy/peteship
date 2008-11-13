@@ -54,10 +54,10 @@ class Missile(ships.Ship):
         self.rotation = self.launcher.hardpoint[2]
         self.setOrder(orders.MoveToTarget(targetShip))
         # contrail stuff
-#        self.contrailLength = self.contrailTimer = 5 # frames before a new contrail is added.
-#        self.contrailLifetime = 100 # how long the trails last.
-#        # Number of contrails in use when moving = contrailLifetime / contrailLength (3000 / 300 = 10 for example.)
-#        self.contrailThickness = 2 # thickness passed to contrail. 
+        self.contrailLength = self.contrailTimer = 5 # frames before a new contrail is added.
+        self.contrailLifetime = 15 # how long the trails last.
+        # Number of contrails in use when moving = contrailLifetime / contrailLength (3000 / 300 = 10 for example.)
+        self.contrailThickness = 2 # thickness passed to contrail. 
         # changing the look of missiles
         self.radius = 2
         self.shieldRadius = self.radius # hit detection radius.
@@ -85,11 +85,11 @@ class Missile(ships.Ship):
     def poll(self):
         self.orders[0].poll()
         self.calcExtras()
-#        if self.contrailTimer == 0:
-#            self.contrailTimer = self.contrailLength
-#            self.contrail = self.view.lowEffects.append(effects.Contrail(self.view, self)) # weyyy
-#        else:
-#            self.contrailTimer -= 1
+        if self.contrailTimer == 0:
+            self.contrailTimer = self.contrailLength
+            self.contrail = self.view.lowEffects.append(effects.Contrail(self.view, self)) # weyyy
+        else:
+            self.contrailTimer -= 1
         colliding = self.colliding()
         if not (not colliding):
             colliding.damaged(self.damage)
@@ -97,7 +97,8 @@ class Missile(ships.Ship):
         self.lifetime -= 1
         if self.lifetime <= 0:
             self.die()
-        self.view.lowEffects.append(effects.StaticParticle(self.view, self.x, self.y, 20, (70, 70, 50)))
+ # particle contrails      
+#         self.view.lowEffects.append(effects.StaticParticle(self.view, self.x, self.y, 20, (70, 70, 50)))
             
     def select(self):
         pass
@@ -197,10 +198,9 @@ class Launcher(): # Superclass that handles the launching of weapons, wether the
 class TestMissile(Missile):
     def __init__(self, view, player, launcher, targetShip):
         Missile.__init__(self, view, player, launcher, targetShip)
-
         self.damage = 5
-        self.speed = 1.5
-        self.rotateSpeed = 0.1
+        self.speed = 4
+        self.rotateSpeed = 0.15
 #        self.contrailLength = self.contrailTimer = 2
 #        self.contrailLifetime = 8
 #        
@@ -208,7 +208,10 @@ class TestMissile(Missile):
 #        self.contrail = self.view.lowEffects.append(effects.Contrail(self.view, self)) # this'll make yer eyes bleed.
         
 class TestMissileLauncher(Launcher):
-    isMissile = True
+    def __init__(self, parent, hardpoint):
+        Launcher.__init__(self, parent, hardpoint)
+        self.range = 250
+        self.lifetime = 90
         
     def fire(self, target):
         self.parent.player.missiles.append(TestMissile(self.parent.view, self.parent.player, self, target))
@@ -218,6 +221,10 @@ class TestMissileLauncher(Launcher):
         
 class TestBeamGun(Launcher):
     isShot = True
+    def __init__(self, parent, hardpoint):
+        Launcher.__init__(self, parent, hardpoint)
+        self.range = 150
+        self.lifetime = 90
     
     def fire(self, thickness, changeTime, launcher, target):
         pass
