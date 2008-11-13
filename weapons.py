@@ -58,7 +58,11 @@ class Missile(ships.Ship):
         self.contrailLifetime = 15 # how long the trails last.
         # Number of contrails in use when moving = contrailLifetime / contrailLength (3000 / 300 = 10 for example.)
         self.contrailThickness = 2 # thickness passed to contrail. 
-        # changing the look of missiles
+        # changing the look of missiles.
+        # this is currently set to a nice blue.
+        self.engineGlow = effects.FlickerCircle(self.view, (self.x, self.y), 2, 0.25, GREY)
+        self.view.lowEffects.append(self.engineGlow) # ehhhgghsfkh
+        self.engineGlow.visible = True
         self.radius = 2
         self.shieldRadius = self.radius # hit detection radius.
         
@@ -74,13 +78,14 @@ class Missile(ships.Ship):
         if self.needsToCalcPoints:
             self.calcPoints()
         pygame.draw.aalines(self.view.screen, self.player.colour, False, self.offsetPoints())
-        
+        self.engineGlow.xy = (self.x, self.y) # update engine glow location
     def drawOrders(self):
         pass
 
     def calcPoints(self):
         self.points = [(self.x + self.radius * math.sin(self.rotation), (self.y - self.radius * math.cos(self.rotation))),(self.x, self.y)]
         self.needsToCalcPoints = False
+        
         
     def poll(self):
         self.orders[0].poll()
@@ -104,6 +109,11 @@ class Missile(ships.Ship):
         pass
     
     def remove(self):
+        # remove engine glow
+        # self.engineGlow.die() # OO method.
+        self.engineGlow.lifetime = 0 # non OO method.
+        
+        # other remove self stuff.
         self.dead = True
         for i in range(len(self.player.missiles)):
             if self.player.missiles[i] == self:
@@ -198,7 +208,7 @@ class Launcher(): # Superclass that handles the launching of weapons, wether the
 class TestMissile(Missile):
     def __init__(self, view, player, launcher, targetShip):
         Missile.__init__(self, view, player, launcher, targetShip)
-        self.damage = 5
+        self.damage = 1
         self.speed = 4
         self.rotateSpeed = 0.15
 #        self.contrailLength = self.contrailTimer = 2
@@ -212,6 +222,8 @@ class TestMissileLauncher(Launcher):
         Launcher.__init__(self, parent, hardpoint)
         self.range = 250
         self.lifetime = 90
+        self.refire = 50 # time between firing.
+        self.refireWait = self.refire
         
     def fire(self, target):
         self.parent.player.missiles.append(TestMissile(self.parent.view, self.parent.player, self, target))
@@ -225,6 +237,8 @@ class TestBeamGun(Launcher):
         Launcher.__init__(self, parent, hardpoint)
         self.range = 150
         self.lifetime = 90
+        self.refire = 10 # time between firing.
+        self.refireWait = self.refire
     
     def fire(self, thickness, changeTime, launcher, target):
         pass

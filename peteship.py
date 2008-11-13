@@ -141,7 +141,7 @@ def main(view, map):
                             colour = (255, 255, 255)
                         pygame.draw.line(view.screen, colour, ((star[0] - view.x) * view.zoom * star[3], (star[1] - view.y) * view.zoom * star[3]), ((star[0] - view.x) * view.zoom * star[3], (star[1] - view.y) * view.zoom * star[3]))
             
-        # Draw contrails.
+        # Draw lower effects layer.
         for effect in view.lowEffects:
             if effect.lifetime <= 0:
                 effect.remove()
