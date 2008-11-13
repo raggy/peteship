@@ -167,6 +167,22 @@ class S1s1(Ship):
     launchers = []    # weapon related values
     hardpoints = []
     
+    def __init__(self, view, player, x, y):
+        Ship.__init__(self, view, player, x, y)
+        self.enginePoint = (self.x, self.y) # engine points. one needs to be initialised so it is...
+        """
+        Please note that enginePoints function like hardpoints, due to the nature of the flickerCircle effect.
+        Ho hum. If a ship has more than three engines i'll code it as a list. or something.
+        
+        On S1s1 it's calcpointed as a point nearer the rear of the ship.
+        """
+        
+        # and we create a FlickerCircle for it...
+        # FlickerCircle.__init__(self, view, xyAsTuple, size, speed, colour):
+        self.engineFlicker = effects.FlickerCircle(self.view, enginePoint, 3, 1, misc.WHITE)
+        self.view.lowEffects.append(self.engineFlicker)
+        # this needs to have it's xy updated in calcpoints.
+        
     def calcPoints(self):
     #calculate the three points of the triangle relative to the center xy of the ship
     #and the radius given to the ship.
@@ -177,6 +193,11 @@ class S1s1(Ship):
     
     def calcExtras(self):
         self.hardpoints = [(self.x + (self.radius + 20) * math.sin(self.rotation), (self.y - (self.radius + 20) * math.cos(self.rotation)), self.rotation)]
+        # engine point calcs. THESE NEED TO BE MOVED TO CALCPOINTS WHEN THEY'RE ONLY DRAWING WHEN ONSCREEN.
+        # calculate the xy.
+        self.enginePoint = ((self.x + self.radius - 2 * math.sin(self.rotation * math.pi)), (self.y + self.radius - 2 * math.cos(self.rotation * math.pi)))
+        # update the xy.
+        self.engineFlicker.xy = self.enginePoint
         i = 0
         for launcher in self.launchers:
             launcher.hardpoint = self.hardpoints[i]
