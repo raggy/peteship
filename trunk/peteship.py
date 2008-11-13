@@ -1,6 +1,6 @@
 #!/usr/local/bin/python
 import sys, os, pygame, math, orders, players, misc, formations, maps, effects
-pygame.init()
+#pygame.init()
 
 try:
     import psyco

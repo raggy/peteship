@@ -1,5 +1,5 @@
 import misc, pygame, random
-pygame.init()
+#pygame.init()
 
 try:
     import psyco

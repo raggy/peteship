@@ -74,17 +74,32 @@ class MoveToShip(MoveToXY):
 class MoveToTarget(MoveToShip):
     """
     Essentially like MoveToShip except that if
-    target ship dies then it will move to the
-    next nearest ship
+    target ship dies then it just move forward
     """
 
     def poll(self):
         if self.target.dead:
-            self.target = self.ship.player.enemyShipClosestToXY(self.ship.x, self.ship.y) # Retarget
+            self.lostTarget()
+        else:
+            self.normal()
+        
+    def normal(self):
         self.x, self.y = self.target.x, self.target.y
         self.moveTowards(self.x, self.y)
         self.angleToXY = self.ship.angleToXY(self.x, self.y)
         self.rotateTowards(self.x, self.y)
+    
+    def lostTarget(self):
+        self.ship.moveForward()
+
+class MoveToTargetAndRetarget(MoveToTarget):
+    """
+    Essentially like MoveToTarget except that if
+    target ship dies then it will move to the
+    next nearest ship
+    """
+    def lostTarget(self):
+        self.target = self.ship.player.enemyShipClosestToXY(self.ship.x, self.ship.y) # Retarget
 
 class RotateToAngle(Order):
     def __init__(self, angle):
@@ -122,5 +137,5 @@ class Attack(MoveToShip):
     #            if self.ship.angleToXY(self.target.x, self.target.y) # check whether to turn left or right 
                 self.ship.rotateTowardAngle(misc.normalisedAngle(self.ship.angleToXY(self.target.x, self.target.y) + math.pi / 2))
         else:
-            self.ship.setOrder(Attack(self.ship.player.enemyShipClosestToXY(self.ship.x, self.ship.y), 30)) # Acquire new target
+            self.ship.setOrder(Attack(self.ship.player.enemyShipClosestToXY(self.ship.x, self.ship.y), self.range)) # Acquire new target
 #            self.ship.nextOrder()

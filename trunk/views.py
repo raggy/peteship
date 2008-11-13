@@ -33,6 +33,7 @@ class View:
         self.screen = pygame.display.set_mode((self.width, self.height), flags) # Initialise the pygame surface
         self.map = map
         self.minimap = MiniMap(self, self.map)
+        self.panBy(0, 0)
         for i in xrange(self.map.area / 10000): # Generate a list of stars consisting of a tuple of (x, y, colour, depth)
             depth = random.random() * 0.5 + 0.5
             self.stars.append((random.random() * self.map.width / depth, random.random() * self.map.height / depth, (120 * depth, 120 * depth, 120 * depth), depth))
