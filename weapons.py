@@ -60,9 +60,9 @@ class Missile(ships.Ship):
         self.contrailThickness = 2 # thickness passed to contrail. 
         # changing the look of missiles.
         # this is currently set to a nice blue.
-        self.engineGlow = effects.FlickerCircle(self.view, (self.x, self.y), 2, 0.25, GREY)
-        self.view.lowEffects.append(self.engineGlow) # ehhhgghsfkh
-        self.engineGlow.visible = True
+#        self.engineGlow = effects.FlickerCircle(self.view, (self.x, self.y), 2, 0.25, GREY)
+#        self.view.lowEffects.append(self.engineGlow) # ehhhgghsfkh
+#        self.engineGlow.visible = True
         self.radius = 2
         self.shieldRadius = self.radius # hit detection radius.
         
@@ -78,7 +78,7 @@ class Missile(ships.Ship):
         if self.needsToCalcPoints:
             self.calcPoints()
         pygame.draw.lines(self.view.screen, self.player.colour, False, self.offsetPoints())
-        self.engineGlow.xy = (self.x, self.y) # update engine glow location
+#        self.engineGlow.xy = (self.x, self.y) # update engine glow location
     def drawOrders(self):
         pass
 
@@ -111,7 +111,7 @@ class Missile(ships.Ship):
     def remove(self):
         # remove engine glow
         # self.engineGlow.die() # OO method.
-        self.engineGlow.lifetime = 0 # non OO method.
+#        self.engineGlow.lifetime = 0 # non OO method.
         
         # other remove self stuff.
         self.dead = True
@@ -211,11 +211,11 @@ class TestMissile(Missile):
         self.damage = 1
         self.speed = 4
         self.rotateSpeed = 0.15
-#        self.contrailLength = self.contrailTimer = 2
-#        self.contrailLifetime = 8
-#        
-#                    #add an initial contrail. NESSECARY IN ALL MISSILE WEAPON
-#        self.contrail = self.view.lowEffects.append(effects.Contrail(self.view, self)) # this'll make yer eyes bleed.
+        self.contrailLength = self.contrailTimer = 2
+        self.contrailLifetime = 8
+        
+                    #add an initial contrail. NESSECARY IN ALL MISSILE WEAPON
+        self.contrail = self.view.lowEffects.append(effects.Contrail(self.view, self)) # this'll make yer eyes bleed.
         
 class TestMissileLauncher(Launcher):
     def __init__(self, parent, hardpoint):

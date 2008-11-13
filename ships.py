@@ -168,8 +168,7 @@ class S1s1(Ship):
     hardpoints = []
     
     def __init__(self, view, player, x, y):
-        Ship.__init__(self, view, player, x, y)
-        self.enginePoint = (self.x, self.y) # engine points. one needs to be initialised so it is...
+        self.enginePoint = (x, y) # engine points. one needs to be initialised so it is...
         """
         Please note that enginePoints function like hardpoints, due to the nature of the flickerCircle effect.
         Ho hum. If a ship has more than three engines i'll code it as a list. or something.
@@ -179,9 +178,10 @@ class S1s1(Ship):
         
         # and we create a FlickerCircle for it...
         # FlickerCircle.__init__(self, view, xyAsTuple, size, speed, colour):
-        self.engineFlicker = effects.FlickerCircle(self.view, enginePoint, 3, 1, misc.WHITE)
-        self.view.lowEffects.append(self.engineFlicker)
+        self.engineFlicker = effects.FlickerCircle(view, self.enginePoint, 3, 1, misc.WHITE)
+        view.lowEffects.append(self.engineFlicker)
         # this needs to have it's xy updated in calcpoints.
+        Ship.__init__(self, view, player, x, y)
         
     def calcPoints(self):
     #calculate the three points of the triangle relative to the center xy of the ship
@@ -197,7 +197,11 @@ class S1s1(Ship):
         # calculate the xy.
         self.enginePoint = ((self.x + self.radius - 2 * math.sin(self.rotation * math.pi)), (self.y + self.radius - 2 * math.cos(self.rotation * math.pi)))
         # update the xy.
-        self.engineFlicker.xy = self.enginePoint
+        if self.moving:
+            self.engineFlicker.xy = self.enginePoint
+            self.engineFlicker.visible = True
+        else:
+            self.engineFlicker.visible = False
         i = 0
         for launcher in self.launchers:
             launcher.hardpoint = self.hardpoints[i]
