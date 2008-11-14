@@ -306,6 +306,8 @@ class S1s4(Ship):
     
     def calcExtras(self):
         self.hardpoints = [(self.x + (self.radius+2) * math.sin(self.rotation), (self.y - (self.radius+2) * math.cos(self.rotation)), self.rotation)]
+        self.hardpoints.append((self.x + (self.radius+2) * math.sin(self.rotation + 2.3   * math.pi / 3), (self.y - (self.radius+2) * math.cos(self.rotation + 2.3   * math.pi / 3)), self.rotation + 2.3))
+        self.hardpoints.append((self.x + (self.radius+2) * math.sin(self.rotation + 3.7   * math.pi / 3), (self.y - (self.radius+2) * math.cos(self.rotation + 3.7   * math.pi / 3)), self.rotation + 3.7))
         # engine point calcs. THESE NEED TO BE MOVED TO CALCPOINTS WHEN THEY'RE ONLY DRAWING WHEN ONSCREEN.
         # calculate the xy.
         self.enginePoint1 = ((self.x + (self.radius - 7)  * math.sin(self.rotation + 2.7 * math.pi / 3)), (self.y - (self.radius - 7) * math.cos(self.rotation + 2.7 * math.pi / 3)))
