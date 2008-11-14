@@ -32,7 +32,7 @@ class Effect():
                 del self.view.lowEffects[i]
                 break
                 
-class BubbleShield():
+class BubbleShield(Effect):
     def __init__(self, parent, view, xyAsTuple, radius, lifetimeMod):
     # lifetime is set here, change it if you want.
         self.parent = parent
@@ -40,7 +40,7 @@ class BubbleShield():
         self.xy = xyAsTuple
         self.radius = radius
         self.maxLifetime = self.lifetime = 10 + lifetimeMod
-        self.maxColour = (255, 255, 255)
+        self.maxColour = (200, 200, 200)
         
     def poll(self):
         self.lifetime -= 1
@@ -48,13 +48,13 @@ class BubbleShield():
         
     def draw(self):
         if self.lifetime * self.view.zoom >= 1:
-            colour = (self.maxColour[0] / self.lifetime * self.maxLifetime,\
-                      self.maxColour[1] / self.lifetime * self.maxLifetime,\
-                      self.maxColour[2] / self.lifetime * self.maxLifetime)
-            pygame.draw.circle(self.view.screen, colour, ((self.xy[0] - self.view.x) * self.view.zoom, (self.xy[1] - self.view.y) * self.view.zoom), self.lifetime * self.view.zoom, 2)
-
+            #self.colour = [(self.maxColour[0] / self.lifetime * self.maxLifetime),\
+            #               (self.maxColour[1] / self.lifetime * self.maxLifetime),\
+            #               (self.maxColour[2] / self.lifetime * self.maxLifetime)]
+            self.colour = (200, 200, 200)
+            pygame.draw.circle(self.view.screen, self.colour, ((self.xy[0] - self.view.x) * self.view.zoom, (self.xy[1] - self.view.y) * self.view.zoom), self.radius * self.view.zoom, 1)
+            
 class Explosion(Effect):
-    
     def __init__(self, view, xyAsTuple, size, length, colour):
         self.xy = xyAsTuple
         self.size = size # this is a multiplier, so should be done as such.
