@@ -47,12 +47,12 @@ class BubbleShield(Effect):
         self.xy = (self.parent.x, self.parent.y)
         
     def draw(self):
-        if self.lifetime * self.view.zoom >= 1:
-            #self.colour = [(self.maxColour[0] / self.lifetime * self.maxLifetime),\
-            #               (self.maxColour[1] / self.lifetime * self.maxLifetime),\
-            #               (self.maxColour[2] / self.lifetime * self.maxLifetime)]
-            self.colour = (200, 200, 200)
-            pygame.draw.circle(self.view.screen, self.colour, ((self.xy[0] - self.view.x) * self.view.zoom, (self.xy[1] - self.view.y) * self.view.zoom), self.radius * self.view.zoom, 1)
+        if self.radius * self.view.zoom >= 2:
+            self.colour = [(self.maxColour[0] / self.maxLifetime * self.lifetime),\
+                           (self.maxColour[1] / self.maxLifetime * self.lifetime),\
+                           (self.maxColour[2] / self.maxLifetime * self.lifetime)]
+            #self.colour = (200, 200, 200)
+            pygame.draw.circle(self.view.screen, self.colour, ((self.xy[0] - self.view.x) * self.view.zoom, (self.xy[1] - self.view.y) * self.view.zoom), self.radius * self.view.zoom, 2)
             
 class Explosion(Effect):
     def __init__(self, view, xyAsTuple, size, length, colour):
