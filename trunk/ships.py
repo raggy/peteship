@@ -240,7 +240,7 @@ class S1s2(Ship):
 class S1s4(Ship):
     """ Spear class cruiser """
     health = 50
-    radius = 15
+    radius = 20
     shieldRadius = 15
     #buildInfo
     buildCost = 50
@@ -271,7 +271,6 @@ class S1s4(Ship):
         
     def calcPoints(self):
     # HOLY COW!
-    
         # starboard side
         # point 0: 0, 0 for this ship. Pointy.
         self.points = [(self.x + self.radius * math.sin(self.rotation), (self.y - self.radius * math.cos(self.rotation))),\
@@ -279,10 +278,11 @@ class S1s4(Ship):
         (self.x + (self.radius-5.25) * math.sin(self.rotation + 2.3   * math.pi / 3), (self.y - (self.radius-5.25) * math.cos(self.rotation + 2.3   * math.pi / 3))),\
         # point 2: 2.67 @ 46 ...  = 3.5
         (self.x + (self.radius-3.5) * math.sin(self.rotation + 2.67 * math.pi / 3), (self.y - (self.radius-3.5) * math.cos(self.rotation + 2.67 * math.pi / 3))),\
-        # point 3: 2.6 & 17.5 ... 15 - 4.375  = 10.625
-        (self.x + (self.radius-10.625) * math.sin(self.rotation + 2.6 * math.pi / 3), (self.y - (self.radius-10.625) * math.cos(self.rotation + 2.6 * math.pi / 3))),\
-        # point 4: 2.79 ~ 2.8 & 14.0 ... 15 - 3.5 = 11.5 
-        (self.x + (self.radius-11.5) * math.sin(self.rotation + 2.8 * math.pi / 3), (self.y - (self.radius-11.5) * math.cos(self.rotation + 2.8 * math.pi / 3))),\
+            # Starboard side engine.
+        # point 3: 2.6 & 17.5 ... 15 - 4.375  = 10.625 !!! minus four'd!
+        (self.x + (self.radius-6.625) * math.sin(self.rotation + 2.6 * math.pi / 3), (self.y - (self.radius-6.625) * math.cos(self.rotation + 2.6 * math.pi / 3))),\
+        # point 4: 2.79 ~ 2.8 & 14.0 ... 15 - 3.5 = 11.5  !!! minus four'd
+        (self.x + (self.radius-7.5) * math.sin(self.rotation + 2.8 * math.pi / 3), (self.y - (self.radius-7.5) * math.cos(self.rotation + 2.8 * math.pi / 3))),\
             # begin tail assembly.
         # point 5: 2.87 & 49.5 ... 15 - 12.375 = 2.625
         (self.x + (self.radius-2.625) * math.sin(self.rotation + 2.87 * math.pi / 3), (self.y - (self.radius-2.625) * math.cos(self.rotation + 2.87 * math.pi / 3))),\
@@ -292,10 +292,12 @@ class S1s4(Ship):
             # final tail point.
         # point 7 equiv 5.
         (self.x + (self.radius-2.625) * math.sin(self.rotation + 3.13 * math.pi / 3), (self.y - (self.radius-2.625) * math.cos(self.rotation + 3.13 * math.pi / 3))),\
-        # point 8 equiv 4.
-        (self.x + (self.radius-11.5) * math.sin(self.rotation + 3.2 * math.pi / 3), (self.y - (self.radius-11.5) * math.cos(self.rotation + 3.2 * math.pi / 3))),\
-        # point 9 equiv 3.
-        (self.x + (self.radius-10.625) * math.sin(self.rotation + 3.4 * math.pi / 3), (self.y - (self.radius-10.625) * math.cos(self.rotation + 3.4 * math.pi / 3))),\
+            # Portside engine.
+        # point 8 equiv 4. !!! minus 4'd
+        (self.x + (self.radius-7.5) * math.sin(self.rotation + 3.2 * math.pi / 3), (self.y - (self.radius-7.5) * math.cos(self.rotation + 3.2 * math.pi / 3))),\
+        # point 9 equiv 3. !!! minus 4'd
+        (self.x + (self.radius-6.625) * math.sin(self.rotation + 3.4 * math.pi / 3), (self.y - (self.radius-6.625) * math.cos(self.rotation + 3.4 * math.pi / 3))),\
+            # Port side.
         # point 10 equiv 2.
         (self.x + (self.radius-3.5) * math.sin(self.rotation + 3.33 * math.pi / 3), (self.y - (self.radius-3.5) * math.cos(self.rotation + 3.33 * math.pi / 3))),\
         # point 11 equiv 1.
@@ -306,8 +308,8 @@ class S1s4(Ship):
         self.hardpoints = [(self.x + (self.radius+2) * math.sin(self.rotation), (self.y - (self.radius+2) * math.cos(self.rotation)), self.rotation)]
         # engine point calcs. THESE NEED TO BE MOVED TO CALCPOINTS WHEN THEY'RE ONLY DRAWING WHEN ONSCREEN.
         # calculate the xy.
-        self.enginePoint1 = ((self.x + (self.radius - 3.5)  * math.sin(self.rotation + 3 * math.pi / 3)), (self.y - (self.radius - 3.5) * math.cos(self.rotation + 3 * math.pi / 3)))
-        self.enginePoint2 = ((self.x + (self.radius - 3.5)  * math.sin(self.rotation + 3 * math.pi / 3)), (self.y - (self.radius - 3.5) * math.cos(self.rotation + 3 * math.pi / 3)))
+        self.enginePoint1 = ((self.x + (self.radius - 7)  * math.sin(self.rotation + 2.7 * math.pi / 3)), (self.y - (self.radius - 7) * math.cos(self.rotation + 2.7 * math.pi / 3)))
+        self.enginePoint2 = ((self.x + (self.radius - 7)  * math.sin(self.rotation + 3.3 * math.pi / 3)), (self.y - (self.radius - 7) * math.cos(self.rotation + 3.3 * math.pi / 3)))
         # update the xy.
         if self.moving:
             self.engineFlicker1.xy = self.enginePoint1

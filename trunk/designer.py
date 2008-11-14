@@ -100,8 +100,8 @@ while running:
         print "Output for current point array:"
         print ""
         for point in points:
-            print "Rotation: " + `point.rotation` + " & Radius modification: " + `points.radiusMod`
-            print " --- "
+            print "Rotation: " + `point.rotation` + " & Radius modification: " + `point.radiusMod`
+            print "|--- "
             
     # calc points:
     drawPoints = []
