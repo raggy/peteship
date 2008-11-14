@@ -198,7 +198,7 @@ class S1s1(Ship):
         self.needsToCalcPoints = False
     
     def calcExtras(self):
-        self.hardpoints = [(self.x + (self.radius + 8) * math.sin(self.rotation), (self.y - (self.radius + 8) * math.cos(self.rotation)), self.rotation)]
+        self.hardpoints = [(self.x + (self.radius + 3) * math.sin(self.rotation), (self.y - (self.radius + 8) * math.cos(self.rotation)), self.rotation)]
         # engine point calcs. THESE NEED TO BE MOVED TO CALCPOINTS WHEN THEY'RE ONLY DRAWING WHEN ONSCREEN.
         # calculate the xy.
         self.enginePoint = ((self.x + (self.radius - 3.5)  * math.sin(self.rotation + 3 * math.pi / 3)), (self.y - (self.radius - 3.5) * math.cos(self.rotation + 3 * math.pi / 3)))
@@ -236,6 +236,92 @@ class S1s2(Ship):
         (self.x + self.radius * math.sin(self.rotation + 3 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 3 * math.pi / 3))),\
         (self.x + self.radius * math.sin(self.rotation + 4.3 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 4.3 * math.pi / 3)))]
         self.needsToCalcPoints = False
+        
+class S1s4(Ship):
+    """ Spear class cruiser """
+    health = 50
+    radius = 15
+    shieldRadius = 15
+    #buildInfo
+    buildCost = 50
+    buildTime = 1000
+    rotateSpeed = 0.005
+    speed = 0.2
+    canAttack = True # this ship has a weapon! useful for setting ui & making sure that ships that can't attack when selected
+                            # with those that can don't get an erroneus attack order.
+    launchers = []    # weapon related values
+    hardpoints = []
+    
+    def __init__(self, view, player, x, y):
+        self.enginePoint2 = self.enginePoint1 = (x, y) # engine points. one needs to be initialised so it is...
+        """
+        Please note that enginePoints function like hardpoints, due to the nature of the flickerCircle effect.
+        Ho hum. If a ship has more than three engines i'll code it as a list. or something.
+        
+        On S1s1 it's calcpointed as a point nearer the rear of the ship.
+        """
+        # and we create a FlickerCircle for it...
+        # FlickerCircle.__init__(self, view, xyAsTuple, size, speed, colour):
+        self.engineFlicker1 = effects.FlickerCircle(view, self.enginePoint1, 2.5, 0.5, misc.WHITE)
+        self.engineFlicker2 = effects.FlickerCircle(view, self.enginePoint2, 2.5, 0.5, misc.WHITE)
+        view.lowEffects.append(self.engineFlicker1)
+        view.lowEffects.append(self.engineFlicker2)
+        # this needs to have it's xy updated in calcpoints.
+        Ship.__init__(self, view, player, x, y)
+        
+    def calcPoints(self):
+    #calculate the three points of the triangle relative to the center xy of the ship
+    #and the radius given to the ship.
+    
+        # starboard side
+        self.points = [(self.x + self.radius * math.sin(self.rotation), (self.y - self.radius * math.cos(self.rotation))),\
+        (self.x + (self.radius-3) * math.sin(self.rotation + 2   * math.pi / 3), (self.y - (self.radius-3) * math.cos(self.rotation + 2   * math.pi / 3))),\
+        (self.x + (self.radius-3.5) * math.sin(self.rotation + 2.3 * math.pi / 3), (self.y - (self.radius-3.5) * math.cos(self.rotation + 2.3 * math.pi / 3))),\
+        # starboard engine assembly.
+        (self.x + (self.radius-6) * math.sin(self.rotation + 2.3 * math.pi / 3), (self.y - (self.radius-6) * math.cos(self.rotation + 2.3 * math.pi / 3))),\
+        (self.x + (self.radius-7) * math.sin(self.rotation + 2.6 * math.pi / 3), (self.y - (self.radius-7) * math.cos(self.rotation + 2.6 * math.pi / 3))),\
+            # tail point.
+        (self.x + (self.radius-0.5) * math.sin(self.rotation + 2.9 * math.pi / 3), (self.y - (self.radius-0.5) * math.cos(self.rotation + 2.9 * math.pi / 3))),\
+        (self.x +  self.radius      * math.sin(self.rotation + 3   * math.pi / 3), (self.y -  self.radius      * math.cos(self.rotation + 3   * math.pi / 3))),\
+        (self.x + (self.radius-0.5) * math.sin(self.rotation + 3.1 * math.pi / 3), (self.y - (self.radius-0.5) * math.cos(self.rotation + 3.1 * math.pi / 3))),\
+        # portside engine assembly.
+        (self.x + (self.radius-7) * math.sin(self.rotation + 3.4 * math.pi / 3), (self.y - (self.radius-7) * math.cos(self.rotation + 3.4 * math.pi / 3))),\
+        (self.x + (self.radius-6) * math.sin(self.rotation + 3.7 * math.pi / 3), (self.y - (self.radius-6) * math.cos(self.rotation + 3.7 * math.pi / 3))),\
+        # port side.
+        (self.x + (self.radius-3.5) * math.sin(self.rotation + 3.7 * math.pi / 3), (self.y - (self.radius-3.5) * math.cos(self.rotation + 3.7 * math.pi / 3))),\
+        (self.x + (self.radius-3) * math.sin(self.rotation + 4   * math.pi / 3), (self.y - (self.radius-3) * math.cos(self.rotation + 4   * math.pi / 3)))]
+        self.needsToCalcPoints = False
+    
+    def calcExtras(self):
+        self.hardpoints = [(self.x + (self.radius+2) * math.sin(self.rotation), (self.y - (self.radius+2) * math.cos(self.rotation)), self.rotation)]
+        # engine point calcs. THESE NEED TO BE MOVED TO CALCPOINTS WHEN THEY'RE ONLY DRAWING WHEN ONSCREEN.
+        # calculate the xy.
+        self.enginePoint1 = ((self.x + (self.radius - 3.5)  * math.sin(self.rotation + 3 * math.pi / 3)), (self.y - (self.radius - 3.5) * math.cos(self.rotation + 3 * math.pi / 3)))
+        self.enginePoint2 = ((self.x + (self.radius - 3.5)  * math.sin(self.rotation + 3 * math.pi / 3)), (self.y - (self.radius - 3.5) * math.cos(self.rotation + 3 * math.pi / 3)))
+        # update the xy.
+        if self.moving:
+            self.engineFlicker1.xy = self.enginePoint1
+            self.engineFlicker2.xy = self.enginePoint2
+            self.engineFlicker1.visible = True
+            self.engineFlicker2.visible = True
+        else:
+            self.engineFlicker1.visible = False
+            self.engineFlicker2.visible = False
+        i = 0
+        for launcher in self.launchers:
+            launcher.hardpoint = self.hardpoints[i]
+            launcher.poll()
+            i += 1
+            
+    def die(self):
+        self.view.effects.append(effects.ExplosionShip(self.view, self, 10))
+        self.view.effects.append(effects.Explosion(self.view, (self.x, self.y), 0.5, (self.radius * 4), misc.WHITE))
+        #and remove the ship when done.
+        self.remove()
+        #any player related stats go here. like death count and such. Dunno if we want need these but hum.
+        self.engineFlicker1.die()
+        self.engineFlicker2.die()
+
 
 class S1s6(Ship):
     """ Carrier """
