@@ -90,7 +90,7 @@ while running:
     if keysHeld[pygame.K_a]:
         currentSelectedPoint -= 1
         if currentSelectedPoint < 0:
-            currentSelectedPoint = numberOfPoints
+            currentSelectedPoint = numberOfPoints - 1
         print ""
         print "Point: " + `currentSelectedPoint`
         keysHeld[pygame.K_a] = False
