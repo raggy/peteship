@@ -31,6 +31,27 @@ class Effect():
             if self.view.lowEffects[i] == self:
                 del self.view.lowEffects[i]
                 break
+                
+class BubbleShield():
+    def __init__(self, parent, view, xyAsTuple, radius, lifetimeMod):
+    # lifetime is set here, change it if you want.
+        self.parent = parent
+        self.view = view
+        self.xy = xyAsTuple
+        self.radius = radius
+        self.maxLifetime = self.lifetime = 10 + lifetimeMod
+        self.maxColour = (255, 255, 255)
+        
+    def poll(self):
+        self.lifetime -= 1
+        self.xy = (self.parent.x, self.parent.y)
+        
+    def draw(self):
+        if self.lifetime * self.view.zoom >= 1:
+            colour = (self.maxColour[0] / self.lifetime * self.maxLifetime,\
+                      self.maxColour[1] / self.lifetime * self.maxLifetime,\
+                      self.maxColour[2] / self.lifetime * self.maxLifetime)
+            pygame.draw.circle(self.view.screen, colour, ((self.xy[0] - self.view.x) * self.view.zoom, (self.xy[1] - self.view.y) * self.view.zoom), self.lifetime * self.view.zoom, 2)
 
 class Explosion(Effect):
     
