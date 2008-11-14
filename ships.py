@@ -176,7 +176,7 @@ class S1s1(Ship):
         """
         # and we create a FlickerCircle for it...
         # FlickerCircle.__init__(self, view, xyAsTuple, size, speed, colour):
-        self.engineFlicker = effects.FlickerCircle(view, self.enginePoint, 2, 0.5, misc.WHITE)
+        self.engineFlicker = effects.FlickerCircle(view, self.enginePoint, 2.5, 0.5, misc.WHITE)
         view.lowEffects.append(self.engineFlicker)
         # this needs to have it's xy updated in calcpoints.
         Ship.__init__(self, view, player, x, y)
@@ -184,16 +184,24 @@ class S1s1(Ship):
     def calcPoints(self):
     #calculate the three points of the triangle relative to the center xy of the ship
     #and the radius given to the ship.
+    
+        # starboard side
         self.points = [(self.x + self.radius * math.sin(self.rotation), (self.y - self.radius * math.cos(self.rotation))),\
-        (self.x + self.radius * math.sin(self.rotation + 2.3 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 2.3 * math.pi / 3))),\
-        (self.x + self.radius * math.sin(self.rotation + 3.7 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 3.7 * math.pi / 3)))]
+        (self.x + self.radius     * math.sin(self.rotation + 2.3 * math.pi / 3), (self.y - self.radius     * math.cos(self.rotation + 2.3 * math.pi / 3))),\
+        (self.x + self.radius     * math.sin(self.rotation + 2.7 * math.pi / 3), (self.y - self.radius     * math.cos(self.rotation + 2.7 * math.pi / 3))),\
+        # these two lines are the inner dips for the engine.
+        (self.x + (self.radius-3) * math.sin(self.rotation + 2.6 * math.pi / 3), (self.y - (self.radius-3) * math.cos(self.rotation + 2.6 * math.pi / 3))),\
+        (self.x + (self.radius-3) * math.sin(self.rotation + 3.4 * math.pi / 3), (self.y - (self.radius-3) * math.cos(self.rotation + 3.4 * math.pi / 3))),\
+        # port side.
+        (self.x + self.radius     * math.sin(self.rotation + 3.3 * math.pi / 3), (self.y - self.radius     * math.cos(self.rotation + 3.3 * math.pi / 3))),\
+        (self.x + self.radius     * math.sin(self.rotation + 3.7 * math.pi / 3), (self.y - self.radius     * math.cos(self.rotation + 3.7 * math.pi / 3)))]
         self.needsToCalcPoints = False
     
     def calcExtras(self):
         self.hardpoints = [(self.x + (self.radius + 8) * math.sin(self.rotation), (self.y - (self.radius + 8) * math.cos(self.rotation)), self.rotation)]
         # engine point calcs. THESE NEED TO BE MOVED TO CALCPOINTS WHEN THEY'RE ONLY DRAWING WHEN ONSCREEN.
         # calculate the xy.
-        self.enginePoint = ((self.x + (self.radius - 2)  * math.sin(self.rotation + 3 * math.pi / 3)), (self.y - (self.radius - 2) * math.cos(self.rotation + 3 * math.pi / 3)))
+        self.enginePoint = ((self.x + (self.radius - 3.5)  * math.sin(self.rotation + 3 * math.pi / 3)), (self.y - (self.radius - 3.5) * math.cos(self.rotation + 3 * math.pi / 3)))
         # update the xy.
         if self.moving:
             self.engineFlicker.xy = self.enginePoint
