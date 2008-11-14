@@ -40,10 +40,10 @@ class Point():
         self.radiusMod = radiusMod
         
     def increaseRadiusMod(self):
-        self.radiusMod += 0.1
+        self.radiusMod += 0.5
 
     def decreaseRadiusMod(self):
-        self.radiusMod -= 0.1
+        self.radiusMod -= 0.5
         
     def increaseRotation(self):
         self.rotation+= 0.05
@@ -96,11 +96,11 @@ while running:
         keysHeld[pygame.K_a] = False
                         
     if keysHeld[pygame.K_SPACE]:
+        print ""
+        print "Output for current point array:"
+        print ""
         for point in points:
-            print ""
-            print "Output for current point array:"
-            print ""
-            print "Rotation: " + `point.rotation` + " & Radius modification: " + `point.radiusMod`
+            print "Rotation: " + `point.rotation` + " & Radius modification: " + `points.radiusMod`
             print " --- "
             
     # calc points:
