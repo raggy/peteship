@@ -270,26 +270,36 @@ class S1s4(Ship):
         Ship.__init__(self, view, player, x, y)
         
     def calcPoints(self):
-    #calculate the three points of the triangle relative to the center xy of the ship
-    #and the radius given to the ship.
+    # HOLY COW!
     
         # starboard side
+        # point 0: 0, 0 for this ship. Pointy.
         self.points = [(self.x + self.radius * math.sin(self.rotation), (self.y - self.radius * math.cos(self.rotation))),\
-        (self.x + (self.radius-3) * math.sin(self.rotation + 2   * math.pi / 3), (self.y - (self.radius-3) * math.cos(self.rotation + 2   * math.pi / 3))),\
-        (self.x + (self.radius-3.5) * math.sin(self.rotation + 2.3 * math.pi / 3), (self.y - (self.radius-3.5) * math.cos(self.rotation + 2.3 * math.pi / 3))),\
-        # starboard engine assembly.
-        (self.x + (self.radius-6) * math.sin(self.rotation + 2.3 * math.pi / 3), (self.y - (self.radius-6) * math.cos(self.rotation + 2.3 * math.pi / 3))),\
-        (self.x + (self.radius-7) * math.sin(self.rotation + 2.6 * math.pi / 3), (self.y - (self.radius-7) * math.cos(self.rotation + 2.6 * math.pi / 3))),\
+        # point 1: 2.28 & 9.75   15 - 9.75 = 5.25
+        (self.x + (self.radius-5.25) * math.sin(self.rotation + 2.3   * math.pi / 3), (self.y - (self.radius-5.25) * math.cos(self.rotation + 2.3   * math.pi / 3))),\
+        # point 2: 2.67 @ 46 ...  = 3.5
+        (self.x + (self.radius-3.5) * math.sin(self.rotation + 2.67 * math.pi / 3), (self.y - (self.radius-3.5) * math.cos(self.rotation + 2.67 * math.pi / 3))),\
+        # point 3: 2.6 & 17.5 ... 15 - 4.375  = 10.625
+        (self.x + (self.radius-10.625) * math.sin(self.rotation + 2.6 * math.pi / 3), (self.y - (self.radius-10.625) * math.cos(self.rotation + 2.6 * math.pi / 3))),\
+        # point 4: 2.79 ~ 2.8 & 14.0 ... 15 - 3.5 = 11.5 
+        (self.x + (self.radius-11.5) * math.sin(self.rotation + 2.8 * math.pi / 3), (self.y - (self.radius-11.5) * math.cos(self.rotation + 2.8 * math.pi / 3))),\
+            # begin tail assembly.
+        # point 5: 2.87 & 49.5 ... 15 - 12.375 = 2.625
+        (self.x + (self.radius-2.625) * math.sin(self.rotation + 2.87 * math.pi / 3), (self.y - (self.radius-2.625) * math.cos(self.rotation + 2.87 * math.pi / 3))),\
             # tail point.
-        (self.x + (self.radius-0.5) * math.sin(self.rotation + 2.9 * math.pi / 3), (self.y - (self.radius-0.5) * math.cos(self.rotation + 2.9 * math.pi / 3))),\
+        # point 6: 3 & radius.
         (self.x +  self.radius      * math.sin(self.rotation + 3   * math.pi / 3), (self.y -  self.radius      * math.cos(self.rotation + 3   * math.pi / 3))),\
-        (self.x + (self.radius-0.5) * math.sin(self.rotation + 3.1 * math.pi / 3), (self.y - (self.radius-0.5) * math.cos(self.rotation + 3.1 * math.pi / 3))),\
-        # portside engine assembly.
-        (self.x + (self.radius-7) * math.sin(self.rotation + 3.4 * math.pi / 3), (self.y - (self.radius-7) * math.cos(self.rotation + 3.4 * math.pi / 3))),\
-        (self.x + (self.radius-6) * math.sin(self.rotation + 3.7 * math.pi / 3), (self.y - (self.radius-6) * math.cos(self.rotation + 3.7 * math.pi / 3))),\
-        # port side.
-        (self.x + (self.radius-3.5) * math.sin(self.rotation + 3.7 * math.pi / 3), (self.y - (self.radius-3.5) * math.cos(self.rotation + 3.7 * math.pi / 3))),\
-        (self.x + (self.radius-3) * math.sin(self.rotation + 4   * math.pi / 3), (self.y - (self.radius-3) * math.cos(self.rotation + 4   * math.pi / 3)))]
+            # final tail point.
+        # point 7 equiv 5.
+        (self.x + (self.radius-2.625) * math.sin(self.rotation + 3.13 * math.pi / 3), (self.y - (self.radius-2.625) * math.cos(self.rotation + 3.13 * math.pi / 3))),\
+        # point 8 equiv 4.
+        (self.x + (self.radius-11.5) * math.sin(self.rotation + 3.2 * math.pi / 3), (self.y - (self.radius-11.5) * math.cos(self.rotation + 3.2 * math.pi / 3))),\
+        # point 9 equiv 3.
+        (self.x + (self.radius-10.625) * math.sin(self.rotation + 3.4 * math.pi / 3), (self.y - (self.radius-10.625) * math.cos(self.rotation + 3.4 * math.pi / 3))),\
+        # point 10 equiv 2.
+        (self.x + (self.radius-3.5) * math.sin(self.rotation + 3.33 * math.pi / 3), (self.y - (self.radius-3.5) * math.cos(self.rotation + 3.33 * math.pi / 3))),\
+        # point 11 equiv 1.
+        (self.x + (self.radius-5.25) * math.sin(self.rotation + 3.7   * math.pi / 3), (self.y - (self.radius-5.25) * math.cos(self.rotation + 3.7   * math.pi / 3)))]
         self.needsToCalcPoints = False
     
     def calcExtras(self):
