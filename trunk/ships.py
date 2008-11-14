@@ -34,8 +34,12 @@ class Ship():
         self.calcPoints()
         self.calcExtras() # Stuff that isn't points but needs to be calced.
         
+    def drawShield(self):
+        self.view.effects.append(effects.BubbleShield(self, self.view, (self.x, self.y), self.radius + 2, 0))
+        
     def damaged(self, amount):
         self.health -= amount
+        self.drawShield()
         if self.health <= 0:
             self.die()
         
