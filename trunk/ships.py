@@ -155,8 +155,8 @@ class Ship():
 
     def drawBounding( self ):
         #Calculate the scaled center
-        xCenter = self.x - self.view.x;
-        yCenter = self.y - self.view.y;
+        xCenter = ( self.x - self.view.x ) * self.view.zoom;
+        yCenter = ( self.y - self.view.y ) * self.view.zoom;
 
         #Calculate the scaled size
         zSize = ( ( self.radius ) * self.view.zoom )
