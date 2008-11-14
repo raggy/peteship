@@ -152,7 +152,29 @@ class Ship():
 
     def select(self):
         self.view.selectedShips.append(self)
+
+    def drawBounding( self ):
+        #Calculate the scaled center
+        xCenter = self.x - self.view.x;
+        yCenter = self.y - self.view.y;
+
+        #Calculate the scaled size
+        zSize = ( ( self.radius ) * self.view.zoom )
+
+        #Calculate the minimum x for the bounding box
+        xMin = xCenter - zSize
+        xMax = xCenter + zSize
+        
+        #Calculate the minimum y for the bounding box
+        yMin = yCenter - zSize
+        yMax = yCenter + zSize
 		
+        #Draw bounding box of object
+        pygame.draw.line(self.view.screen, misc.RED, ( xMin, yMax ), ( xMax, yMax ) )
+        pygame.draw.line(self.view.screen, misc.RED, ( xMax, yMax ), ( xMax, yMin ) )
+        pygame.draw.line(self.view.screen, misc.RED, ( xMax, yMin ), ( xMin, yMin ) )
+        pygame.draw.line(self.view.screen, misc.RED, ( xMin, yMin ), ( xMin, yMax ) )
+
         # SPECIFC SHIP CLASSES START HERE ! ! ! !  ! !  ! !  !   ! !  ! !  ! !  ! ! !  ! !  !
 
 class S1s1(Ship):

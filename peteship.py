@@ -166,6 +166,10 @@ def main(view, map):
                     ship.draw()
                     view.shipsOnScreen.append(ship) # Make a list of all ships on screen
 
+            #Loop through the selected ships and draw their bounding box to highlight their selection
+            for sship in view.selectedShips:
+                sship.drawBounding()
+
         if view.selecting: # If the player is currently holding down the left mouse button
             # Draw a nice box for selection
             pygame.draw.line(view.screen, misc.DARKGREY, view.selStartPos, (view.selStartPos[0], view.selEndPos[1]))
