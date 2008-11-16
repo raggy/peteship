@@ -203,7 +203,7 @@ class S1s1(Ship):
         """
         # and we create a FlickerCircle for it...
         # FlickerCircle.__init__(self, view, xyAsTuple, size, speed, colour):
-        self.engineFlicker = effects.FlickerCircle(view, self.enginePoint, 2.5, 0.5, misc.WHITE)
+        self.engineFlicker = effects.FlickerCircle(view, self.enginePoint, 2.5, 0.25, misc.WHITE)
         view.lowEffects.append(self.engineFlicker)
         # this needs to have it's xy updated in calcpoints.
         Ship.__init__(self, view, player, x, y)
@@ -289,8 +289,8 @@ class S1s4(Ship):
         """
         # and we create a FlickerCircle for it...
         # FlickerCircle.__init__(self, view, xyAsTuple, size, speed, colour):
-        self.engineFlicker1 = effects.FlickerCircle(view, self.enginePoint1, 2.5, 0.5, misc.WHITE)
-        self.engineFlicker2 = effects.FlickerCircle(view, self.enginePoint2, 2.5, 0.5, misc.WHITE)
+        self.engineFlicker1 = effects.FlickerCircle(view, self.enginePoint1, 2.5, 0.25, misc.WHITE)
+        self.engineFlicker2 = effects.FlickerCircle(view, self.enginePoint2, 2.5, 0.25, misc.WHITE)
         view.lowEffects.append(self.engineFlicker1)
         view.lowEffects.append(self.engineFlicker2)
         # this needs to have it's xy updated in calcpoints.
