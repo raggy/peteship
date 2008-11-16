@@ -59,7 +59,8 @@ class Missile(ships.Ship):
         # Number of contrails in use when moving = contrailLifetime / contrailLength (3000 / 300 = 10 for example.)
         self.contrailThickness = 2 # thickness passed to contrail. 
         # changing the look of missiles.
-        # this is currently set to a nice blue.
+        
+        # this is currently set to a nice GREY.
 #        self.engineGlow = effects.FlickerCircle(self.view, (self.x, self.y), 2, 0.25, GREY)
 #        self.view.lowEffects.append(self.engineGlow) # ehhhgghsfkh
 #        self.engineGlow.visible = True

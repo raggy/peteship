@@ -1,4 +1,4 @@
-import pygame, random, math
+import pygame, random, math, misc
 
 try:
     import psyco
@@ -38,21 +38,48 @@ class AngleShield(Effect):
         self.view = view
         self.xy = xyAsTuple
         self.radius = radius
-        self.maxLifetime = self.lifetime = 15 + lifetimeMod
+        self.maxLifetime = self.lifetime = 25 + lifetimeMod
         self.maxColour = (150, 150, 150)
-        self.hitBy = hitBy
+        self.hitBy = hitBy # what were we hit by? Where the heck is it?
+        self.baseAngle = self.angleToXY(self.hitBy.x, self.hitBy.y)
+        print self.baseAngle 
+        print self.parent.x, self.parent.y
+        print self.hitBy.x, self.hitBy.y
+        self.startAngle = misc.normalisedAngle(self.baseAngle - 0.5)
+        self.endAngle = misc.normalisedAngle(self.baseAngle + 0.5)
+        del self.hitBy # remove the hitBy reference so we on't clog up the memory.
+
+    def angleToXY(self, x, y):
+        #calculate the angle from the referenced ships x, y to the
+        #given x,y point.
+        
+        # cheers ben! This one is specific to angle shield though.
+        if self.xy[1] - y > 0:
+            return misc.normalisedAngle(math.atan((self.xy[0]-x)/(y-self.xy[1])))
+        elif self.xy[1] - y == 0:
+            return misc.normalisedAngle(-math.atan(self.xy[0]-x))
+        else:
+            return misc.normalisedAngle(math.atan((self.xy[0]-x)/(y-self.xy[1]))+math.pi)
         
     def poll(self):
         self.lifetime -= 1
-        self.xy = (self.parent.x, self.parent.y)
+        self.xy = (self.parent.x, self.parent.y) # stick to the ship.
         
     def draw(self):
         if self.radius * self.view.zoom >= 2:
             self.colour = [(self.maxColour[0] / self.maxLifetime * self.lifetime),\
                            (self.maxColour[1] / self.maxLifetime * self.lifetime),\
                            (self.maxColour[2] / self.maxLifetime * self.lifetime)]
-            #self.colour = (200, 200, 200)
-            pygame.draw.circle(self.view.screen, self.colour, ((self.xy[0] - self.view.x) * self.view.zoom, (self.xy[1] - self.view.y) * self.view.zoom), self.radius * self.view.zoom, 1)
+            # old bubbleshield draw. testing purposes.
+#            pygame.draw.circle(self.view.screen, self.colour, ((self.xy[0] - self.view.x) * self.view.zoom, (self.xy[1] - self.view.y) * self.view.zoom), self.radius * self.view.zoom, 1)
+            pygame.draw.arc(self.view.screen, self.colour,\
+            # rectangle code. needs to be defined so it knows where to draw the arc. fassen rassen pygame. heh. we love you pygame!
+            pygame.Rect(\
+            ((self.parent.x - self.parent.radius) - self.view.x) * self.view.zoom,\
+            ((self.parent.y - self.parent.radius) - self.view.y) * self.view.zoom,\
+            (self.parent.radius * 2) * self.view.zoom,\
+            (self.parent.radius * 2) * self.view.zoom),\
+            self.startAngle, self.endAngle, 1) # last value width.
                 
 class BubbleShield(Effect):
     def __init__(self, parent, view, xyAsTuple, radius, lifetimeMod):
@@ -111,8 +138,18 @@ class FlickerCircle(Effect):
         self.speed = speed
         self.colour = colour
         self.lifetime = 1 # so that the effect can be removed on death easily.
+        self.wakeTimer = 10
+        self.wake = []
         
     def poll(self):
+# every 5 frames. see waketimer.
+        if self.wakeTimer == 0:
+            self.wake.append(StaticParticle(self.view, self.xy[0] + random.random()*self.maxSize - (self.maxSize / 2), self.xy[1] + random.random()*self.maxSize - (self.maxSize / 2), 50, (150, 150, 150)))
+            self.view.lowEffects.append(self.wake[len(self.wake) - 1])
+            self.wakeTimer = 10
+        else:
+            self.wakeTimer -= 1
+    
         if self.visible:
         # flicker size between the min & max. 
             if self.size >= self.maxSize:
