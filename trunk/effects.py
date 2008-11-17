@@ -69,7 +69,7 @@ class AngleShield(Effect):
         
     def draw(self):
         if self.radius * self.view.zoom >= 2:
-            self.colour = [(self.maxColour[0] / self.maxLifetime * self.lifetime),\ # work out a colour, fadestylei
+            self.colour = [(self.maxColour[0] / self.maxLifetime * self.lifetime),\
                            (self.maxColour[1] / self.maxLifetime * self.lifetime),\
                            (self.maxColour[2] / self.maxLifetime * self.lifetime)]
             # old bubbleshield draw. testing purposes.
