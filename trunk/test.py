@@ -9,7 +9,7 @@ except ImportError:
     pass
 
 
-GLOBAL_TESTSHIPS = 1 #Generic int for creating multiples of tsetingships.
+GLOBAL_TESTSHIPS = 25 #Generic int for creating multiples of tsetingships.
 
 map = maps.Map(1000, 1000, 500, 2) # 1000 x 1000 map with 500 resources and 2 players.
 view = views.View(1024, 600, pygame.FULLSCREEN, map)
@@ -30,14 +30,12 @@ for player in map.players:
         player.ships.append(ships.S1s1(view, player, (random.random()*map.width), (random.random()*map.height)))
         player.ships[len(player.ships) - 1].built = True
         player.ships[len(player.ships) - 1].launchers = [weapons.TestMissileLauncher(player.ships[len(player.ships) - 1], player.ships[len(player.ships) - 1].hardpoints[0])]
-    """
     player.ships.append(ships.S1s4(view, player, (random.random()*map.width), (random.random()*map.height)))
     player.ships[len(player.ships) - 1].built = True
     player.ships[len(player.ships) - 1].launchers = []
     for hardpoint in player.ships[len(player.ships) - 1].hardpoints:
         player.ships[len(player.ships) - 1].launchers.append(weapons.TestMissileLauncher(player.ships[len(player.ships) - 1], hardpoint))
         #ships[i].order = MoveToXY(ships[i], 100.0, 100.0)
-    """
 
 #for i in range(3):
 #    map.players[1].ships.append(ships.S1s6(view, map.players[1], (random.random() * view.width), (random.random() * view.height)))
