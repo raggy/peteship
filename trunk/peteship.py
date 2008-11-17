@@ -160,15 +160,15 @@ def main(view, map):
             for formation in player.formations:
                 formation.poll() # always needs to be done.
 
-            for ship in (player.ships + player.missiles): # Rev 43: Will work better when ships Idle properly. At the moment they stay with a move order.
+            for ship in (player.ships + player.missiles):
                 ship.poll();
                 if ship.x > view.lBound and ship.x < view.rBound and ship.y > view.tBound and ship.y < view.bBound:
                     ship.draw()
                     view.shipsOnScreen.append(ship) # Make a list of all ships on screen
 
             #Loop through the selected ships and draw their bounding box to highlight their selection
-            for sship in view.selectedShips:
-                sship.drawBounding()
+            for ship in view.selectedShips:
+                ship.drawBounding()
 
         if view.selecting: # If the player is currently holding down the left mouse button
             # Draw a nice box for selection

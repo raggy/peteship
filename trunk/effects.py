@@ -150,7 +150,7 @@ class FlickerCircle(Effect):
     def poll(self):
 # every 5 frames. see waketimer.
         if self.wakeTimer == 0:
-            self.wake.append(StaticBlockParticle(self.view, 2, self.xy[0] + random.random()*self.maxSize - (self.maxSize / 2), self.xy[1] + random.random()*self.maxSize - (self.maxSize / 2), 50, (150, 150, 150)))
+            self.wake.append(StaticBlockParticle(self.view, 1.5, self.xy[0] + random.random()*self.maxSize - (self.maxSize / 2), self.xy[1] + random.random()*self.maxSize - (self.maxSize / 2), 50, (150, 150, 150)))
             self.view.lowEffects.append(self.wake[len(self.wake) - 1])
             self.wakeTimer = 10
         else:
