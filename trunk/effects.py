@@ -34,18 +34,20 @@ class Effect():
                 
 class AngleShield(Effect):
     def __init__(self, parent, view, xyAsTuple, radius, lifetimeMod, hitBy):
-        self.parent = parent
-        self.view = view
-        self.xy = xyAsTuple
-        self.radius = radius
-        self.maxLifetime = self.lifetime = 25 + lifetimeMod
+        self.parent = parent #ship that got hit.
+        self.view = view #for drawing.
+        self.xy = xyAsTuple #xy of the shield. set the same as the parent.
+        self.radius = radius # yeap. not used. will tweak out later.
+        self.maxLifetime = self.lifetime = 25 + lifetimeMod # lifetime of the shield.
         self.maxColour = (150, 150, 150)
-        self.hitBy = hitBy # what were we hit by? Where the heck is it?
-        self.baseAngle = self.angleToXY(self.hitBy.x, self.hitBy.y)
+        self.hitBy = hitBy # what were we hit by? Where the heck is it? Pointer to the weapon that hit the parent
+        self.baseAngle = self.angleToXY(self.hitBy.x, self.hitBy.y) # middle of the arc. This is the angle to the weapon that hit the parent.
+        """ debug
         print self.baseAngle 
         print self.parent.x, self.parent.y
         print self.hitBy.x, self.hitBy.y
-        self.startAngle = misc.normalisedAngle(self.baseAngle - 0.5)
+        """
+        self.startAngle = misc.normalisedAngle(self.baseAngle - 0.5) # make it an arc. Checkout pygame.draw.arc (google: pygame draw)
         self.endAngle = misc.normalisedAngle(self.baseAngle + 0.5)
         del self.hitBy # remove the hitBy reference so we on't clog up the memory.
 
@@ -67,18 +69,19 @@ class AngleShield(Effect):
         
     def draw(self):
         if self.radius * self.view.zoom >= 2:
-            self.colour = [(self.maxColour[0] / self.maxLifetime * self.lifetime),\
+            self.colour = [(self.maxColour[0] / self.maxLifetime * self.lifetime),\ # work out a colour, fadestylei
                            (self.maxColour[1] / self.maxLifetime * self.lifetime),\
                            (self.maxColour[2] / self.maxLifetime * self.lifetime)]
             # old bubbleshield draw. testing purposes.
 #            pygame.draw.circle(self.view.screen, self.colour, ((self.xy[0] - self.view.x) * self.view.zoom, (self.xy[1] - self.view.y) * self.view.zoom), self.radius * self.view.zoom, 1)
             pygame.draw.arc(self.view.screen, self.colour,\
             # rectangle code. needs to be defined so it knows where to draw the arc. fassen rassen pygame. heh. we love you pygame!
+            # to see why, google: pygame draw
             pygame.Rect(\
-            ((self.parent.x - self.parent.radius) - self.view.x) * self.view.zoom,\
-            ((self.parent.y - self.parent.radius) - self.view.y) * self.view.zoom,\
-            (self.parent.radius * 2) * self.view.zoom,\
-            (self.parent.radius * 2) * self.view.zoom),\
+            ((self.parent.x - self.parent.shieldRadius) - self.view.x) * self.view.zoom,\
+            ((self.parent.y - self.parent.shieldRadius) - self.view.y) * self.view.zoom,\
+            (self.parent.shieldRadius * 2) * self.view.zoom,\
+            (self.parent.shieldRadius * 2) * self.view.zoom),\
             self.startAngle, self.endAngle, 1) # last value width.
                 
 class BubbleShield(Effect):
