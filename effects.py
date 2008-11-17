@@ -39,29 +39,32 @@ class AngleShield(Effect):
         self.xy = xyAsTuple #xy of the shield. set the same as the parent.
         self.radius = radius # yeap. not used. will tweak out later.
         self.maxLifetime = self.lifetime = 25 + lifetimeMod # lifetime of the shield.
-        self.maxColour = (150, 150, 150)
+        self.maxColour = (1, 150, 1)
         self.hitBy = hitBy # what were we hit by? Where the heck is it? Pointer to the weapon that hit the parent
-        self.baseAngle = self.angleToXY(self.hitBy.x, self.hitBy.y) # middle of the arc. This is the angle to the weapon that hit the parent.
-        """ debug
+        self.baseAngle = self.angleToXY(self.hitBy, self.parent) # middle of the arc. This is the angle to the weapon that hit the parent.
+        """ debug """
         print self.baseAngle 
         print self.parent.x, self.parent.y
         print self.hitBy.x, self.hitBy.y
-        """
-        self.startAngle = misc.normalisedAngle(self.baseAngle - 0.5) # make it an arc. Checkout pygame.draw.arc (google: pygame draw)
-        self.endAngle = misc.normalisedAngle(self.baseAngle + 0.5)
+
+        self.startAngle = self.baseAngle - 0.5 # make it an arc. Checkout pygame.draw.arc (google: pygame draw)
+        self.endAngle = self.baseAngle + 0.5
+ 
         del self.hitBy # remove the hitBy reference so we on't clog up the memory.
 
-    def angleToXY(self, x, y):
+    def angleToXY(self, v1, v2):
         #calculate the angle from the referenced ships x, y to the
         #given x,y point.
         
-        # cheers ben! This one is specific to angle shield though.
-        if self.xy[1] - y > 0:
-            return misc.normalisedAngle(math.atan((self.xy[0]-x)/(y-self.xy[1])))
-        elif self.xy[1] - y == 0:
-            return misc.normalisedAngle(-math.atan(self.xy[0]-x))
-        else:
-            return misc.normalisedAngle(math.atan((self.xy[0]-x)/(y-self.xy[1]))+math.pi)
+        return math.atan2( v1.x, v1.y ) - math.atan2( v2.x, v2.y );
+
+        #cheers ben! This one is specific to angle shield though.
+        # if self.xy[1] - y > 0:
+            # return misc.normalisedAngle(math.atan2((self.xy[0]-x)/(y-self.xy[1])))
+        # elif self.xy[1] - y == 0:
+            # return misc.normalisedAngle(-math.atan2(self.xy[0]-x))
+        # else:
+            # return misc.normalisedAngle(math.atan2((self.xy[0]-x)/(y-self.xy[1]))+math.pi)
         
     def poll(self):
         self.lifetime -= 1
@@ -81,6 +84,7 @@ class AngleShield(Effect):
             ((self.parent.x - self.parent.shieldRadius) - self.view.x) * self.view.zoom,\
             ((self.parent.y - self.parent.shieldRadius) - self.view.y) * self.view.zoom,\
             (self.parent.shieldRadius * 2) * self.view.zoom,\
+
             (self.parent.shieldRadius * 2) * self.view.zoom),\
             self.startAngle, self.endAngle, 1) # last value width.
                 
