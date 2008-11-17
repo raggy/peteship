@@ -160,7 +160,7 @@ class Ship():
         yCenter = ( self.y - self.view.y ) * self.view.zoom;
 
         #Calculate the scaled size
-        zSize = ( ( self.radius ) * self.view.zoom )
+        zSize = ( ( self.shieldRadius ) * self.view.zoom )
 
         #Calculate the minimum x for the bounding box
         xMin = xCenter - zSize
@@ -169,13 +169,20 @@ class Ship():
         #Calculate the minimum y for the bounding box
         yMin = yCenter - zSize
         yMax = yCenter + zSize
+        
+        #Draw bounding circle
+        
+        pygame.draw.circle(self.view.screen, misc.MIDGREEN, ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom), (self.shieldRadius + 2) * self.view.zoom, 1)
 		
+        """
         #Draw bounding box of object
-        pygame.draw.line(self.view.screen, misc.RED, ( xMin, yMax ), ( xMax, yMax ) )
-        pygame.draw.line(self.view.screen, misc.RED, ( xMax, yMax ), ( xMax, yMin ) )
-        pygame.draw.line(self.view.screen, misc.RED, ( xMax, yMin ), ( xMin, yMin ) )
-        pygame.draw.line(self.view.screen, misc.RED, ( xMin, yMin ), ( xMin, yMax ) )
-
+        
+        pygame.draw.line(self.view.screen, misc.GREY, ( xMin, yMax ), ( xMax, yMax ),2 )
+        pygame.draw.line(self.view.screen, misc.GREY, ( xMax, yMax ), ( xMax, yMin ),2 )
+        pygame.draw.line(self.view.screen, misc.GREY, ( xMax, yMin ), ( xMin, yMin ),2 )
+        pygame.draw.line(self.view.screen, misc.GREY, ( xMin, yMin ), ( xMin, yMax ),2 )
+        """
+        
         # SPECIFC SHIP CLASSES START HERE ! ! ! !  ! !  ! !  !   ! !  ! !  ! !  ! ! !  ! !  !
 
 class S1s1(Ship):
