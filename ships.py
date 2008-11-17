@@ -268,7 +268,7 @@ class S1s4(Ship):
     """ Spear class cruiser """
     health = 50
     radius = 20
-    shieldRadius = 15
+    shieldRadius = 22
     #buildInfo
     buildCost = 50
     buildTime = 1000
