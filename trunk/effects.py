@@ -150,7 +150,7 @@ class FlickerCircle(Effect):
     def poll(self):
 # every 5 frames. see waketimer.
         if self.wakeTimer == 0:
-            self.wake.append(StaticBlockParticle(self.view, 1.5, self.xy[0] + random.random()*self.maxSize - (self.maxSize / 2), self.xy[1] + random.random()*self.maxSize - (self.maxSize / 2), 50, (150, 150, 150)))
+            self.wake.append(StaticBlockParticle(self.view, 1, self.xy[0] + random.random()*self.maxSize - (self.maxSize / 2), self.xy[1] + random.random()*self.maxSize - (self.maxSize / 2), 50, (150, 150, 150)))
             self.view.lowEffects.append(self.wake[len(self.wake) - 1])
             self.wakeTimer = 10
         else:
@@ -233,9 +233,11 @@ class BlockParticle(Particle):
         self.y >= self.view.y and\
         self.y <= self.view.y + self.view.height / self.view.zoom: # If particle is on screen
             # dot draw code.
-            #pygame.draw.line(self.view.screen, self.colour, ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom), ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom)) # Draw it
-            self.square = pygame.Rect(((self.x - self.size) - self.view.x) * self.view.zoom, ((self.y - self.size) - self.view.y) * self.view.zoom, self.size2, self.size2)
-            pygame.draw.rect(self.view.screen, self.colour, self.square, 0)
+            if self.size2 * self.view.zoom < 2:
+                self.view.screen.set_at(((self.x - self.view.x) * self.view.zoom, (self.y -self.view.y) * self.view.zoom), self.colour)
+            else:
+                self.square = pygame.Rect(((self.x - self.size) - self.view.x) * self.view.zoom, ((self.y - self.size) - self.view.y) * self.view.zoom, self.size2 * self.view.zoom, self.size2 * self.view.zoom)
+                pygame.draw.rect(self.view.screen, self.colour, self.square, 0)
         
 class StaticParticle(Particle):
     
@@ -262,7 +264,7 @@ class StaticBlockParticle(StaticParticle):
         self.x = x
         self.y = y
         self.size = size
-        self.size2 = self.size * 2
+        self.size2 = self.size * 2  
         self.maxlife = self.lifetime = lifetime #lollercaust 
         self.maxColour = colour
         
@@ -272,9 +274,11 @@ class StaticBlockParticle(StaticParticle):
         self.y >= self.view.y and\
         self.y <= self.view.y + self.view.height / self.view.zoom: # If particle is on screen
             # dot draw code.
-            #pygame.draw.line(self.view.screen, self.colour, ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom), ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom)) # Draw it
-            self.square = pygame.Rect(((self.x - self.size) - self.view.x) * self.view.zoom, ((self.y - self.size) - self.view.y) * self.view.zoom, self.size2, self.size2)
-            pygame.draw.rect(self.view.screen, self.colour, self.square, 0)
+            if self.size2 * self.view.zoom < 2:
+                self.view.screen.set_at(((self.x - self.view.x) * self.view.zoom, (self.y -self.view.y) * self.view.zoom), self.colour)
+            else:
+                self.square = pygame.Rect(((self.x - self.size) - self.view.x) * self.view.zoom, ((self.y - self.size) - self.view.y) * self.view.zoom, self.size2 * self.view.zoom, self.size2 * self.view.zoom)
+                pygame.draw.rect(self.view.screen, self.colour, self.square, 0)
         
 class ExplosionShip(Effect):
     
@@ -287,7 +291,7 @@ class ExplosionShip(Effect):
         self.view      = view
         for i in range(particles):
             randomColour = random.random() * 255
-            self.particles.append(BlockParticle(self.view, 1, (random.random() * math.pi * 2), ((random.random() * 2) - 1) * ship.radius + ship.x, ((random.random() * 2) - 1) * ship.radius + ship.y, self.lifetime, (randomColour, randomColour, randomColour))) #(random.random() * 255, random.random() * 255, random.random() * 255)))
+            self.particles.append(BlockParticle(self.view, 0.5, (random.random() * math.pi * 2), ((random.random() * 2) - 1) * ship.radius + ship.x, ((random.random() * 2) - 1) * ship.radius + ship.y, self.lifetime, (randomColour, randomColour, randomColour))) #(random.random() * 255, random.random() * 255, random.random() * 255)))
     def poll(self):
         for particle in self.particles:
             particle.poll()

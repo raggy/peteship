@@ -14,7 +14,7 @@ class View:
     zoom                 = 1.0
     tBound = bBound = lBound = rBound = 0
 
-    selecting = False
+    selecting =      False
     selectedShips = []
     shipsOnScreen = []
 
@@ -90,6 +90,19 @@ class View:
         else:
             self.y += y
         self.calcBounds() # Call calcBounds() because the view changed
+        
+class Button:
+    """
+    class to create the inteface with
+    """
+    def __init__(self, view, rect):
+        self.view = view
+        self.shape = rect
+        self.clicked = False
+        
+    def draw(self):
+        #pygame.draw.rect
+        pass
 
 class MiniMap:
 
