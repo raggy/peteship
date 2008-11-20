@@ -10,7 +10,7 @@ except ImportError:
 
 def main(view, map):
     clock = pygame.time.Clock()
-    keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_a:False,pygame.K_SPACE:False,pygame.K_w:False,pygame.K_s:False,pygame.K_d:False,pygame.K_1:False,pygame.K_2:False}
+    keysHeld = {pygame.K_UP:False,pygame.K_DOWN:False,pygame.K_LEFT:False,pygame.K_RIGHT:False,pygame.K_ESCAPE:False,pygame.K_q:False,pygame.K_a:False,pygame.K_SPACE:False,pygame.K_w:False,pygame.K_s:False,pygame.K_d:False,pygame.K_1:False,pygame.K_2:False,pygame.K_o:False,pygame.K_l:False}
     running = True
     currentPlayer = map.players[0]
 
@@ -120,11 +120,19 @@ def main(view, map):
         if keysHeld[pygame.K_a]:
             view.zoomOutBy(1.05)
             
-        if keysHeld[pygame.K_s]:
+        if keysHeld[pygame.K_l]:
             view.minimap.resize(-4, -4)
             
-        if keysHeld[pygame.K_w]:
+        if keysHeld[pygame.K_o]:
             view.minimap.resize(4, 4)
+            
+        if keysHeld[pygame.K_w]:
+            print "Key W currently unbound."
+
+        if keysHeld[pygame.K_s]:
+            if len(view.selectedShips) > 0:
+                for ship in view.selectedShips:
+                    ship.setOrder(orders.Idle())
         
         if keysHeld[pygame.K_d]:
             for ship in view.selectedShips:
