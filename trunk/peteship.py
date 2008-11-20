@@ -29,9 +29,20 @@ def main(view, map):
         for event in pygame.event.get(pygame.MOUSEBUTTONDOWN): # Loop through all MOUSEBUTTONDOWN events on the buffer
             if event.dict['button'] == 1: # If left mouse button clicked
                 # then ask any ships if they're going to be selected
-                #Testing new box select    
-                view.selStartPos = view.selEndPos = event.dict['pos']
-                view.selecting = True
+                #Testing new box select
+                flag = False
+                for item in view.interface:
+                    # check for clicks.
+                    if  event.dict['pos'][0] >= (item.shape.left) and\
+                        event.dict['pos'][0] <= (item.shape.right) and\
+                        event.dict['pos'][1] >= (item.shape.top) and\
+                        event.dict['pos'][1] <= (item.shape.bottom): # If player clicked on this ship
+                            item.click()
+                            flag = True
+                            print view.selectedShips
+                if flag == False:    
+                    view.selStartPos = view.selEndPos = event.dict['pos']
+                    view.selecting = True
             elif (event.dict['button'] == 2) or (event.dict['button'] == 3): # If right mouse button clicked
                 if (event.dict['pos'][0] / view.zoom) + view.x >= 0.0 and\
                 (event.dict['pos'][1] / view.zoom) + view.y >= 0.0 and\
@@ -70,6 +81,7 @@ def main(view, map):
             """
         for event in pygame.event.get(pygame.MOUSEBUTTONUP):
             if event.dict['button'] == 1:
+                # loop through and check that the interface hasn't been clicked
                 view.selectedShips = []
                 view.selecting = False
                 view.selEndPos = event.dict['pos']
@@ -187,14 +199,14 @@ def main(view, map):
                effect.draw()
 		
 		# draw map boundary.s
-        if view.height / view.zoom > map.height: # If the player view is taller than the map height
+        #if view.height / view.zoom > map.height: # If the player view is taller than the map height # eff off map boundary checks!
             # Draw horizontal edges
-            pygame.draw.line(view.screen, misc.WHITE, ((-view.x) * view.zoom, (-view.y) * view.zoom), ((map.width - view.x) * view.zoom, (-view.y) * view.zoom))
-            pygame.draw.line(view.screen, misc.WHITE, ((map.width - view.x) * view.zoom,(map.height - view.y) * view.zoom), ((-view.x) * view.zoom,(map.height - view.y) * view.zoom))
-        if view.width / view.zoom > map.width: # If the player view is wider than the map width
+        pygame.draw.line(view.screen, misc.WHITE, ((-view.x) * view.zoom, (-view.y) * view.zoom), ((map.width - view.x) * view.zoom, (-view.y) * view.zoom))
+        pygame.draw.line(view.screen, misc.WHITE, ((map.width - view.x) * view.zoom,(map.height - view.y) * view.zoom), ((-view.x) * view.zoom,(map.height - view.y) * view.zoom))
+        #if view.width / view.zoom > map.width: # If the player view is wider than the map width
             # Draw vertical edges
-            pygame.draw.line(view.screen, misc.WHITE, ((map.width - view.x) * view.zoom, (-view.y) * view.zoom), ((map.width - view.x) * view.zoom,(map.height - view.y) * view.zoom))
-            pygame.draw.line(view.screen, misc.WHITE, ((-view.x) * view.zoom,(map.height - view.y) * view.zoom), ((-view.x) * view.zoom, (-view.y) * view.zoom))        
+        pygame.draw.line(view.screen, misc.WHITE, ((map.width - view.x) * view.zoom, (-view.y) * view.zoom), ((map.width - view.x) * view.zoom,(map.height - view.y) * view.zoom))
+        pygame.draw.line(view.screen, misc.WHITE, ((-view.x) * view.zoom,(map.height - view.y) * view.zoom), ((-view.x) * view.zoom, (-view.y) * view.zoom))        
 
 
         # Draw minimap
@@ -249,6 +261,10 @@ def main(view, map):
 #            ship.colour = misc.GREEN
 #            ship.draw()
 #            ship.colour = ship.player.colour
+
+        # draw the interface.
+        for item in view.interface:
+            item.draw()
 
         pygame.display.flip()
 

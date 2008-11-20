@@ -22,6 +22,7 @@ class View:
 
     effects = []
     lowEffects = [] # Effects to be drawn underneath the ships
+    interface = [] # interface to be drawn finally.
     
     drawStars = True # Are we drawing stars?
     drawContrails = True # drawing contrails or not? detail option.
@@ -75,16 +76,16 @@ class View:
         """
         if self.width / self.zoom > self.map.width:
             self.x = (self.map.width - (self.width / self.zoom)) / 2
-        elif self.x + x < 0.0:
-            self.x = 0.0
+        elif self.x + x < -100.0:
+            self.x = -100.0
         elif self.x + x > self.map.width - self.width / self.zoom:
             self.x = self.map.width - self.width / self.zoom
         else:
             self.x += x
         if self.height / self.zoom > self.map.height:
             self.y = (self.map.height - (self.height / self.zoom)) / 2
-        elif self.y + y < 0.0:
-            self.y = 0.0
+        elif self.y + y < -100.0:
+            self.y = -100.0
         elif self.y + y > self.map.height - self.height / self.zoom:
             self.y = self.map.height - self.height / self.zoom
         else:
@@ -99,11 +100,28 @@ class Button:
         self.view = view
         self.shape = rect
         self.clicked = False
-        
-    def draw(self):
-        #pygame.draw.rect
-        pass
+        # add self to the interface list.
+        self.view.interface.append(self)
 
+    def draw(self):
+        if self.clicked:
+            pygame.draw.rect(self.view.screen, misc.GREY, self.shape, 2)
+        else:
+            pygame.draw.rect(self.view.screen, misc.WHITE, self.shape, 2)
+            
+class BuildButton(Button):
+    def __init__(self, view, rect, ship):
+        Button.__init__(self, view, rect)
+        self.ship = ship
+        
+    def click(self):
+        if len(self.view.selectedShips) > 1:
+            # more than one ship? at the moment selects first ship... should it have different behaviour?
+           self.view.selectedShips = [self.view.selectedShips[0]]
+        else:
+            # assign a build order.
+            self.view.selectedShips[0].addToBuildQueue(self.ship)
+            
 class MiniMap:
 
     def __init__(self, view, map):

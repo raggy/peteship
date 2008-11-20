@@ -171,7 +171,6 @@ class Ship():
         yMax = yCenter + zSize
         
         #Draw bounding circle
-        
         pygame.draw.circle(self.view.screen, misc.MIDGREEN, ((self.x - self.view.x) * self.view.zoom, (self.y - self.view.y) * self.view.zoom), (self.shieldRadius + 2) * self.view.zoom, 1)
 		
         """
@@ -382,7 +381,7 @@ class S1s6(Ship):
 
     health = 40
 
-    radius = 12
+    radius = 25
 
     rotateSpeed = 0.004
     speed = 0.1
@@ -435,5 +434,5 @@ class S1s6(Ship):
                 self.buildShip.justBuilt()
                 self.building = False            
 
-    def addToBuildQueue(self): #Currently only produces triangles. only works on buildships.
-        self.buildQueue.append(S1s1(self.view, self.player, self.buildPoints[0][0], self.buildPoints[0][1])) # Pete, you forgot the self. prefix
+    def addToBuildQueue(self, ship): #Currently only produces triangles. only works on buildships.
+        self.buildQueue.append(ship(self.view, self.player, self.buildPoints[0][0], self.buildPoints[0][1])) # Pete, you forgot the self. prefix
