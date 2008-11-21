@@ -1,4 +1,4 @@
-import math
+import math, pygame
 
 try:
     import psyco
@@ -20,6 +20,12 @@ DARKGREY = 50, 50, 50
 GUINESS  = 20, 10, 10
 RESOURCEBROWN = 128, 64, 0
 EXPLOSIONRED = 120, 0, 0
+
+pygame.font.init()
+BASICFONT = pygame.font.Font(None, 12) # default font size 12
+
+def drawText(screen, x, y, colour, text):
+    screen.blit(BASICFONT.render(text, True, colour), (x, y))
 
 def positive(number):
     #Convert negative numbers to their positive equivalent.
