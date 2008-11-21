@@ -69,10 +69,10 @@ def main(view, map):
                     elif shipAtCursor.player != currentPlayer: # attack order
                         if pygame.KMOD_SHIFT & pygame.key.get_mods():
                             for ship in view.selectedShips:
-                                ship.queueOrder(orders.Attack(shipAtCursor, 200))
+                                ship.queueOrder(orders.FrontalAttack(shipAtCursor, 200))
                         else:
                             for ship in view.selectedShips:
-                                ship.setOrder(orders.Attack(shipAtCursor, 200))
+                                ship.setOrder(orders.FrontalAttack(shipAtCursor, 200))
                                 
                     else: # follow order
                         if pygame.KMOD_SHIFT & pygame.key.get_mods():
@@ -144,7 +144,7 @@ def main(view, map):
         if keysHeld[pygame.K_s]:
             if len(view.selectedShips) > 0:
                 for ship in view.selectedShips:
-                    ship.setOrder(orders.Idle())
+                    ship.setOrder(orders.Idle(ship))
         
         if keysHeld[pygame.K_d]:
             for ship in view.selectedShips:
