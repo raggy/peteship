@@ -285,6 +285,8 @@ def main(view, map):
         # draw the interface.
         for item in view.interface:
             item.draw()
+        
+        misc.drawText(view.screen, 10, 70, misc.WHITE, "TEST")
 
         pygame.display.flip()
 
