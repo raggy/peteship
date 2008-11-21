@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.5
 
-import peteship, players, ships, formations, random, orders, misc, effects, weapons, views, maps, pygame, psyco
+import peteship, players, ships, formations, random, orders, misc, effects, weapons, views, maps, pygame, psyco, sys
 
 try:
     import psyco
@@ -8,11 +8,19 @@ try:
 except ImportError:
     pass
 
+if len(sys.argv) > 1:
+    fullscreen = int(sys.argv[1])
+else:
+    fullscreen = 1
 
 GLOBAL_TESTSHIPS = 25 #Generic int for creating multiples of tsetingships.
 
 map = maps.Map(1000, 1000, 500, 2) # 1000 x 1000 map with 500 resources and 2 players.
-view = views.View(1024, 600, pygame.FULLSCREEN, map)
+
+if fullscreen == 0:
+    view = views.View(1024, 600, 0, map)
+else:
+    view = views.View(1024, 600, pygame.FULLSCREEN, map)
 
 #player.ships.append(ships.S1s6(player, (player.width/2), (player.height/2)))
 #player.ships[0].built = True
