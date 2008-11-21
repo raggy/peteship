@@ -50,26 +50,38 @@ def main(view, map):
                 (event.dict['pos'][1] / view.zoom) + view.y <= map.height: # If player clicked somewhere on the map
                     #shipAtCursor = player.shipOnScreenAtXY(event.dict['pos'][0], event.dict['pos'][1])
                     shipAtCursor = False
+                    
                     for ship in view.shipsOnScreen:
                         if event.dict['pos'][0] >= (ship.x - ship.radius - view.x) * view.zoom and\
                         event.dict['pos'][0] <= (ship.x + ship.radius - view.x) * view.zoom and\
                         event.dict['pos'][1] >= (ship.y - ship.radius - view.y) * view.zoom and\
                         event.dict['pos'][1] <= (ship.y + ship.radius - view.y) * view.zoom:
                             shipAtCursor = ship
-                    if shipAtCursor == False:
+                            
+                    if shipAtCursor == False: # move.
                         if pygame.KMOD_SHIFT & pygame.key.get_mods():
                             for ship in view.selectedShips:
                                 ship.queueOrder(orders.MoveToXY((float(event.dict['pos'][0])/ view.zoom + view.x), (float(event.dict['pos'][1])) / view.zoom + view.y))
                         else:
                             for ship in view.selectedShips:
                                 ship.setOrder(orders.MoveToXY((float(event.dict['pos'][0])/ view.zoom + view.x), (float(event.dict['pos'][1])) / view.zoom + view.y))
-                    else:
+                                
+                    elif shipAtCursor.player != currentPlayer: # attack order
+                        if pygame.KMOD_SHIFT & pygame.key.get_mods():
+                            for ship in view.selectedShips:
+                                ship.queueOrder(orders.Attack(shipAtCursor, 200))
+                        else:
+                            for ship in view.selectedShips:
+                                ship.setOrder(orders.Attack(shipAtCursor, 200))
+                                
+                    else: # follow order
                         if pygame.KMOD_SHIFT & pygame.key.get_mods():
                             for ship in view.selectedShips:
                                 ship.queueOrder(orders.MoveToShip(shipAtCursor))
                         else:
                             for ship in view.selectedShips:
                                 ship.setOrder(orders.MoveToShip(shipAtCursor))
+                                
             elif (event.dict['button'] == 4):
                 view.zoomInBy(1.05)
             elif (event.dict['button'] == 5):
@@ -174,7 +186,7 @@ def main(view, map):
         for ship in currentPlayer.ships:
             ship.drawOrders()
        
-        # SHIP CALCULATIONS START HERE.s
+        # SHIP CALCULATIONS START HERE.
         view.shipsOnScreen = []
         for player in map.players:
             for formation in player.formations:
