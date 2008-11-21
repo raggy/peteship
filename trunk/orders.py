@@ -17,7 +17,10 @@ class Order():
         pass
 
 class Idle(Order):
-    # do nothing. 
+    # do nothing.
+    def __init__(self, ship):
+        ship.moving = False #!
+        
     def poll(self):
         pass
 
@@ -74,9 +77,8 @@ class MoveToShip(MoveToXY):
 class MoveToTarget(MoveToShip):
     """
     Essentially like MoveToShip except that if
-    target ship dies then it just move forward
+    target ship dies then it just moves forward
     """
-
     def poll(self):
         if self.target.dead:
             self.lostTarget()
@@ -139,3 +141,28 @@ class Attack(MoveToShip):
         else:
             self.ship.setOrder(Attack(self.ship.player.enemyShipClosestToXY(self.ship.x, self.ship.y), self.range)) # Acquire new target
 #            self.ship.nextOrder()
+
+class FrontalAttack(MoveToShip):
+    """
+    Ship moves within range and then noses to target.
+    """
+    
+    colour = (50, 0, 0) # Dark red
+    
+    def __init__(self, target, range):
+        self.target = target
+        self.x, self.y = self.target.x, self.target.y
+        self.range = range
+        
+    def poll(self):
+        self.x, self.y = self.target.x, self.target.y
+        if not self.target.dead: # If target isn't dead
+            if self.ship.distanceFrom(self.target.x, self.target.y) > self.range: # If not yet within range
+                self.moveTowards(self.x, self.y)                             # Move closer
+                self.angleToXY = self.ship.angleToXY(self.x, self.y)
+                self.rotateTowards(self.x, self.y)
+            else:   # rotate to the enemy ship.
+                self.angleToXY = self.ship.angleToXY(self.x, self.y)
+                self.rotateTowards(self.x, self.y)
+        else:
+            self.ship.setOrder(Attack(self.ship.player.enemyShipClosestToXY(self.ship.x, self.ship.y), self.range)) # Acquire new target

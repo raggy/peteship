@@ -28,14 +28,14 @@ class Ship():
         self.colour = self.player.colour
         self.x, self.y = x, y
         self.shieldRadius = self.radius + 2
-        self.orders = [orders.Idle()]
+        self.orders = [orders.Idle(self)]
         self.moving = False
         self.built = False
         self.calcPoints()
         self.calcExtras() # Stuff that isn't points but needs to be calced.
         
     def drawShield(self, hitBy):
-        self.view.effects.append(effects.BubbleShield(self, self.view, (self.x, self.y), self.radius + 2, 0))
+        self.view.effects.append(effects.BubbleShield(self, self.view, (self.x, self.y), self.shieldRadius, 0))
         #self.view.effects.append(effects.AngleShield(self, self.view, (self.x, self.y), self.radius + 2, 0, hitBy))
         
     def damaged(self, amount, hitBy):
@@ -127,7 +127,7 @@ class Ship():
         self.orders.pop(0)
         if len(self.orders) == 0:
             self.moving = False
-            self.orders.append(orders.Idle())
+            self.orders.append(orders.Idle(self))
 
     def queueOrder(self, order):
         if len(self.orders) > 0:
@@ -144,7 +144,7 @@ class Ship():
             self.orders = [order]
             self.orders[0].setShip(self)
         else:
-            self.orders = [orders.Idle(), order]
+            self.orders = [orders.Idle(self), order]
             self.orders[1].setShip(self)
 
     def justBuilt(self):
@@ -238,7 +238,8 @@ class S1s1(Ship):
         # update the xy.
         if self.moving:
             self.engineFlicker.xy = self.enginePoint
-            self.engineFlicker.visible = True
+            self.engineFlicker.visible = True # this could be handled in the poll of the FlickerCircle.
+                                              # but it would be less offscreen efficient - this only gets polled when onscreen.
         else:
             self.engineFlicker.visible = False
         i = 0
@@ -408,7 +409,7 @@ class S1s6(Ship):
         self.calcExtras()
         if self.building == False and len(self.buildQueue) > 0:
             self.buildShip = self.buildQueue.pop(0)
-            self.buildShip.orders = [orders.Idle()]
+            self.buildShip.orders = [orders.Idle(self)]
             self.buildShip.rotation = self.rotation
             self.player.resources -= self.buildShip.buildCost
             self.buildTimeRemaining = self.buildShip.buildTime

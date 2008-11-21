@@ -149,6 +149,10 @@ class State():
     def getFriendlyTarget(self):
         pass
         
+class HoldFire(State):
+    def poll(self):
+        pass # do NOTHING.
+        
 class Idle(State):
     # sit in place and fire at passing ships.
     def poll(self):
