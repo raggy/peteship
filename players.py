@@ -18,6 +18,7 @@ class Player():
         self.startX, self.startY = startPoint()
         self.resources = startingResources
         self.ships = []
+        self.buildShips = [] # handy list for interface & game conditions.
         self.formations = []
         self.missiles = []
 

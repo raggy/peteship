@@ -38,7 +38,9 @@ def main(view, map):
                         event.dict['pos'][1] >= (item.shape.top) and\
                         event.dict['pos'][1] <= (item.shape.bottom): # If player clicked on this ship
                             item.click()
+                            print " Getting double clicks here? wtf?"
                             flag = True
+                            view.selStartPos = view.selEndPos = event.dict['pos']
                 if flag == False:    
                     view.selStartPos = view.selEndPos = event.dict['pos']
                     view.selecting = True
@@ -229,6 +231,7 @@ def main(view, map):
 
 
         # Draw interface. This includes the minimap.
+        view.panel.draw()
         for item in view.interface:            
             item.draw()
         

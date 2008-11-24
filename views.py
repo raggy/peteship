@@ -22,6 +22,7 @@ class View:
 
     effects = []
     lowEffects = [] # Effects to be drawn underneath the ships
+    panel = False
     interface = []
 
     drawStars = True # Are we drawing stars?
@@ -34,7 +35,7 @@ class View:
         self.screen = pygame.display.set_mode((self.width, self.height), flags) # Initialise the pygame surface
         self.map = map
         self.minimap = MiniMap(self, self.map)
-        self.interface.append(Panel(self))
+        self.panel = Panel(self)
         self.panBy(0, 0)
         for i in xrange(self.map.area / 10000): # Generate a list of stars consisting of a tuple of (x, y, colour, depth)
             depth = random.random() * 0.5 + 0.5
@@ -68,8 +69,11 @@ class View:
         """
         Zoom out from the map by 'zoom'
         """
-        self.zoom = self.zoom / zoom # Zoom out
-        self.panBy(((self.width / (self.zoom * zoom) - self.width / self.zoom) / 2), ((self.height / (self.zoom * zoom) - self.height / self.zoom) / 2)) # Recentre the view
+        if self.zoom / zoom < 0.1:
+            pass
+        else:
+            self.zoom = self.zoom / zoom # Zoom out
+            self.panBy(((self.width / (self.zoom * zoom) - self.width / self.zoom) / 2), ((self.height / (self.zoom * zoom) - self.height / self.zoom) / 2)) # Recentre the view
     
     def panBy(self, x, y):
         """
@@ -79,8 +83,8 @@ class View:
             self.x = (self.map.width - (self.width / self.zoom)) / 2
         elif self.x + x < -100.0:
             self.x = -100.0
-        elif self.x + x > self.map.width + 200 - self.width / self.zoom:
-            self.x = self.map.width + 200 - self.width / self.zoom
+        elif self.x + x > self.map.width + 300 - self.width / self.zoom:
+            self.x = self.map.width + 300 - self.width / self.zoom
         else:
             self.x += x
         if self.height / self.zoom > self.map.height:
@@ -111,7 +115,7 @@ class Panel:
         
     def draw(self):
         pygame.draw.rect(self.view.screen, (15, 15, 15), self.shape)
-        pygame.draw.line(self.view.screen, misc.WHITE, ((self.view.width - 110), 0), ((self.view.width - 110), self.view.height), 2)
+        pygame.draw.rect(self.view.screen, misc.GREY, self.shape, 2)
         self.mm.draw()
         
     def click(self):
@@ -132,6 +136,7 @@ class Button:
     def draw(self):
         if self.clicked:
             pygame.draw.rect(self.view.screen, misc.GREY, self.shape, 2)
+            self.clicked = False
         else:
             pygame.draw.rect(self.view.screen, misc.WHITE, self.shape, 2)
             
@@ -146,13 +151,26 @@ class SelectBuildButton(Button):
     def setShip(self, ship):
         self.ship = ship
         
+    def draw(self):
+        if self.clicked:
+            pygame.draw.rect(self.view.screen, misc.GREY, self.shape, 2)
+            if self.ship == False:
+                pygame.draw.line(self.view.screen, misc.GREY, (self.shape.x, self.shape.y), (self.shape.x + self.shape.height, self.shape.y + self.shape.width))
+            self.clicked = False
+        else:
+            if self.ship == False:
+                pygame.draw.line(self.view.screen, misc.GREY, (self.shape.x, self.shape.y), (self.shape.x + self.shape.height, self.shape.y + self.shape.width))
+            pygame.draw.rect(self.view.screen, misc.WHITE, self.shape, 2)
+        
     def click(self):
+        self.clicked = True
         if self.ship == False:
             pass # nothing
         else:
-            if self.view.selectedShips[0] == self.ship:
-                # goto that ship...
-                pass
+            if len(self.view.selectedShips) > 0:
+                if self.view.selectedShips[0] == self.ship:
+                    # goto that ship...
+                    pass
             else:
                 self.view.selectedShips = [self.ship]
     
@@ -178,7 +196,7 @@ class MiniMap:
         self.view = view
         self.map = map
         self.border = pygame.Rect(self.view.x, self.view.y, 10, 10) # Rectangle representing the screen
-        self.boundary = pygame.Rect(self.view.width - 60, 10 * self.map.height / self.map.width - 10, 50, 50 * self.map.height / self.map.width) # Rectangle representing the map
+        self.boundary = pygame.Rect(self.view.width - 105, 20 * self.map.height / self.map.width - 10, 100, 80 * self.map.height / self.map.width) # Rectangle representing the map
 
     def update(self):
         """
