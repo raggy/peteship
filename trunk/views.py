@@ -44,7 +44,7 @@ class View:
         self.tBound = self.y - 10 # 10 is the biggest radius so far, will replace when we have more ships.
         self.bBound = self.y + 10 + self.height / self.zoom # same kinda thing
         self.lBound = self.x - 10
-        self.rBound = self.x + 10 + self.width / self.zoom
+        self.rBound = self.x - 70 + self.width / self.zoom # accounts for 110 pixels of panel.
 
     """def focusOn(self, x, y):
         self.x = (x - (self.width / 2)) / self.zoom
@@ -79,8 +79,8 @@ class View:
             self.x = (self.map.width - (self.width / self.zoom)) / 2
         elif self.x + x < -100.0:
             self.x = -100.0
-        elif self.x + x > self.map.width - self.width / self.zoom:
-            self.x = self.map.width - self.width / self.zoom
+        elif self.x + x > self.map.width + 200 - self.width / self.zoom:
+            self.x = self.map.width + 200 - self.width / self.zoom
         else:
             self.x += x
         if self.height / self.zoom > self.map.height:
@@ -99,16 +99,18 @@ class Panel:
     def __init__(self, view):
         self.view = view
         self.mm = self.view.minimap
-        self.shape = pygame.Rect(self.view.width - 110, 0, 100, self.view.height)
+        self.shape = pygame.Rect(self.view.width - 110, 0, 110, self.view.height)
         # first row of build ship select buttons
-        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 5, 70, 30, 30)))
-        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 40, 70, 30, 30)))
-        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 75, 70, 30, 30)))
+        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 5, 100, 30, 30)))
+        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 40, 100, 30, 30)))
+        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 75, 100, 30, 30)))
         # second row of build ship select buttons. Max buildships is 6
-        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 5, 105, 30, 30)))
-        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 40, 105, 30, 30)))
-        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 75, 105, 30, 30)))
+        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 5, 135, 30, 30)))
+        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 40, 135, 30, 30)))
+        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 75, 135, 30, 30)))
+        
     def draw(self):
+        pygame.draw.rect(self.view.screen, (15, 15, 15), self.shape)
         pygame.draw.line(self.view.screen, misc.WHITE, ((self.view.width - 110), 0), ((self.view.width - 110), self.view.height), 2)
         self.mm.draw()
         
