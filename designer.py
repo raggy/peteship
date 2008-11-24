@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.5
+ #!/usr/bin/env python2.5
 
 import os, sys, pygame, math
 

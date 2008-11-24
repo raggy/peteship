@@ -22,8 +22,8 @@ class View:
 
     effects = []
     lowEffects = [] # Effects to be drawn underneath the ships
-    interface = [] # interface to be drawn finally.
-    
+    interface = []
+
     drawStars = True # Are we drawing stars?
     drawContrails = True # drawing contrails or not? detail option.
     drawMiniMap = True # Are we displaying the minimap?
@@ -34,6 +34,7 @@ class View:
         self.screen = pygame.display.set_mode((self.width, self.height), flags) # Initialise the pygame surface
         self.map = map
         self.minimap = MiniMap(self, self.map)
+        self.interface.append(Panel(self))
         self.panBy(0, 0)
         for i in xrange(self.map.area / 10000): # Generate a list of stars consisting of a tuple of (x, y, colour, depth)
             depth = random.random() * 0.5 + 0.5
@@ -92,6 +93,29 @@ class View:
             self.y += y
         self.calcBounds() # Call calcBounds() because the view changed
         
+class Panel:
+    """ interface surrounding bit. """
+    #currently very hardcoded. No reason to change that imho.
+    def __init__(self, view):
+        self.view = view
+        self.mm = self.view.minimap
+        self.shape = pygame.Rect(self.view.width - 110, 0, 100, self.view.height)
+        # first row of build ship select buttons
+        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 5, 70, 30, 30)))
+        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 40, 70, 30, 30)))
+        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 75, 70, 30, 30)))
+        # second row of build ship select buttons. Max buildships is 6
+        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 5, 105, 30, 30)))
+        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 40, 105, 30, 30)))
+        self.view.interface.append(SelectBuildButton(self.view, pygame.Rect(self.shape.left + 75, 105, 30, 30)))
+    def draw(self):
+        pygame.draw.line(self.view.screen, misc.WHITE, ((self.view.width - 110), 0), ((self.view.width - 110), self.view.height), 2)
+        self.mm.draw()
+        
+    def click(self):
+        pass
+        
+        
 class Button:
     """
     class to create the inteface with
@@ -109,7 +133,32 @@ class Button:
         else:
             pygame.draw.rect(self.view.screen, misc.WHITE, self.shape, 2)
             
+class SelectBuildButton(Button):
+    """
+    select a buildship.
+    """
+    def __init__(self, view, rect):
+        Button.__init__(self, view, rect)
+        self.ship = False
+        
+    def setShip(self, ship):
+        self.ship = ship
+        
+    def click(self):
+        if self.ship == False:
+            pass # nothing
+        else:
+            if self.view.selectedShips[0] == self.ship:
+                # goto that ship...
+                pass
+            else:
+                self.view.selectedShips = [self.ship]
+    
+            
 class BuildButton(Button):
+    """
+    build a ship with the selected buildship.
+    """
     def __init__(self, view, rect, ship):
         Button.__init__(self, view, rect)
         self.ship = ship
@@ -123,12 +172,11 @@ class BuildButton(Button):
             self.view.selectedShips[0].addToBuildQueue(self.ship)
             
 class MiniMap:
-
     def __init__(self, view, map):
         self.view = view
         self.map = map
         self.border = pygame.Rect(self.view.x, self.view.y, 10, 10) # Rectangle representing the screen
-        self.boundary = pygame.Rect(self.view.width - 60, self.view.height - 50 * self.map.height / self.map.width - 10, 50, 50 * self.map.height / self.map.width) # Rectangle representing the map
+        self.boundary = pygame.Rect(self.view.width - 60, 10 * self.map.height / self.map.width - 10, 50, 50 * self.map.height / self.map.width) # Rectangle representing the map
 
     def update(self):
         """

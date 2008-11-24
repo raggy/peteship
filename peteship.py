@@ -4,7 +4,7 @@ import sys, os, pygame, math, orders, players, misc, formations, maps, effects
 
 try:
     import psyco
-    psyco.full()
+    psyco.profile()
 except ImportError:
     pass
 
@@ -39,7 +39,6 @@ def main(view, map):
                         event.dict['pos'][1] <= (item.shape.bottom): # If player clicked on this ship
                             item.click()
                             flag = True
-                            print view.selectedShips
                 if flag == False:    
                     view.selStartPos = view.selEndPos = event.dict['pos']
                     view.selecting = True
@@ -229,8 +228,9 @@ def main(view, map):
         pygame.draw.line(view.screen, misc.WHITE, ((-view.x) * view.zoom,(map.height - view.y) * view.zoom), ((-view.x) * view.zoom, (-view.y) * view.zoom))        
 
 
-        # Draw minimap
-        view.minimap.draw()
+        # Draw interface. This includes the minimap.
+        for item in view.interface:            
+            item.draw()
         
 #        # Test shipsAlongLine
 #        startPoint = (50.0, 50.0)
@@ -282,11 +282,8 @@ def main(view, map):
 #            ship.draw()
 #            ship.colour = ship.player.colour
 
-        # draw the interface.
-        for item in view.interface:
-            item.draw()
-        
-        misc.drawText(view.screen, 10, 70, misc.WHITE, "TEST")
+        #example of drawtext.
+        # misc.drawText(view.screen, 10, 70, misc.WHITE, "Resources: " + str(currentPlayer.resources))
 
         pygame.display.flip()
 

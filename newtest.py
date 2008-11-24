@@ -19,8 +19,10 @@ map.players[1].colour = (100, 100, 212)
 for player in map.players:
      player.ships.append(ships.S1s6(view, player, (view.width/2), (view.height/2)))
      player.ships[-1].built = True
-     
+
+"""     
 buildButton = views.BuildButton(view, pygame.Rect(10, 10, 20, 20), ships.S1s1)
 buildButton = views.BuildButton(view, pygame.Rect(10, 40, 20, 20), ships.S1s4)
+"""
         
 peteship.main(view, map) # run the game

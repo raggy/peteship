@@ -2,7 +2,7 @@ import misc, math, ships
 
 try:
     import psyco
-    psyco.full()
+    psyco.profile()
 except ImportError:
     pass
 
