@@ -15,7 +15,7 @@ else:
 
 GLOBAL_TESTSHIPS = 25 #Generic int for creating multiples of tsetingships.
 
-map = maps.Map(1000, 1000, 500, 2) # 1000 x 1000 map with 500 resources and 2 players.
+map = maps.Map(5000, 5000, 500, 2) # 1000 x 1000 map with 500 resources and 2 players.
 
 if fullscreen == 0:
     view = views.View(1024, 600, 0, map)
