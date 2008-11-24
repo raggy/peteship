@@ -3,7 +3,7 @@ from misc import *
 
 try:
     import psyco
-    psyco.full()
+    psyco.profile()
 except ImportError:
     pass
 
@@ -149,6 +149,18 @@ class State():
     def getFriendlyTarget(self):
         pass
         
+class AttackTarget(State):
+    """ 
+    actively attack only the targets in the list.
+    """
+    def poll(self):
+        if self.launcher.isTurret: # turret code.
+            pass
+        elif self.launcher.isShot: # shot code.
+            pass
+        else: # missile code
+            pass
+        
 class HoldFire(State):
     def poll(self):
         pass # do NOTHING.
@@ -158,8 +170,19 @@ class Idle(State):
     def poll(self):
         if self.launcher.isTurret: # code for turrets.
             pass # nothing yet.
+            
         elif self.launcher.isShot: # code for shot weapons e.g. railgun, beam.
-            pass # nothing yet.
+            """ hacked in missile fire code """
+            # first of all see if we have a target. 
+            if len(self.launcher.targets) == 0:
+                # add the closest enemy ship to the launcher to it's target list.
+                if self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]).distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) < self.launcher.range:
+                    self.launcher.addTarget(self.launcher.parent.player.enemyShipClosestToXY(self.launcher.hardpoint[0], self.launcher.hardpoint[1]))
+            else: # we have a target
+                if self.launcher.targets[0].distanceFrom(self.launcher.hardpoint[0], self.launcher.hardpoint[1]) > self.launcher.range or self.launcher.targets[0].dead == True:
+                    self.launcher.targets = [] # if it's too far away or dead then remove it, we'll find a new one.
+                # otherwise the launcher will handle firing itself. Wey.
+                
         else: # code for missiles.
             # first of all see if we have a target. 
             if len(self.launcher.targets) == 0:
@@ -247,3 +270,21 @@ class TestBeamGun(Launcher):
     
     def fire(self, thickness, changeTime, launcher, target):
         pass
+        
+class TestCannon(Launcher):
+    """ Shot weapons fake a weapon. They just do the damage and do a contrail. Simple. """
+    isShot = True
+    def __init__(self, parent, hardpoint):
+        Launcher.__init__(self, parent, hardpoint)
+        self.range = 150
+        self.lifetime = 90
+        self.damage = 2
+        self.refireWait = self.refire = 40
+        
+    def fire(self, target):
+        target.damaged(self.damage, self)
+        # damage code.
+        # fx code
+        # hacked contrail. It technically starts at the enemy ship and draws to the launcher.
+            #def __init__(self, view, start, end, lifeTime, thickness):
+        self.parent.view.lowEffects.append(effects.ShotContrail(self.parent.view, self.hardpoint, (target.x, target.y), 50, 2))

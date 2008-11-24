@@ -2,7 +2,7 @@ import pygame, random, math, misc
 
 try:
     import psyco
-    psyco.full()
+    psyco.profile()
 except ImportError:
     pass
 
@@ -334,6 +334,51 @@ class Contrail(Effect):
         
         if self.parent.contrailTimer == 0:
             self.updateStartPoint = False
+                       
+    def draw(self):
+        if (self.x1 >= self.view.x\
+        and self.x1 <= self.view.x + self.view.width / self.view.zoom\
+        and self.y1 >= self.view.y\
+        and self.y1 <= self.view.y + self.view.height / self.view.zoom)\
+        or (self.x2 >= self.view.x\
+        and self.x2 <= self.view.x + self.view.width / self.view.zoom\
+        and self.y2 >= self.view.y\
+        and self.y2 <= self.view.y + self.view.height / self.view.zoom): # If both points are on screen
+            self.tempThickness = self.thickness * self.view.zoom
+            if self.tempThickness > self.thickness:
+                self.tempThickness = self.thickness
+            elif self.tempThickness < 1:
+                self.tempThickness = 1
+            pygame.draw.line(self.view.screen, self.colour, ((self.x1 - self.view.x) * self.view.zoom, (self.y1 - self.view.y) * self.view.zoom), ((self.x2 - self.view.x) * self.view.zoom, (self.y2 -self.view.y) * self.view.zoom), self.tempThickness)
+
+    def remove(self):
+        for i in range(len(self.view.lowEffects)):
+            if self.view.lowEffects[i] == self:
+                del self.view.lowEffects[i]
+                break
+                
+class ShotContrail(Effect):
+    # this is a static, nonupdating contrail.
+    def __init__(self, view, start, end, lifeTime, thickness):        
+        self.x1 = start[0] # !!! x1 & y1 constitue the startPoint, while x2 & y2 constitue the endPoint.
+        self.y1 = start[1]
+        
+        self.x2 = end[0]
+        self.y2 = end[1]
+        
+        self.maxlife = self.lifetime = lifeTime
+        self.thickness = thickness
+        #self.colour = colour    # do we need specific colours for view contrails? hmm...
+        self.view = view
+        
+    def poll(self):
+        self.lifetime -= 1
+        self.colour = ((50 * self.lifetime / self.maxlife),\
+                       (50 * self.lifetime / self.maxlife),\
+                       (50 * self.lifetime / self.maxlife))
+        self.tempColour = [self.colour[0] * self.view.zoom, self.colour[1] * self.view.zoom, self.colour[2] * self.view.zoom]
+        if self.tempColour[0] < self.colour[0]:
+            self.colour = self.tempColour
                        
     def draw(self):
         if (self.x1 >= self.view.x\

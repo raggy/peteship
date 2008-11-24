@@ -2,7 +2,7 @@ import misc, math, orders, pygame, effects
 
 try:
     import psyco
-    psyco.full()
+    psyco.profile()
 except ImportError:
     pass
 
@@ -190,8 +190,8 @@ class S1s1(Ship):
     radius = 5
     shieldRadius = 5
     #buildInfo
-    buildCost = 10
-    buildTime = 500
+    buildCost = 2
+    buildTime = 400
     rotateSpeed = 0.05
     speed = 1
     canAttack = True # this ship has a weapon! useful for setting ui & making sure that ships that can't attack when selected
@@ -277,7 +277,7 @@ class S1s4(Ship):
     radius = 20
     shieldRadius = 22
     #buildInfo
-    buildCost = 50
+    buildCost = 10
     buildTime = 1000
     rotateSpeed = 0.005
     speed = 0.2
@@ -390,6 +390,8 @@ class S1s6(Ship):
     #buildInfo
     buildCost = 10
     buildTime = 1000
+    
+    availableToBuild = [S1s1]
         
     def calcPoints(self):
         self.points = [(self.x + self.radius * math.sin(self.rotation + 5.8 * math.pi / 3), (self.y - self.radius * math.cos(self.rotation + 5.8 * math.pi /3))),\

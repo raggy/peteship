@@ -26,7 +26,7 @@ class Map():
             startX = 50 # code to generate a starting point here.
             startY = 50 # likewise.
             self.startPoints.append(StartPoint(startX, startY)) # wey.
-            self.players.append(players.Player(self, self.startPoints[i], 500)) # add some players. Needs modifications to Player() to take a start position.
+            self.players.append(players.Player(self, self.startPoints[i], 20)) # add some players. Needs modifications to Player() to take a start position.
     def addResource(self, x, y, amount, baseSize):
         self.resources.append(resources.Asteroid(x, y, amount, baseSize)) # just adds it to the map list so far.
 

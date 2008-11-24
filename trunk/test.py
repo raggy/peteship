@@ -37,7 +37,7 @@ for player in map.players:
     for i in range(GLOBAL_TESTSHIPS): # GLOBAL_TESTSHIPS is located at the top, this is a pain to find sometimes.
         player.ships.append(ships.S1s1(view, player, (random.random()*map.width), (random.random()*map.height)))
         player.ships[len(player.ships) - 1].built = True
-        player.ships[len(player.ships) - 1].launchers = [weapons.TestMissileLauncher(player.ships[len(player.ships) - 1], player.ships[len(player.ships) - 1].hardpoints[0])]
+        player.ships[len(player.ships) - 1].launchers = [weapons.TestCannon(player.ships[len(player.ships) - 1], player.ships[len(player.ships) - 1].hardpoints[0])]
     player.ships.append(ships.S1s4(view, player, (random.random()*map.width), (random.random()*map.height)))
     player.ships[len(player.ships) - 1].built = True
     player.ships[len(player.ships) - 1].launchers = []
