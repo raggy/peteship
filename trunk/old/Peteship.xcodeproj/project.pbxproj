@@ -1,0 +1,321 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXFileReference section */
+		C1ED57400F5F098400FAE9EE /* categories.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = categories.pbxbtree; sourceTree = "<group>"; };
+		C1ED57410F5F098400FAE9EE /* cdecls.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = cdecls.pbxbtree; sourceTree = "<group>"; };
+		C1ED57420F5F098400FAE9EE /* decls.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = decls.pbxbtree; sourceTree = "<group>"; };
+		C1ED57430F5F098400FAE9EE /* files.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = files.pbxbtree; sourceTree = "<group>"; };
+		C1ED57440F5F098400FAE9EE /* imports.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = imports.pbxbtree; sourceTree = "<group>"; };
+		C1ED57450F5F098400FAE9EE /* pbxindex.header */ = {isa = PBXFileReference; lastKnownFileType = file; path = pbxindex.header; sourceTree = "<group>"; };
+		C1ED57460F5F098400FAE9EE /* protocols.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = protocols.pbxbtree; sourceTree = "<group>"; };
+		C1ED57470F5F098400FAE9EE /* refs.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = refs.pbxbtree; sourceTree = "<group>"; };
+		C1ED57490F5F098400FAE9EE /* control */ = {isa = PBXFileReference; lastKnownFileType = file; path = control; sourceTree = "<group>"; };
+		C1ED574A0F5F098400FAE9EE /* strings */ = {isa = PBXFileReference; lastKnownFileType = file; path = strings; sourceTree = "<group>"; };
+		C1ED574B0F5F098400FAE9EE /* subclasses.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = subclasses.pbxbtree; sourceTree = "<group>"; };
+		C1ED574C0F5F098400FAE9EE /* Entities.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Entities.py; sourceTree = "<group>"; };
+		C1ED574E0F5F098400FAE9EE /* Main.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Main.py; sourceTree = "<group>"; };
+		C1ED574F0F5F098400FAE9EE /* Maps.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Maps.py; sourceTree = "<group>"; };
+		C1ED57510F5F098400FAE9EE /* Misc.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Misc.py; sourceTree = "<group>"; };
+		C1ED57520F5F098400FAE9EE /* Objects.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Objects.py; sourceTree = "<group>"; };
+		C1ED57570F5F098400FAE9EE /* categories.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = categories.pbxbtree; sourceTree = "<group>"; };
+		C1ED57580F5F098400FAE9EE /* cdecls.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = cdecls.pbxbtree; sourceTree = "<group>"; };
+		C1ED57590F5F098400FAE9EE /* decls.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = decls.pbxbtree; sourceTree = "<group>"; };
+		C1ED575A0F5F098400FAE9EE /* files.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = files.pbxbtree; sourceTree = "<group>"; };
+		C1ED575B0F5F098400FAE9EE /* imports.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = imports.pbxbtree; sourceTree = "<group>"; };
+		C1ED575C0F5F098400FAE9EE /* pbxindex.header */ = {isa = PBXFileReference; lastKnownFileType = file; path = pbxindex.header; sourceTree = "<group>"; };
+		C1ED575D0F5F098400FAE9EE /* protocols.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = protocols.pbxbtree; sourceTree = "<group>"; };
+		C1ED575E0F5F098400FAE9EE /* refs.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = refs.pbxbtree; sourceTree = "<group>"; };
+		C1ED57600F5F098400FAE9EE /* control */ = {isa = PBXFileReference; lastKnownFileType = file; path = control; sourceTree = "<group>"; };
+		C1ED57610F5F098400FAE9EE /* strings */ = {isa = PBXFileReference; lastKnownFileType = file; path = strings; sourceTree = "<group>"; };
+		C1ED57620F5F098400FAE9EE /* subclasses.pbxbtree */ = {isa = PBXFileReference; lastKnownFileType = file; path = subclasses.pbxbtree; sourceTree = "<group>"; };
+		C1ED57630F5F098400FAE9EE /* designer.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = designer.py; sourceTree = "<group>"; };
+		C1ED57640F5F098400FAE9EE /* effects.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = effects.py; sourceTree = "<group>"; };
+		C1ED57650F5F098400FAE9EE /* effects.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = effects.pyc; sourceTree = "<group>"; };
+		C1ED57660F5F098400FAE9EE /* formations.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = formations.py; sourceTree = "<group>"; };
+		C1ED57670F5F098400FAE9EE /* formations.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = formations.pyc; sourceTree = "<group>"; };
+		C1ED57680F5F098400FAE9EE /* maps.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = maps.py; sourceTree = "<group>"; };
+		C1ED57690F5F098400FAE9EE /* maps.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = maps.pyc; sourceTree = "<group>"; };
+		C1ED576A0F5F098400FAE9EE /* misc.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = misc.py; sourceTree = "<group>"; };
+		C1ED576B0F5F098400FAE9EE /* misc.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = misc.pyc; sourceTree = "<group>"; };
+		C1ED576C0F5F098400FAE9EE /* newtest.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = newtest.py; sourceTree = "<group>"; };
+		C1ED576D0F5F098400FAE9EE /* orders.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = orders.py; sourceTree = "<group>"; };
+		C1ED576E0F5F098400FAE9EE /* orders.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = orders.pyc; sourceTree = "<group>"; };
+		C1ED576F0F5F098400FAE9EE /* peteship.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = peteship.py; sourceTree = "<group>"; };
+		C1ED57700F5F098400FAE9EE /* peteship.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = peteship.pyc; sourceTree = "<group>"; };
+		C1ED57710F5F098400FAE9EE /* Peteship.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Peteship.xcodeproj; sourceTree = "<group>"; };
+		C1ED57740F5F098400FAE9EE /* players.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = players.py; sourceTree = "<group>"; };
+		C1ED57750F5F098400FAE9EE /* players.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = players.pyc; sourceTree = "<group>"; };
+		C1ED57760F5F098400FAE9EE /* resources.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = resources.py; sourceTree = "<group>"; };
+		C1ED57770F5F098400FAE9EE /* resources.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = resources.pyc; sourceTree = "<group>"; };
+		C1ED57780F5F098400FAE9EE /* Road map 0.1.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Road map 0.1.rtf"; sourceTree = "<group>"; };
+		C1ED57790F5F098400FAE9EE /* ships.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ships.py; sourceTree = "<group>"; };
+		C1ED577A0F5F098400FAE9EE /* ships.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = ships.pyc; sourceTree = "<group>"; };
+		C1ED577B0F5F098400FAE9EE /* Ships.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Ships.rtf; sourceTree = "<group>"; };
+		C1ED577C0F5F098400FAE9EE /* test.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test.py; sourceTree = "<group>"; };
+		C1ED577D0F5F098400FAE9EE /* views.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = views.py; sourceTree = "<group>"; };
+		C1ED577E0F5F098400FAE9EE /* views.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = views.pyc; sourceTree = "<group>"; };
+		C1ED577F0F5F098400FAE9EE /* weapons.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = weapons.py; sourceTree = "<group>"; };
+		C1ED57800F5F098400FAE9EE /* weapons.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = weapons.pyc; sourceTree = "<group>"; };
+		C1ED57810F5F098400FAE9EE /* Options.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Options.py; sourceTree = "<group>"; };
+		C1ED57830F5F098400FAE9EE /* TestMap.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = TestMap.py; sourceTree = "<group>"; };
+		C1ED57850F5F098400FAE9EE /* Views.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Views.py; sourceTree = "<group>"; };
+		C1ED57910F6073B900FAE9EE /* Angles.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Angles.py; sourceTree = "<group>"; };
+		C1ED58C10F61BB3000FAE9EE /* lesson06.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = lesson06.py; sourceTree = "<group>"; };
+		C1ED58C20F61BB5B00FAE9EE /* Graphics.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = Graphics.py; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		C14EFFFC0EC35D58009A4461 = {
+			isa = PBXGroup;
+			children = (
+				C1637A120EC4884A0078FE9E /* trunk */,
+			);
+			sourceTree = "<group>";
+		};
+		C1637A120EC4884A0078FE9E /* trunk */ = {
+			isa = PBXGroup;
+			children = (
+				C1ED573C0F5F098300FAE9EE /* trunk */,
+				C1637A130EC4884A0078FE9E /* build */,
+			);
+			name = trunk;
+			sourceTree = "<group>";
+		};
+		C1637A130EC4884A0078FE9E /* build */ = {
+			isa = PBXGroup;
+			children = (
+				C1637A140EC4884A0078FE9E /* Peteship.build */,
+			);
+			path = build;
+			sourceTree = "<group>";
+		};
+		C1637A140EC4884A0078FE9E /* Peteship.build */ = {
+			isa = PBXGroup;
+			children = (
+				C1637A150EC4884A0078FE9E /* Peteship.pbxindex */,
+			);
+			path = Peteship.build;
+			sourceTree = "<group>";
+		};
+		C1637A150EC4884A0078FE9E /* Peteship.pbxindex */ = {
+			isa = PBXGroup;
+			children = (
+				C1637A1E0EC4884A0078FE9E /* strings.pbxstrings */,
+			);
+			path = Peteship.pbxindex;
+			sourceTree = "<group>";
+		};
+		C1637A1E0EC4884A0078FE9E /* strings.pbxstrings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = strings.pbxstrings;
+			sourceTree = "<group>";
+		};
+		C1ED573C0F5F098300FAE9EE /* trunk */ = {
+			isa = PBXGroup;
+			children = (
+				C1ED57910F6073B900FAE9EE /* Angles.py */,
+				C1ED574C0F5F098400FAE9EE /* Entities.py */,
+				C1ED58C20F61BB5B00FAE9EE /* Graphics.py */,
+				C1ED58C10F61BB3000FAE9EE /* lesson06.py */,
+				C1ED57850F5F098400FAE9EE /* Views.py */,
+				C1ED574E0F5F098400FAE9EE /* Main.py */,
+				C1ED574F0F5F098400FAE9EE /* Maps.py */,
+				C1ED57510F5F098400FAE9EE /* Misc.py */,
+				C1ED57520F5F098400FAE9EE /* Objects.py */,
+				C1ED57810F5F098400FAE9EE /* Options.py */,
+				C1ED57830F5F098400FAE9EE /* TestMap.py */,
+				C1ED573D0F5F098400FAE9EE /* build */,
+				C1ED57530F5F098400FAE9EE /* old */,
+			);
+			name = trunk;
+			path = ..;
+			sourceTree = SOURCE_ROOT;
+		};
+		C1ED573D0F5F098400FAE9EE /* build */ = {
+			isa = PBXGroup;
+			children = (
+				C1ED573E0F5F098400FAE9EE /* Peteship.build */,
+			);
+			path = build;
+			sourceTree = "<group>";
+		};
+		C1ED573E0F5F098400FAE9EE /* Peteship.build */ = {
+			isa = PBXGroup;
+			children = (
+				C1ED573F0F5F098400FAE9EE /* Peteship.pbxindex */,
+			);
+			path = Peteship.build;
+			sourceTree = "<group>";
+		};
+		C1ED573F0F5F098400FAE9EE /* Peteship.pbxindex */ = {
+			isa = PBXGroup;
+			children = (
+				C1ED57400F5F098400FAE9EE /* categories.pbxbtree */,
+				C1ED57410F5F098400FAE9EE /* cdecls.pbxbtree */,
+				C1ED57420F5F098400FAE9EE /* decls.pbxbtree */,
+				C1ED57430F5F098400FAE9EE /* files.pbxbtree */,
+				C1ED57440F5F098400FAE9EE /* imports.pbxbtree */,
+				C1ED57450F5F098400FAE9EE /* pbxindex.header */,
+				C1ED57460F5F098400FAE9EE /* protocols.pbxbtree */,
+				C1ED57470F5F098400FAE9EE /* refs.pbxbtree */,
+				C1ED57480F5F098400FAE9EE /* strings.pbxstrings */,
+				C1ED574B0F5F098400FAE9EE /* subclasses.pbxbtree */,
+			);
+			path = Peteship.pbxindex;
+			sourceTree = "<group>";
+		};
+		C1ED57480F5F098400FAE9EE /* strings.pbxstrings */ = {
+			isa = PBXGroup;
+			children = (
+				C1ED57490F5F098400FAE9EE /* control */,
+				C1ED574A0F5F098400FAE9EE /* strings */,
+			);
+			path = strings.pbxstrings;
+			sourceTree = "<group>";
+		};
+		C1ED57530F5F098400FAE9EE /* old */ = {
+			isa = PBXGroup;
+			children = (
+				C1ED57540F5F098400FAE9EE /* build */,
+				C1ED57630F5F098400FAE9EE /* designer.py */,
+				C1ED57640F5F098400FAE9EE /* effects.py */,
+				C1ED57650F5F098400FAE9EE /* effects.pyc */,
+				C1ED57660F5F098400FAE9EE /* formations.py */,
+				C1ED57670F5F098400FAE9EE /* formations.pyc */,
+				C1ED57680F5F098400FAE9EE /* maps.py */,
+				C1ED57690F5F098400FAE9EE /* maps.pyc */,
+				C1ED576A0F5F098400FAE9EE /* misc.py */,
+				C1ED576B0F5F098400FAE9EE /* misc.pyc */,
+				C1ED576C0F5F098400FAE9EE /* newtest.py */,
+				C1ED576D0F5F098400FAE9EE /* orders.py */,
+				C1ED576E0F5F098400FAE9EE /* orders.pyc */,
+				C1ED576F0F5F098400FAE9EE /* peteship.py */,
+				C1ED57700F5F098400FAE9EE /* peteship.pyc */,
+				C1ED57710F5F098400FAE9EE /* Peteship.xcodeproj */,
+				C1ED57740F5F098400FAE9EE /* players.py */,
+				C1ED57750F5F098400FAE9EE /* players.pyc */,
+				C1ED57760F5F098400FAE9EE /* resources.py */,
+				C1ED57770F5F098400FAE9EE /* resources.pyc */,
+				C1ED57780F5F098400FAE9EE /* Road map 0.1.rtf */,
+				C1ED57790F5F098400FAE9EE /* ships.py */,
+				C1ED577A0F5F098400FAE9EE /* ships.pyc */,
+				C1ED577B0F5F098400FAE9EE /* Ships.rtf */,
+				C1ED577C0F5F098400FAE9EE /* test.py */,
+				C1ED577D0F5F098400FAE9EE /* views.py */,
+				C1ED577E0F5F098400FAE9EE /* views.pyc */,
+				C1ED577F0F5F098400FAE9EE /* weapons.py */,
+				C1ED57800F5F098400FAE9EE /* weapons.pyc */,
+			);
+			path = old;
+			sourceTree = "<group>";
+		};
+		C1ED57540F5F098400FAE9EE /* build */ = {
+			isa = PBXGroup;
+			children = (
+				C1ED57550F5F098400FAE9EE /* Peteship.build */,
+			);
+			path = build;
+			sourceTree = "<group>";
+		};
+		C1ED57550F5F098400FAE9EE /* Peteship.build */ = {
+			isa = PBXGroup;
+			children = (
+				C1ED57560F5F098400FAE9EE /* Peteship.pbxindex */,
+			);
+			path = Peteship.build;
+			sourceTree = "<group>";
+		};
+		C1ED57560F5F098400FAE9EE /* Peteship.pbxindex */ = {
+			isa = PBXGroup;
+			children = (
+				C1ED57570F5F098400FAE9EE /* categories.pbxbtree */,
+				C1ED57580F5F098400FAE9EE /* cdecls.pbxbtree */,
+				C1ED57590F5F098400FAE9EE /* decls.pbxbtree */,
+				C1ED575A0F5F098400FAE9EE /* files.pbxbtree */,
+				C1ED575B0F5F098400FAE9EE /* imports.pbxbtree */,
+				C1ED575C0F5F098400FAE9EE /* pbxindex.header */,
+				C1ED575D0F5F098400FAE9EE /* protocols.pbxbtree */,
+				C1ED575E0F5F098400FAE9EE /* refs.pbxbtree */,
+				C1ED575F0F5F098400FAE9EE /* strings.pbxstrings */,
+				C1ED57620F5F098400FAE9EE /* subclasses.pbxbtree */,
+			);
+			path = Peteship.pbxindex;
+			sourceTree = "<group>";
+		};
+		C1ED575F0F5F098400FAE9EE /* strings.pbxstrings */ = {
+			isa = PBXGroup;
+			children = (
+				C1ED57600F5F098400FAE9EE /* control */,
+				C1ED57610F5F098400FAE9EE /* strings */,
+			);
+			path = strings.pbxstrings;
+			sourceTree = "<group>";
+		};
+		C1ED57720F5F098400FAE9EE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		C14EFFFE0EC35D58009A4461 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C14E00010EC35D58009A4461 /* Build configuration list for PBXProject "Peteship" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 0;
+			mainGroup = C14EFFFC0EC35D58009A4461;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C1ED57720F5F098400FAE9EE /* Products */;
+					ProjectRef = C1ED57710F5F098400FAE9EE /* Peteship.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		C14E00000EC35D58009A4461 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			name = Release;
+		};
+		C14EFFFF0EC35D58009A4461 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C14E00010EC35D58009A4461 /* Build configuration list for PBXProject "Peteship" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C14EFFFF0EC35D58009A4461 /* Debug */,
+				C14E00000EC35D58009A4461 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C14EFFFE0EC35D58009A4461 /* Project object */;
+}
