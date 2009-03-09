@@ -16,11 +16,10 @@ class GraphicsHandler():
         self.ships = []
         # VVV to be replaced with recursive stuff to load all images. VVV
         self.ships.append([pygame.image.load(os.path.join('Data', 'icon.png'))])    
-        
         for list in self.ships:
             for surface in list:
                 print surface
-                textureData = pygame.image.tostring(surface, "RGBA", 1)
+                textureData = pygame.image.tostring(surface, "RGBX", 1)
                 print "1"
                 glBindTexture(GL_TEXTURE_2D, 0)
                 print "2"

@@ -8,6 +8,7 @@
 #
 
 import sys, os, pygame, math, Entities, TestMap, Options
+
 #
 ## Not until we've got alot of calcs going on!
 #try:

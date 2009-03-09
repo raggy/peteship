@@ -9,13 +9,13 @@ import pygame, os, Options, Views, Maps, Graphics
    
 class EntityHandler():
     def __init__(self, fullscreen, map, player, number_of_players):
-        self.graphics = Graphics.GraphicsHandler()
         self.player = player
         self.selected = None # selected ship.
         self.ships = []
         self.effects = []
         
         self.view = Views.GameView(fullscreen, self)
+        self.graphics = Graphics.GraphicsHandler()
         self.map = Maps.Map(self, map)
                 
     def updateMap(self):
